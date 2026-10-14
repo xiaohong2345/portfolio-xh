@@ -728,6 +728,213 @@ if (quizTrigger && quizViewer) {
   });
 }
 
+const aiVideoSection = document.querySelector(".ai-video");
+
+if (aiVideoSection) {
+  const works = [
+    {
+      title: "vivo精彩随行",
+      tag: "产品广告 · 手机TVC",
+      description: "用高频使用场景来展示产品卖点：远处拍得清 → 身边拍得好 → 动态抓得住，然后卖点收束，进入产品展示，“这一切来自这台手机”，记录值得珍藏的鲜活记忆。",
+      src: "./pic/video/最新手机.mp4",
+      poster: "./pic/video/posters/最新手机.webp",
+    },
+    {
+      title: "珍爱APP短片",
+      tag: "产品宣传",
+      description: "从相似的日常切入，珍爱网中的活动成为相遇的契机，让两个陌生人从线上到线下，在自然相处与共同经历中，完成从“相遇”到“相爱”的情感递进。",
+      src: "./pic/video/珍爱最新-换前段.mp4",
+      poster: "./pic/video/posters/珍爱最新-换前段.webp",
+    },
+    {
+      title: "安慕希\n整颗蓝莓酸奶",
+      tag: "食品广告 · 奇幻动画",
+      description: "把蓝莓拟人化、从种植园到入口的过程旅程化，从摘下枝头开始“锁鲜”，到通关时完好无损，叙事节奏松紧交替，强化故事情绪起伏。",
+      src: "./pic/video/鲜奇一路整颗满足.mp4",
+      poster: "./pic/video/posters/鲜奇一路整颗满足.webp",
+    },
+    {
+      title: "音乐MV 丨千禧记忆",
+      tag: "快乐马首发灰测 · 音乐MV",
+      description: "快乐马模型首发测试，以音乐MV的形式，童年游戏机像一个入口，通往陌生又熟悉的回忆，每个画面像一段被回放的童年存档。暂且抛开现实，在记忆里畅游。",
+      src: "./pic/video/最新掉进游戏机-高清.mp4",
+      poster: "./pic/video/posters/最新掉进游戏机-高清.webp",
+    },
+  ];
+
+  const player = aiVideoSection.querySelector(".ai-video__player");
+  const title = aiVideoSection.querySelector(".ai-video__work-title");
+  const tag = aiVideoSection.querySelector(".ai-video__tag");
+  const description = aiVideoSection.querySelector(".ai-video__description");
+  const currentNumber = aiVideoSection.querySelector(".ai-video__current");
+  const errorMessage = aiVideoSection.querySelector(".ai-video__error");
+  const screen = aiVideoSection.querySelector(".ai-video__screen");
+  const rail = aiVideoSection.querySelector(".ai-video__rail");
+  const thumbnails = [...aiVideoSection.querySelectorAll(".ai-video__thumb")];
+  const compactRail = window.matchMedia("(max-width: 1250px)");
+  let activeIndex = 0;
+  let playRequest = 0;
+  let userSelectedVideo = false;
+  let firstVideoStartedByScroll = false;
+  let screenVisible = false;
+  let resumeFirstWhenVisible = false;
+
+  const updateRail = () => {
+    const railHeight = rail.clientHeight;
+    const thumbnailHeight = 70;
+    const edgeGap = 8;
+    const step = compactRail.matches ? 0 : Math.min(88, Math.max(0, (railHeight - 2 * edgeGap - thumbnailHeight) / (thumbnails.length - 1)));
+    const firstCenter = railHeight / 2 - activeIndex * step;
+    const lastCenter = railHeight / 2 + (thumbnails.length - 1 - activeIndex) * step;
+    const minCenter = edgeGap + thumbnailHeight / 2;
+    const maxCenter = railHeight - minCenter;
+    const shift = compactRail.matches ? 0 : Math.min(maxCenter - lastCenter, Math.max(minCenter - firstCenter, 0));
+    if (compactRail.matches) {
+      rail.style.removeProperty("--ai-video-active-center");
+    } else {
+      rail.style.setProperty("--ai-video-active-center", `${railHeight / 2 + shift}px`);
+    }
+
+    thumbnails.forEach((thumbnail, index) => {
+      const offset = index - activeIndex;
+      const distance = Math.abs(offset);
+      const isActive = offset === 0;
+      thumbnail.classList.toggle("is-active", isActive);
+      thumbnail.setAttribute("aria-pressed", String(isActive));
+
+      if (compactRail.matches) {
+        thumbnail.style.removeProperty("transform");
+        thumbnail.style.removeProperty("opacity");
+        thumbnail.style.removeProperty("z-index");
+        return;
+      }
+
+      const x = distance * distance * 4;
+      const y = offset * step + shift;
+      const scale = Math.max(0.86, 1 - distance * 0.04) * (isActive ? 122 / 112 : 1);
+      const opacity = Math.max(0.22, 1 - distance * 0.18);
+      thumbnail.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale.toFixed(3)})`;
+      thumbnail.style.opacity = String(opacity);
+      thumbnail.style.zIndex = String(20 - distance);
+    });
+  };
+
+  const releaseVideo = () => {
+    player.pause();
+    player.removeAttribute("src");
+    player.load();
+  };
+
+  const setVideoStartMuted = () => {
+    player.defaultMuted = true;
+    player.muted = true;
+    player.volume = 1;
+  };
+
+  const playVideo = (request) => {
+    player.play().catch(() => {
+      if (request !== playRequest || !player.hasAttribute("src")) return;
+      errorMessage.textContent = "播放未能开始，请点击播放器的播放按钮或再次点击缩略图重试。";
+      errorMessage.hidden = false;
+    });
+  };
+
+  const selectVideo = (index) => {
+    const work = works[index];
+    if (!work) return;
+
+    const request = ++playRequest;
+    releaseVideo();
+    errorMessage.hidden = true;
+    title.textContent = work.title;
+    tag.textContent = work.tag;
+    description.textContent = work.description;
+    currentNumber.textContent = String(index + 1).padStart(2, "0");
+    activeIndex = index;
+    updateRail();
+
+    player.poster = work.poster;
+    player.setAttribute("aria-label", work.title);
+    player.controls = true;
+    setVideoStartMuted();
+    player.src = work.src;
+    player.load();
+    playVideo(request);
+  };
+
+  const playFirstWhenVisible = () => {
+    if (compactRail.matches || document.hidden || !screenVisible || userSelectedVideo) return;
+
+    if (!firstVideoStartedByScroll) {
+      firstVideoStartedByScroll = true;
+      selectVideo(0);
+    } else if (resumeFirstWhenVisible && player.hasAttribute("src")) {
+      resumeFirstWhenVisible = false;
+      setVideoStartMuted();
+      playVideo(++playRequest);
+    }
+  };
+
+  thumbnails.forEach((thumbnail) => {
+    thumbnail.addEventListener("click", () => {
+      userSelectedVideo = true;
+      resumeFirstWhenVisible = false;
+      selectVideo(Number(thumbnail.dataset.videoIndex));
+    });
+  });
+  compactRail.addEventListener("change", () => {
+    updateRail();
+    if (compactRail.matches && firstVideoStartedByScroll && !userSelectedVideo) {
+      resumeFirstWhenVisible = player.hasAttribute("src") && !player.paused;
+      player.pause();
+      ++playRequest;
+    } else {
+      playFirstWhenVisible();
+    }
+  });
+  window.addEventListener("resize", updateRail);
+  updateRail();
+
+  player.addEventListener("playing", () => {
+    errorMessage.hidden = true;
+  });
+
+  player.addEventListener("error", () => {
+    if (!player.error || !player.hasAttribute("src")) return;
+    ++playRequest;
+    releaseVideo();
+    errorMessage.textContent = "视频暂时无法播放，请再次点击缩略图重试。";
+    errorMessage.hidden = false;
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      if (firstVideoStartedByScroll && !userSelectedVideo) {
+        resumeFirstWhenVisible = player.hasAttribute("src") && !player.paused;
+      }
+      player.pause();
+      ++playRequest;
+    } else {
+      playFirstWhenVisible();
+    }
+  });
+
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(([entry]) => {
+      screenVisible = entry.isIntersecting && entry.intersectionRatio >= 0.35;
+      if (!entry.isIntersecting) {
+        if (firstVideoStartedByScroll && !userSelectedVideo) {
+          resumeFirstWhenVisible = player.hasAttribute("src") && !player.paused;
+        }
+        player.pause();
+        ++playRequest;
+      } else {
+        playFirstWhenVisible();
+      }
+    }, { threshold: [0, 0.35] }).observe(screen);
+  }
+}
+
 const stackCards = [...document.querySelectorAll(".card-stack__card")];
 
 if (stackCards.length) {
