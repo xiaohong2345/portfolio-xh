@@ -602,10 +602,12 @@ dd:lang(zh) {
 }
 
 .work-collection__app-heading h3 {
+  min-width: 0;
   margin: 0;
-  font-size: clamp(24px, 1.8vw, 30px);
+  font-size: clamp(20px, 1.5vw, 25px);
   font-weight: 500;
   line-height: 1.2;
+  text-wrap: balance;
 }
 
 .work-collection__app-media {
@@ -662,19 +664,21 @@ dd:lang(zh) {
 
 .work-collection__placeholder--square h3 {
   margin: 1px 0 0;
-  font-size: clamp(24px, 1.8vw, 30px);
+  font-size: clamp(20px, 1.5vw, 25px);
   font-weight: 500;
   line-height: 1.2;
 }
 
-.work-collection__data-image {
+.work-collection__creative-image {
   position: absolute;
-  right: 13%;
-  bottom: 16px;
+  right: 7%;
+  bottom: 5%;
   display: block;
-  width: 74%;
-  height: auto;
-  opacity: 0.72;
+  width: 86%;
+  height: 65%;
+  object-fit: contain;
+  object-position: center bottom;
+  opacity: 0.85;
   transition: opacity 0.4s ease;
 }
 
@@ -712,7 +716,7 @@ dd:lang(zh) {
 
 .work-card h3 {
   margin: 28px 0 0;
-  font-size: clamp(24px, 2vw, 32px);
+  font-size: clamp(20px, 1.65vw, 26px);
   font-weight: 500;
   line-height: 1.25;
 }
@@ -870,8 +874,8 @@ html.event-viewer-open,
 html.event-viewer-open body,
 html.app-viewer-open,
 html.app-viewer-open body,
-html.data-viewer-open,
-html.data-viewer-open body,
+html.creative-viewer-open,
+html.creative-viewer-open body,
 html.research-viewer-open,
 html.research-viewer-open body,
 html.quiz-viewer-open,
@@ -1056,7 +1060,7 @@ html.quiz-viewer-open body {
 }
 
 .app-viewer,
-.data-viewer {
+.creative-viewer {
   position: fixed;
   inset: 0;
   width: 100%;
@@ -1083,12 +1087,12 @@ html.quiz-viewer-open body {
 }
 
 .app-viewer::backdrop,
-.data-viewer::backdrop {
+.creative-viewer::backdrop {
   background: rgb(0 0 0 / 85%);
 }
 
 .app-viewer__header,
-.data-viewer__header {
+.creative-viewer__header {
   position: fixed;
   z-index: 5;
   top: 12px;
@@ -1202,22 +1206,20 @@ html.quiz-viewer-open body {
   opacity: 0.9;
 }
 
-.data-viewer {
-  padding-inline: 24px;
+.creative-viewer[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 72px 24px 24px;
   overflow: auto;
   overscroll-behavior: contain;
-  scrollbar-width: none;
 }
 
-.data-viewer::-webkit-scrollbar {
-  display: none;
-}
-
-.data-viewer__image {
+.creative-viewer__image {
   display: block;
-  width: min(1080px, max(650px, calc(100% - 48px)));
+  width: min(100%, 900px);
   height: auto;
-  margin: 72px auto 48px;
+  margin: auto;
 }
 
 @media (max-width: 900px) {
@@ -1940,7 +1942,7 @@ html.quiz-viewer-open body {
 
   .work-card:hover .work-card__visual,
   .work-collection__placeholder--wide:hover .work-collection__app-media,
-  .work-collection__placeholder--square:hover .work-collection__data-image {
+  .work-collection__placeholder--square:hover .work-collection__creative-image {
     opacity: 1;
   }
 
@@ -2146,7 +2148,7 @@ html.quiz-viewer-open body {
 
   .work-card h3 {
     margin-top: 1.9444vw;
-    font-size: 2vw;
+    font-size: 1.7vw;
   }
 
   .work-card__content p {
@@ -2205,7 +2207,7 @@ html.quiz-viewer-open body {
 
   .work-collection__app-heading h3,
   .work-collection__placeholder--square h3 {
-    font-size: 1.8vw;
+    font-size: 1.5vw;
   }
 
   .work-collection__app-media {
@@ -2231,10 +2233,6 @@ html.quiz-viewer-open body {
 
   .work-collection__placeholder--square h3 {
     margin-top: 0.0694vw;
-  }
-
-  .work-collection__data-image {
-    bottom: 1.1111vw;
   }
 }
 
@@ -2317,10 +2315,6 @@ html.quiz-viewer-open body {
 
 .ip-design .section-heading {
   --heading-accent: #ffe571;
-}
-
-.creative-design .section-heading {
-  --heading-accent: #206ed8;
 }
 
 .section-heading {
@@ -2943,16 +2937,16 @@ html.quiz-viewer-open body {
 
 .card-stack__fields {
   display: grid;
-  gap: clamp(18px, 2.2svh, 28px);
+  gap: clamp(20px, 2.4svh, 30px);
   margin: 0;
 }
 
 .card-stack__field dt {
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   color: #b8b8b8;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: clamp(12px, 0.85vw, 14px);
-  line-height: 1.25;
+  line-height: 1.4;
 }
 
 .card-stack__field dd {
@@ -2963,7 +2957,7 @@ html.quiz-viewer-open body {
   font-size: clamp(15px, 0.95vw, 18px);
   font-weight: 300;
   letter-spacing: 0.04em;
-  line-height: 2;
+  line-height: 2.15;
   opacity: 0.95;
 }
 
@@ -2971,7 +2965,7 @@ html.quiz-viewer-open body {
   margin: 0;
   font-size: clamp(28px, 2.4vw, 38px);
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 .card-stack__visual {
@@ -3063,8 +3057,31 @@ html.quiz-viewer-open body {
   padding: 0 clamp(32px, 6.5vw, 120px) clamp(96px, 10vw, 160px);
 }
 
+.ip-design__features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 32px);
+  width: min(100%, 1600px);
+  margin: 0 auto clamp(-40px, -2.2vw, -20px);
+}
+
+.ip-design__features img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: clamp(8px, 0.8vw, 14px);
+}
+
+@media (max-width: 600px) {
+  .ip-design__features {
+    grid-template-columns: 1fr;
+    margin-bottom: 20px;
+  }
+}
+
 .ip-design__gallery {
   position: relative;
+  z-index: 1;
   width: min(100%, 1600px);
   aspect-ratio: 1000 / 250;
   margin-inline: auto;
@@ -3157,7 +3174,7 @@ html.quiz-viewer-open body {
   }
 
   .card-stack__fields {
-    gap: 12px;
+    gap: 16px;
   }
 
   .card-stack__field dt {
@@ -3166,7 +3183,7 @@ html.quiz-viewer-open body {
 
   .card-stack__field:not(.card-stack__field--name) dd {
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.8;
   }
 
   .card-stack__field h3 {
@@ -3327,18 +3344,18 @@ html.quiz-viewer-open body {
   }
 
   .card-stack__fields {
-    gap: 12px;
+    gap: 14px;
   }
 
   .card-stack__field dt {
-    margin-bottom: 2px;
+    margin-bottom: 4px;
     font-size: 10px;
   }
 
   .card-stack__field:not(.card-stack__field--name) dd {
     font-size: 12px;
     letter-spacing: 0.02em;
-    line-height: 1.55;
+    line-height: 1.7;
   }
 
   .card-stack__field h3 {
@@ -3356,80 +3373,6 @@ html.quiz-viewer-open body {
   .card-stack__prompt-icon {
     width: 26px;
   }
-}
-
-.creative-design {
-  width: min(100%, 1920px);
-  margin-inline: auto;
-  padding: 0 clamp(32px, 6.5vw, 120px) clamp(64px, 7vw, 102px);
-}
-
-.creative-design__heading .card-stack__eyebrow {
-  font-size: clamp(26px, 6.7vw, 96px);
-}
-
-.creative-design__grid {
-  --creative-line: rgb(255 255 255 / 45%);
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  width: min(80vw, 1600px, 100%);
-  margin-inline: auto;
-  height: clamp(360px, 34vw, 520px);
-  border-top: 1px solid var(--creative-line);
-  border-bottom: 1px solid var(--creative-line);
-}
-
-.creative-design__column {
-  min-width: 0;
-  min-height: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(12px, 2vw, 28px);
-}
-
-.creative-design__column img {
-  display: block;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-/* Every artwork uses the same scale relative to its source dimensions. */
-.creative-design__column:first-child > img {
-  width: min(86.5546%, 321.36px);
-}
-
-.creative-design__column:nth-child(2) > img {
-  width: min(100%, 371.28px);
-}
-
-.creative-design__column--split img {
-  width: min(77.3109%, 287.04px);
-}
-
-.creative-design__column + .creative-design__column {
-  border-left: 1px solid var(--creative-line);
-}
-
-.creative-design__column--split {
-  display: grid;
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  padding: 0;
-}
-
-.creative-design__column--split > div {
-  min-width: 0;
-  min-height: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(12px, 2vw, 28px);
-}
-
-.creative-design__column--split > :last-child {
-  border-top: 1px solid var(--creative-line);
 }
 
 .portfolio-contact {
@@ -3658,100 +3601,29 @@ html.quiz-viewer-open body {
   }
 }
 
-@media (max-width: 900px) {
-  .creative-design {
-    padding: 0 6.5vw 7vw;
-  }
-
-  .creative-design .section-heading {
-    width: min(100%, 44.4444vw);
-    margin-bottom: 4vw;
-    transform-origin: center center;
-  }
-
-  .creative-design .section-heading h2 {
-    font-size: 3.8889vw;
-  }
-
-  .creative-design .section-heading h2::after {
-    right: -3.6111vw;
-    width: 0.8333vw;
-    height: 0.8333vw;
-  }
-
-  .creative-design .section-heading__accent {
-    right: -0.9722vw;
-    bottom: -0.8333vw;
-    width: 12.0833vw;
-    height: 2.2222vw;
-  }
-
-  .creative-design .section-heading .card-stack__details {
-    gap: 1.3889vw;
-    width: min(100%, 38.8889vw);
-    margin-top: 1.5278vw;
-    transform: translateX(2.9167vw);
-  }
-
-  .creative-design .section-heading .card-stack__details img:first-child {
-    width: 13.9583vw;
-    margin-top: 2.0833vw;
-  }
-
-  .creative-design .section-heading .card-stack__details img:last-child {
-    width: 12.2917vw;
-  }
-
-  .creative-design__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    width: min(80vw, 100%);
-    height: 34vw;
-    transform-origin: center center;
-  }
-
-  .creative-design__column {
-    height: auto;
-    padding: 2vw;
-  }
-
-  .creative-design__column + .creative-design__column {
-    border-top: 0;
-    border-left: 1px solid var(--creative-line);
-  }
-
-  .creative-design__column--split {
-    grid-template-rows: repeat(2, minmax(0, 1fr));
-    height: auto;
-  }
-
-  .creative-design__column--split > div {
-    padding: 2vw;
-  }
-}
-
 @media (max-width: 767px) {
-  :is(.activity-design-intro, .card-stack, .ip-design, .creative-design) .section-heading {
+  :is(.activity-design-intro, .card-stack, .ip-design) .section-heading {
     width: min(100%, 640px, calc(100vw - max(64px, 13vw)));
   }
 
-  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design, .creative-design) .section-heading h2 {
+  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design) .section-heading h2 {
     font-size: clamp(34px, 6.75vw, 50px);
   }
 
-  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design, .creative-design) .section-heading h2::after {
+  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design) .section-heading h2::after {
     right: -20px;
     width: 8px;
     height: 8px;
   }
 
-  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design, .creative-design) .section-heading__accent {
+  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design) .section-heading__accent {
     right: -4px;
     bottom: -8px;
     width: min(156px, 45vw);
     height: auto;
   }
 
-  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design, .creative-design) .section-heading .card-stack__details {
+  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design) .section-heading .card-stack__details {
     align-items: flex-start;
     gap: clamp(12px, 4vw, 20px);
     width: min(100%, 560px);
@@ -3762,22 +3634,43 @@ html.quiz-viewer-open body {
     transform-origin: center top;
   }
 
-  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design, .creative-design) .section-heading .card-stack__details img {
+  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design) .section-heading .card-stack__details img {
     flex: none;
     width: auto;
     max-width: none;
     height: clamp(8.5px, 2.75vw, 20px);
   }
 
-  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design, .creative-design) .section-heading .card-stack__details img:first-child {
+  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design) .section-heading .card-stack__details img:first-child {
     width: auto;
     margin-top: 24px;
     transform: none;
   }
 
-  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design, .creative-design) .section-heading .card-stack__details img:last-child {
+  :is(.activity-design-intro, .ai-video, .card-stack, .ip-design) .section-heading .card-stack__details img:last-child {
     width: auto;
     margin-top: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .ip-design {
+    padding-bottom: 48px;
+  }
+
+  .ip-design .section-heading__accent {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .ip-design .section-heading h2::after {
+    right: auto;
+    left: calc(50% + min(78px, 22.5vw) + 8px);
+  }
+
+  .portfolio-contact {
+    padding-top: 32px;
   }
 }
 
@@ -3840,13 +3733,12 @@ html.quiz-viewer-open body {
     height: auto;
   }
 
-  .data-viewer {
-    padding-inline: 16px;
+  .creative-viewer[open] {
+    padding: 80px 16px 32px;
   }
 
-  .data-viewer__image {
+  .creative-viewer__image {
     width: min(100%, 700px);
-    margin: 80px auto 32px;
   }
 
   .research-viewer__stage {

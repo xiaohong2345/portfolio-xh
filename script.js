@@ -335,32 +335,32 @@ if (appTrigger && appViewer) {
   });
 }
 
-const dataTrigger = document.querySelector(".work-card__open--data");
-const dataViewer = document.getElementById("dataViewer");
+const creativeTrigger = document.querySelector(".work-card__open--creative");
+const creativeViewer = document.getElementById("creativeViewer");
 
-if (dataTrigger && dataViewer) {
-  const backButton = dataViewer.querySelector(".data-viewer__back");
+if (creativeTrigger && creativeViewer) {
+  const backButton = creativeViewer.querySelector(".creative-viewer__back");
   let openedScrollY = 0;
 
-  dataTrigger.addEventListener("click", () => {
+  creativeTrigger.addEventListener("click", () => {
     openedScrollY = window.scrollY;
-    dataViewer.showModal();
-    dataViewer.scrollTop = 0;
-    dataViewer.scrollLeft = 0;
-    document.documentElement.classList.add("data-viewer-open");
+    creativeViewer.showModal();
+    creativeViewer.scrollTop = 0;
+    creativeViewer.scrollLeft = 0;
+    document.documentElement.classList.add("creative-viewer-open");
     pageScroller?.stop();
     backButton.focus({ preventScroll: true });
   });
 
-  backButton.addEventListener("click", () => dataViewer.close());
-  dataViewer.addEventListener("close", () => {
-    document.documentElement.classList.remove("data-viewer-open");
+  backButton.addEventListener("click", () => creativeViewer.close());
+  creativeViewer.addEventListener("close", () => {
+    document.documentElement.classList.remove("creative-viewer-open");
     pageScroller?.start();
     if (Math.abs(window.scrollY - openedScrollY) > 1) {
       if (pageScroller) pageScroller.scrollTo(openedScrollY, { immediate: true, force: true });
       else window.scrollTo(0, openedScrollY);
     }
-    dataTrigger.focus({ preventScroll: true });
+    creativeTrigger.focus({ preventScroll: true });
   });
 }
 
@@ -1108,13 +1108,13 @@ if (ipItems.length) {
 
 const portfolioContact = document.querySelector(".portfolio-contact");
 
-if (portfolioContact && "IntersectionObserver" in window) {
-  const contactTitle = portfolioContact.querySelector(".contact-title");
+if (portfolioContact) {
   const titleLines = [...portfolioContact.querySelectorAll("[data-decrypt-text]")];
   const contactDetails = [...portfolioContact.querySelectorAll(".contact-capabilities, .contact-methods")];
   const skipContactMotion = window.matchMedia("(prefers-reduced-motion: reduce), (max-width: 600px)");
 
   if (!skipContactMotion.matches) {
+    let stopWaitingForEnd = () => {};
     const prepareContactTitle = () => {
       const letters = [];
 
@@ -1174,22 +1174,34 @@ if (portfolioContact && "IntersectionObserver" in window) {
       if (skipContactMotion.matches) return;
       const letters = prepareContactTitle();
       contactDetails.forEach((detail) => detail.classList.add("contact-reveal-pending"));
+      let animationStarted = false;
 
-      const observer = new IntersectionObserver((entries) => {
-        if (!entries[0].isIntersecting) return;
-        observer.disconnect();
+      const startNearPageEnd = () => {
+        if (animationStarted) return;
+        const scrollHeight = document.scrollingElement?.scrollHeight ?? document.documentElement.scrollHeight;
+        const remaining = scrollHeight - window.innerHeight - window.scrollY;
+        if (remaining > Math.min(120, window.innerHeight * 0.16)) return;
+        stopWaitingForEnd();
         if (skipContactMotion.matches) {
           revealDetails();
           return;
         }
         startContactAnimation(letters);
-      }, { threshold: 0.2 });
+      };
 
-      observer.observe(contactTitle);
+      stopWaitingForEnd = () => {
+        animationStarted = true;
+        window.removeEventListener("scroll", startNearPageEnd);
+        window.removeEventListener("resize", startNearPageEnd);
+      };
+      window.addEventListener("scroll", startNearPageEnd, { passive: true });
+      window.addEventListener("resize", startNearPageEnd);
+      startNearPageEnd();
     });
 
     skipContactMotion.addEventListener("change", () => {
       if (!skipContactMotion.matches) return;
+      stopWaitingForEnd();
       titleLines.forEach((line) => { line.textContent = line.dataset.decryptText; });
       revealDetails();
     });
