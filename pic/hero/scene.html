@@ -30,8 +30,8 @@
       }
       .window-line, .sill-line { opacity: 1; }
       .bottle-body {
-        fill: #24344b;
-        fill-opacity: .38;
+        fill: #424242;
+        fill-opacity: .2;
         stroke: #d0dce9;
         stroke-width: 1.12;
         stroke-linecap: round;
@@ -191,7 +191,7 @@
                   }
 
                   .cls-3 {
-                    fill: #06172d;
+                    fill: #0F1110;
                   }
                 </style>
               </defs>
@@ -250,7 +250,7 @@
                   }
 
                   .cls-3 {
-                    fill: #06172d;
+                    fill: #0F1110;
                   }
                 </style>
               </defs>
@@ -306,7 +306,7 @@
                   }
 
                   .cls-3 {
-                    fill: #06172d;
+                    fill: #0F1110;
                   }
                 </style>
               </defs>
@@ -390,6 +390,13 @@
         const NORMAL_METEOR_COUNT = 110;
         const WARM_METEOR_COUNT = 1;
         const MAX_STARS = 40;
+        const CAPTURE_RATE_MULTIPLIER = 1.3;
+        const OPENING_CAPTURES = [
+          { at: 0, kind: 'wide' },
+          { at: .3, kind: 'wide' },
+          { at: 2.45, kind: 'near' },
+          { at: 2.8, kind: 'wide' }
+        ];
         const SAND_LEFT = 565;
         const SAND_RIGHT = 654;
         const SAND_FLOOR = 426;
@@ -407,8 +414,11 @@
         let sceneTime = 0;
         let sillClock = 0;
         const captures = [];
-        let nextCapture = 2.2;
+        let nextCapture = 2.2 / CAPTURE_RATE_MULTIPLIER;
         let captureWave = 0;
+        let openingCaptureIndex = 0;
+        let openingLandings = 0;
+        let openingCapturesActive = !reducedMotion.matches;
         let pairDelay = -1;
         let pairKind = 'wide';
         let captureGradientId = 0;
@@ -416,14 +426,39 @@
         let shakeDuration = .24;
         let shakeSide = 1;
         let shakeStrength = 1;
-        let nextSillMeteorAt = 3;
+        let nextSillMeteorAt = null;
+        let nextSillDuration = 1.15;
+        let nextSillSide = 'left';
         let sillMeteor = null;
         let sillStar = null;
 
         const random = (min, max) => min + Math.random() * (max - min);
         const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
         const mix = (a, b, t) => a + (b - a) * t;
+        const cubic = (a, b, c, d, t) => (1 - t) ** 3 * a + 3 * (1 - t) ** 2 * t * b
+          + 3 * (1 - t) * t ** 2 * c + t ** 3 * d;
         const smooth = (t) => t * t * (3 - 2 * t);
+
+        function leftSillPosition(targetX, targetY, t) {
+          if (t <= .5) {
+            const progress = t * 2;
+            return {
+              x: cubic(targetX + 440, targetX + 350, targetX + 230, targetX + 180, progress),
+              y: cubic(-6, 35, 100, 140, progress)
+            };
+          }
+          const progress = (t - .5) * 2;
+          return {
+            x: cubic(targetX + 180, targetX + 130, targetX + 60, targetX, progress),
+            y: cubic(140, 180, 330, targetY, progress)
+          };
+        }
+
+        function scheduleSillMeteor(fromTime) {
+          nextSillDuration = random(1.05, 1.25);
+          nextSillMeteorAt = fromTime + random(4, 6) - nextSillDuration;
+        }
+
         const outCubic = (t) => 1 - (1 - t) ** 3;
         // Three restrained hand-drawn poses, timed with the rabbit. Endpoints stay fixed.
         const linePosePaths = linePaths.map((path, index) => {
@@ -787,7 +822,7 @@
           };
         }
 
-        function launchCapture(kind) {
+        function launchCapture(kind, opening = false) {
           if (captures.length >= 2 || stars.length + captures.length >= MAX_STARS) return false;
           const route = chooseCapturePath(kind);
           const hue = Math.random() < .58 ? 'yellow' : 'orange';
@@ -820,7 +855,7 @@
           approachLayer.append(skyWhiteGlow, skyWarmGlow, skyWhiteTail, skyWarmTail, group);
           bottleContent.append(innerWhiteGlow, innerWarmGlow, innerWhiteTail, innerWarmTail);
           captures.push({
-            group, whiteGroup, warmGroup, hue, inside: false, elapsed: 0,
+            group, whiteGroup, warmGroup, hue, opening, inside: false, elapsed: 0,
             ...route, x: route.startX, y: route.startY,
             history: [{ x: route.startX, y: route.startY, time: 0 }],
             mouthTime: Infinity,
@@ -909,10 +944,10 @@
           return `M ${left.join(' L ')} L ${right.reverse().join(' L ')} Z`;
         }
 
-        function launchSillMeteor() {
-          // Keep this route to the right of both the bottle and the seated figure.
-          const targetX = random(790, 950);
-          const targetY = random(420, 444);
+        function launchSillMeteor(side) {
+          const leftSide = side === 'left';
+          const targetX = leftSide ? random(460, 485) : random(790, 950);
+          const targetY = leftSide ? random(418, 426) : random(420, 444);
           const gradient = curveYellow.cloneNode(true);
           gradient.id = `sill-meteor-${++captureGradientId}`;
           svgDefs.append(gradient);
@@ -930,14 +965,15 @@
           group.append(glow, tail, head);
           sillMeteorLayer.append(group);
           sillMeteor = {
-            group, gradient, glow, tail, head, targetX, targetY,
-            startX: Math.min(1136, targetX + random(185, 245)),
-            startY: -6, duration: random(1.05, 1.25), elapsed: 0,
+            group, gradient, glow, tail, head, side, targetX, targetY,
+            startX: leftSide ? targetX + 440
+              : Math.min(1136, targetX + random(185, 245)),
+            startY: -6, duration: nextSillDuration, elapsed: 0,
             history: [], impactAge: null
           };
         }
 
-        function landSillStar(x, y) {
+        function landSillStar(x, y, side) {
           const depth = clamp((y - 402) / 66, 0, 1);
           const scaleX = mix(.72, 1.32, depth);
           const scaleY = scaleX * mix(.42, .58, depth);
@@ -956,8 +992,10 @@
           root.append(shadow, star);
           sillMeteorLayer.append(root);
           sillStar = { root, shadow, star, x, y, scaleX, scaleY, age: 0 };
-          // The wall shake is subpixel after SVG scaling; make this impact readable.
-          triggerBottleShake(-1, 12, .36);
+          if (side === 'right') {
+            // The wall shake is subpixel after SVG scaling; make this impact readable.
+            triggerBottleShake(-1, 12, .36);
+          }
         }
 
         function triggerBottleShake(side, strength = 1, duration = .24) {
@@ -992,8 +1030,13 @@
 
           meteor.elapsed = Math.min(meteor.duration, meteor.elapsed + dt);
           const t = meteor.elapsed / meteor.duration;
-          const x = mix(meteor.startX, meteor.targetX, t);
-          const y = mix(meteor.startY, meteor.targetY, .18 * t + .82 * t * t);
+          const position = meteor.side === 'left'
+            ? leftSillPosition(meteor.targetX, meteor.targetY, t)
+            : {
+                x: mix(meteor.startX, meteor.targetX, t),
+                y: mix(meteor.startY, meteor.targetY, .18 * t + .82 * t * t)
+              };
+          const { x, y } = position;
           meteor.history.push({ x, y, time: meteor.elapsed });
           while (meteor.history.length > 2 && meteor.history[1].time < meteor.elapsed - CAPTURE_TRAIL_TIME) {
             meteor.history.shift();
@@ -1008,7 +1051,9 @@
           meteor.gradient.setAttribute('y2', oldest.y.toFixed(2));
           meteor.head.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)})`);
           if (t >= 1) {
-            landSillStar(meteor.targetX, meteor.targetY);
+            landSillStar(meteor.targetX, meteor.targetY, meteor.side);
+            nextSillSide = meteor.side === 'left' ? 'right' : 'left';
+            scheduleSillMeteor(sillClock);
             meteor.head.remove();
             meteor.impactAge = 0;
           }
@@ -1139,6 +1184,14 @@
               triggerBottleShake(impactX < 609 ? -1 : 1, 6, .32);
             }
             landStar(clamp(impactX, 568, 651), impactY, false, meteor.hue);
+            if (meteor.opening && ++openingLandings === OPENING_CAPTURES.length) {
+              openingCapturesActive = false;
+              captureWave = OPENING_CAPTURES.length;
+              nextCapture = random(4.5, 6.5) / CAPTURE_RATE_MULTIPLIER;
+            }
+            if (window.parent !== window) {
+              window.parent.postMessage({ type: 'portfolio-scene:star-impact' }, '*');
+            }
           }
         }
 
@@ -1331,8 +1384,12 @@
 
           physicsRemainder += elapsed;
           while (physicsRemainder >= PHYSICS_STEP) {
-            if (stars.length + captures.length < MAX_STARS &&
-                (!sillMeteor || sillMeteor.impactAge !== null)) {
+            if (openingCapturesActive) {
+              const event = OPENING_CAPTURES[openingCaptureIndex];
+              if (event && sceneTime >= event.at && launchCapture(event.kind, true)) {
+                openingCaptureIndex++;
+              }
+            } else if (stars.length + captures.length < MAX_STARS) {
               nextCapture -= PHYSICS_STEP;
               if (nextCapture <= 0) {
                 const kinds = ['near', 'wide', 'right', 'near', 'wide'];
@@ -1344,7 +1401,7 @@
                     pairKind = kind === 'wide' ? 'near' : 'wide';
                     pairDelay = random(.2, .42);
                   }
-                  nextCapture = random(4.5, 6.5);
+                  nextCapture = random(4.5, 6.5) / CAPTURE_RATE_MULTIPLIER;
                 }
               }
             }
@@ -1361,10 +1418,8 @@
           updateSparkles();
           updateShake(elapsed);
           updateRabbit(sillElapsed);
-          if (nextSillMeteorAt !== null && sillClock >= nextSillMeteorAt &&
-              !sillMeteor && captures.length === 0 && pairDelay < 0) {
-            launchSillMeteor();
-            nextSillMeteorAt = sillClock + random(12, 15);
+          if (nextSillMeteorAt !== null && sillClock >= nextSillMeteorAt && !sillMeteor) {
+            launchSillMeteor(nextSillSide);
           }
           updateSillMeteor(sillElapsed);
           updateSillStar(sillElapsed);
@@ -1414,19 +1469,21 @@
           stop();
           for (const meteor of captures) removeCaptureVisual(meteor);
           captures.length = 0;
+          openingCapturesActive = false;
           pairDelay = -1;
           if (reducedMotion.matches) {
             nextSillMeteorAt = null;
             fillSky();
             seedStillBottle();
           } else {
-            nextCapture = 2.2;
-            captureWave = 0;
-            nextSillMeteorAt = sillClock + 3;
+            nextCapture = 2.2 / CAPTURE_RATE_MULTIPLIER;
+            captureWave = OPENING_CAPTURES.length;
+            scheduleSillMeteor(sillClock);
             start();
           }
         });
 
+        scheduleSillMeteor(sillClock);
         fillSky();
         if (reducedMotion.matches) seedStillBottle();
         start();

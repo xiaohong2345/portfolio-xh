@@ -14,9 +14,84 @@ const hero = document.querySelector(".hero");
 if (hero) {
   const scene = hero.querySelector(".hero__scene");
   if (scene) {
+    const soundToggle = hero.querySelector(".hero__sound-toggle");
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     const sceneOrigin = window.location.protocol === "file:" ? "*" : window.location.origin;
     const desktopScene = window.matchMedia("(min-width: 768px)");
     let sceneVisible = true;
+    let soundContext;
+    let soundEnabled = Boolean(AudioContextClass);
+    let lastChimeAt = -Infinity;
+
+    const updateSoundToggle = () => {
+      const label = soundEnabled ? "关闭音效" : "开启音效";
+      soundToggle.setAttribute("aria-label", label);
+      soundToggle.setAttribute("aria-pressed", String(soundEnabled));
+      soundToggle.title = label;
+    };
+
+    const unlockSound = () => {
+      if (!soundEnabled || !desktopScene.matches || !soundToggle) return;
+      try {
+        soundContext ||= new AudioContextClass();
+        if (soundContext.state !== "running") soundContext.resume().catch(() => {});
+      } catch {
+        soundEnabled = false;
+        soundToggle.hidden = true;
+      }
+    };
+
+    const playChime = () => {
+      const now = soundContext.currentTime;
+      if (now - lastChimeAt < 0.12) return;
+      lastChimeAt = now;
+
+      const envelope = soundContext.createGain();
+      envelope.gain.setValueAtTime(0.0001, now);
+      envelope.gain.exponentialRampToValueAtTime(0.055, now + 0.008);
+      envelope.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+      envelope.connect(soundContext.destination);
+
+      let voicesLeft = 3;
+      for (const [frequency, volume] of [[1046.5, 1], [1568, 0.3], [2093, 0.12]]) {
+        const oscillator = soundContext.createOscillator();
+        const partial = soundContext.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.value = frequency;
+        partial.gain.value = volume;
+        oscillator.connect(partial);
+        partial.connect(envelope);
+        oscillator.onended = () => {
+          oscillator.disconnect();
+          partial.disconnect();
+          if (--voicesLeft === 0) envelope.disconnect();
+        };
+        oscillator.start(now);
+        oscillator.stop(now + 0.46);
+      }
+    };
+
+    if (AudioContextClass && soundToggle) {
+      updateSoundToggle();
+      soundToggle.addEventListener("click", () => {
+        soundEnabled = !soundEnabled;
+        updateSoundToggle();
+        if (soundEnabled) unlockSound();
+      });
+      window.addEventListener("pointerdown", unlockSound, { capture: true });
+      window.addEventListener("keydown", unlockSound, { capture: true });
+      unlockSound();
+    } else if (soundToggle) {
+      soundToggle.hidden = true;
+    }
+
+    window.addEventListener("message", (event) => {
+      if (event.source !== scene.contentWindow || event.data?.type !== "portfolio-scene:star-impact") return;
+      if (window.location.protocol !== "file:" && event.origin !== window.location.origin) return;
+      if (!soundEnabled || !desktopScene.matches || !sceneVisible || document.hidden) return;
+      if (soundContext?.state === "running") playChime();
+    });
+
     const syncScene = () => {
       if (!desktopScene.matches || !scene.hasAttribute("src")) return;
       scene.contentWindow?.postMessage(
@@ -29,9 +104,12 @@ if (hero) {
       if (desktopScene.matches) {
         if (!scene.hasAttribute("src")) scene.src = scene.dataset.src;
         else syncScene();
-      } else if (scene.hasAttribute("src")) {
-        scene.contentWindow?.postMessage({ type: "portfolio-scene:pause" }, sceneOrigin);
-        scene.removeAttribute("src");
+        unlockSound();
+      } else {
+        if (scene.hasAttribute("src")) {
+          scene.contentWindow?.postMessage({ type: "portfolio-scene:pause" }, sceneOrigin);
+          scene.removeAttribute("src");
+        }
       }
     };
 
