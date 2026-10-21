@@ -52,124 +52,88 @@ dd:lang(zh) {
 }
 
 .hero {
+  --hero-header-clearance: clamp(150px, 21vh, 170px);
   position: relative;
-  isolation: isolate;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  min-height: 100vh;
-  min-height: 100svh;
-  padding: clamp(28px, 3.5vw, 56px) var(--page-padding)
-    clamp(24px, 3vw, 44px);
+  height: 100svh;
+  min-height: 320px;
   overflow: hidden;
+  background: #0f1110;
+  color: #f5f0e8;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.hero__media {
+.hero__scene {
   position: absolute;
   inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  background: #0f1110 url("./pic/IP设计/C.png") center / cover no-repeat;
-}
-
-.hero__media::after {
-  position: absolute;
-  inset: 0;
-  content: "";
-  background: linear-gradient(
-    to bottom,
-    rgb(0 0 0 / 25%) 0 58%,
-    rgb(15 17 16 / 60%) 82%,
-    var(--color-bg) 100%
-  );
-  pointer-events: none;
-}
-
-.hero__video {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  border: 0;
+  pointer-events: none;
 }
 
-.hero__video[hidden] {
+.hero__mobile-art {
   display: none;
 }
 
 .hero__header {
-  position: relative;
-  z-index: 2;
-  grid-column: 1 / -1;
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  height: var(--hero-header-clearance);
+  pointer-events: none;
+}
+
+.hero__categories {
+  position: absolute;
+  top: 22px;
+  left: clamp(22px, 3.2vw, 42px);
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  font-size: clamp(14px, 1vw, 18px);
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: 0.16em;
+  gap: 4px;
+  font-size: clamp(14px, .95vw, 18px);
+  font-weight: 700;
+  line-height: 1;
   white-space: nowrap;
+  pointer-events: auto;
 }
 
-.hero__title {
-  position: relative;
-  z-index: 2;
-  grid-column: 1 / -1;
-  align-self: end;
-  justify-self: center;
-  width: min(51vw, 885px, 130svh);
-  margin: 0 0 clamp(28px, 3.5vh, 44px);
-}
-
-.hero__title img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.hero__scroll {
-  position: relative;
-  z-index: 2;
-  grid-column: 1 / -1;
-  justify-self: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: clamp(11px, 0.75vw, 13px);
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: 0.16em;
+.hero__categories a {
   color: inherit;
   text-decoration: none;
 }
 
-.hero__scroll:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 8px;
+.hero__categories a:hover,
+.hero__categories a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
-.hero__scroll-arrow {
-  font-size: 1.3em;
+.hero__brand {
+  position: absolute;
+  top: 22px;
+  right: clamp(22px, 3.2vw, 42px);
+  font-size: clamp(14px, .95vw, 18px);
+  font-weight: 700;
   line-height: 1;
 }
 
-@media (min-width: 768px) and (any-hover: hover) and (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .hero-reveal-ready .hero__title {
-    transition: opacity 850ms ease, transform 850ms cubic-bezier(0.2, 0.78, 0.18, 1);
-  }
-
-  .hero-reveal-ready:not(.hero-revealed) .hero__title {
-    opacity: 0;
-    transform: translateY(32px);
-  }
+.hero__title {
+  position: absolute;
+  bottom: -42px;
+  left: 50%;
+  margin: 0;
+  transform: translateX(-50%);
+  font-size: clamp(50px, calc(6.5vw + 4px), 128px);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: .96;
+  white-space: nowrap;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .hero__video {
-    display: none;
-  }
+.hero__mobile-tip {
+  display: none;
 }
 
 .activity-design-intro {
@@ -1985,19 +1949,57 @@ html.quiz-viewer-open body {
 
 @media (max-width: 767px) {
   .hero {
-    padding-top: 28px;
-    padding-bottom: 28px;
+    --hero-mobile-title-top: clamp(150px, 26svh, 250px);
+    --hero-mobile-art-height: min(28vw, 130px);
+    height: min(56svh, 394px);
   }
 
-  .hero__header {
-    gap: 12px;
-    font-size: clamp(12px, 3vw, 14px);
-    letter-spacing: 0.11em;
+  .activity-design-intro {
+    padding-top: 0;
+  }
+
+  .hero__scene {
+    display: none;
+  }
+
+  .hero__mobile-art {
+    position: absolute;
+    z-index: 0;
+    top: calc(var(--hero-mobile-title-top) - var(--hero-mobile-art-height) + 20px);
+    left: 50%;
+    display: block;
+    width: min(47vw, 220px);
+    height: var(--hero-mobile-art-height);
+    object-fit: contain;
+    transform: translateX(-50%);
+    pointer-events: none;
   }
 
   .hero__title {
-    width: min(69vw, 420px);
-    margin-bottom: clamp(24px, 4svh, 36px);
+    top: var(--hero-mobile-title-top);
+    bottom: auto;
+    font-size: clamp(46px, 13vw, 58px);
+    text-shadow: 0 2px 8px rgb(15 17 16 / 85%);
+  }
+
+  .hero__mobile-tip {
+    position: absolute;
+    top: calc(var(--hero-mobile-title-top) + 72px);
+    left: 50%;
+    display: block;
+    margin: 0;
+    transform: translateX(-50%);
+    color: rgb(245 240 232 / 72%);
+    font-size: 13px;
+    line-height: 1.4;
+    letter-spacing: .04em;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 767px) and (max-height: 600px) {
+  .hero {
+    --hero-mobile-art-height: min(28vw, 90px);
   }
 }
 
@@ -2475,6 +2477,14 @@ html.quiz-viewer-open body {
   object-fit: cover;
 }
 
+.ai-video__screen.is-portrait {
+  background: #000;
+}
+
+.ai-video__screen.is-portrait .ai-video__player {
+  object-fit: contain;
+}
+
 .ai-video__error {
   position: absolute;
   top: 16px;
@@ -2613,6 +2623,14 @@ html.quiz-viewer-open body {
   height: 100%;
   border-radius: inherit;
   object-fit: cover;
+}
+
+.ai-video__thumb--portrait {
+  background: #000;
+}
+
+.ai-video__thumb--portrait img {
+  object-fit: contain;
 }
 
 .ai-video__thumb:hover,

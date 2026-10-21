@@ -11,18 +11,6 @@
     <meta property="og:title" content="XIAOHONG｜视觉设计、AI 视频与创意开发作品集（2026）" />
     <meta property="og:description" content="XIAOHONG 2026 作品集，展示活动视觉、IP 形象、文创设计、AI 工具与交互项目。" />
     <title>XIAOHONG｜视觉设计、AI 视频与创意开发作品集（2026）</title>
-    <script>
-      (() => {
-        const root = document.documentElement;
-        const desktopReveal = "(min-width: 768px) and (any-hover: hover) and (any-pointer: fine) and (prefers-reduced-motion: no-preference)";
-        if (matchMedia(desktopReveal).matches && window.scrollY <= 2 && !window.location.hash) {
-          root.classList.add("hero-reveal-ready");
-        }
-        window.addEventListener("load", () => {
-          if (!root.classList.contains("hero-reveal-bound")) root.classList.remove("hero-reveal-ready");
-        }, { once: true });
-      })();
-    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -37,31 +25,18 @@
   <body>
     <main>
     <section class="hero" aria-label="作品集首页">
-      <div class="hero__media" aria-hidden="true">
-        <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="./pic/IP设计/C.png" tabindex="-1">
-          <source src="./pic/IP设计/C小象.mp4" type="video/mp4" />
-        </video>
-      </div>
-
-      <header class="hero__header" aria-label="网站标识">
-        <span>XIAOHONG</span>
-        <span>PORTFOLIO 2026</span>
+      <iframe class="hero__scene" data-src="./pic/hero/scene.html" title="流星窗景动画" loading="eager" tabindex="-1"></iframe>
+      <img class="hero__mobile-art" src="./pic/hero/瓶子.png" alt="装着星星的瓶子与兔子插画" width="1304" height="1104" decoding="async" />
+      <header class="hero__header">
+        <nav class="hero__categories" aria-label="作品分类">
+          <a href="#activity-design">Visual Design</a>
+          <a href="#ai-video">AI Video</a>
+          <a href="#vibe-coding">Vibe Coding</a>
+        </nav>
+        <span class="hero__brand">xiaohong</span>
+        <h1 class="hero__title">PORTFOLIO</h1>
+        <p class="hero__mobile-tip">电脑端更精彩，打开看看！</p>
       </header>
-
-      <h1 class="hero__title">
-        <img
-          src="./pic/0-portfolio.png"
-          alt="Portfolio"
-          width="961"
-          height="359"
-          fetchpriority="high"
-        />
-      </h1>
-
-      <a class="hero__scroll" href="#activity-design" aria-label="下滑浏览活动视觉设计">
-        <span class="hero__scroll-arrow">↓</span>
-        <span>SCROLL</span>
-      </a>
     </section>
 
     <section class="activity-design-intro" id="activity-design" aria-labelledby="activity-design-title">
@@ -367,14 +342,14 @@
               <button class="ai-video__thumb is-active" type="button" data-video-index="0" aria-label="播放 vivo精彩随行" aria-pressed="true"><img src="./pic/video/posters/最新手机.webp" alt="" loading="lazy" decoding="async" /></button>
               <button class="ai-video__thumb" type="button" data-video-index="1" aria-label="播放 珍爱APP短片" aria-pressed="false"><img src="./pic/video/posters/珍爱最新-换前段.webp" alt="" loading="lazy" decoding="async" /></button>
               <button class="ai-video__thumb" type="button" data-video-index="2" aria-label="播放 安慕希整颗蓝莓酸奶" aria-pressed="false"><img src="./pic/video/posters/鲜奇一路整颗满足.webp" alt="" loading="lazy" decoding="async" /></button>
-              <button class="ai-video__thumb" type="button" data-video-index="3" aria-label="播放 音乐MV千禧记忆" aria-pressed="false"><img src="./pic/video/posters/最新掉进游戏机-高清.webp" alt="" loading="lazy" decoding="async" /></button>
+              <button class="ai-video__thumb ai-video__thumb--portrait" type="button" data-video-index="3" aria-label="播放 向日葵" aria-pressed="false"><img src="./pic/video/posters/向日葵.webp" alt="" loading="lazy" decoding="async" /></button>
             </div>
           </div>
         </nav>
       </div>
     </section>
 
-    <section class="card-stack" aria-labelledby="card-stack-title">
+    <section class="card-stack" id="vibe-coding" aria-labelledby="card-stack-title">
       <header class="card-stack__heading section-heading">
         <span class="card-stack__eyebrow" aria-hidden="true">AI TOOLING</span>
         <h2 id="card-stack-title">AI工具化<svg class="section-heading__accent" viewBox="0 0 174 32" aria-hidden="true" focusable="false"><path d="M0.195312 31.0779C28.2322 24.3578 94.8197 6.97291 82.1155 13.9856M42.6887 27.1338C64.7385 20.852 150.105 2.59095 173.235 0.837891" /></svg></h2>

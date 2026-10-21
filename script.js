@@ -12,104 +12,39 @@ const pageScroller = typeof Lenis !== "undefined"
 const hero = document.querySelector(".hero");
 
 if (hero) {
-  const root = document.documentElement;
-  const scrollCue = hero.querySelector(".hero__scroll");
-  const video = hero.querySelector(".hero__video");
-  const desktopPointer = window.matchMedia("(min-width: 768px) and (any-hover: hover) and (any-pointer: fine)");
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const canStageReveal = () => desktopPointer.matches && !reducedMotion.matches;
-  const revealDuration = 850;
-  let revealed = !canStageReveal() || window.scrollY > 2 || Boolean(window.location.hash);
-  let revealStartedAt = -Infinity;
-  let lastBlockedWheelAt = -Infinity;
+  const scene = hero.querySelector(".hero__scene");
+  if (scene) {
+    const sceneOrigin = window.location.protocol === "file:" ? "*" : window.location.origin;
+    const desktopScene = window.matchMedia("(min-width: 768px)");
+    let sceneVisible = true;
+    const syncScene = () => {
+      if (!desktopScene.matches || !scene.hasAttribute("src")) return;
+      scene.contentWindow?.postMessage(
+        { type: sceneVisible ? "portfolio-scene:resume" : "portfolio-scene:pause" },
+        sceneOrigin
+      );
+    };
 
-  if (revealed) root.classList.add("hero-revealed");
-  else root.classList.add("hero-reveal-ready");
-
-  const revealTitle = () => {
-    if (revealed) return;
-    revealed = true;
-    revealStartedAt = performance.now();
-    lastBlockedWheelAt = revealStartedAt;
-    root.classList.add("hero-revealed");
-  };
-
-  const revealIsSettling = (now) =>
-    now - revealStartedAt < revealDuration || now - lastBlockedWheelAt < 180;
-
-  const blockWheel = (event, now) => {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    lastBlockedWheelAt = now;
-  };
-
-  window.addEventListener("wheel", (event) => {
-    if (!canStageReveal() || window.scrollY > 2 || event.deltaY <= 0 || !hero.contains(event.target)) return;
-
-    const now = performance.now();
-    if (!revealed) {
-      revealTitle();
-      blockWheel(event, now);
-    } else if (revealIsSettling(now)) {
-      blockWheel(event, now);
-    }
-  }, { capture: true, passive: false });
-
-  scrollCue?.addEventListener("click", (event) => {
-    if (!canStageReveal() || window.scrollY > 2) return;
-    if (!revealed || revealIsSettling(performance.now())) {
-      event.preventDefault();
-      event.stopPropagation();
-      revealTitle();
-    }
-  });
-
-  window.addEventListener("keydown", (event) => {
-    if (!canStageReveal() || window.scrollY > 2 || event.altKey || event.ctrlKey || event.metaKey) return;
-    if (!["ArrowDown", "PageDown", " "].includes(event.key)) return;
-    if (event.target !== document.body && event.target !== root && !hero.contains(event.target)) return;
-    if (!revealed || revealIsSettling(performance.now())) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      revealTitle();
-    }
-  }, { capture: true });
-
-  window.addEventListener("scroll", () => {
-    if (!revealed && window.scrollY > 2) revealTitle();
-  }, { passive: true });
-
-  const revealWhenStageEnds = () => {
-    if (!canStageReveal()) revealTitle();
-  };
-  desktopPointer.addEventListener("change", revealWhenStageEnds);
-  reducedMotion.addEventListener("change", revealWhenStageEnds);
-
-  if (video) {
-    let heroVisible = true;
-    const updateVideoPlayback = () => {
-      if (reducedMotion.matches || document.hidden || !heroVisible) {
-        video.pause();
-      } else {
-        video.play().catch(() => {});
+    const syncSceneWidth = () => {
+      if (desktopScene.matches) {
+        if (!scene.hasAttribute("src")) scene.src = scene.dataset.src;
+        else syncScene();
+      } else if (scene.hasAttribute("src")) {
+        scene.contentWindow?.postMessage({ type: "portfolio-scene:pause" }, sceneOrigin);
+        scene.removeAttribute("src");
       }
     };
 
-    const showPoster = () => { video.hidden = true; };
-    video.addEventListener("error", showPoster);
-    video.querySelector("source")?.addEventListener("error", showPoster);
-    document.addEventListener("visibilitychange", updateVideoPlayback);
-    reducedMotion.addEventListener("change", updateVideoPlayback);
+    scene.addEventListener("load", syncScene);
+    desktopScene.addEventListener("change", syncSceneWidth);
+    syncSceneWidth();
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(([entry]) => {
-        heroVisible = entry.isIntersecting;
-        updateVideoPlayback();
+        sceneVisible = entry.isIntersecting;
+        syncScene();
       }, { threshold: 0.01 }).observe(hero);
     }
-    updateVideoPlayback();
   }
-
-  root.classList.add("hero-reveal-bound");
 }
 
 if ("IntersectionObserver" in window) {
@@ -754,11 +689,12 @@ if (aiVideoSection) {
       poster: "./pic/video/posters/鲜奇一路整颗满足.webp",
     },
     {
-      title: "音乐MV 丨千禧记忆",
-      tag: "快乐马首发灰测 · 音乐MV",
-      description: "快乐马模型首发测试，以音乐MV的形式，童年游戏机像一个入口，通往陌生又熟悉的回忆，每个画面像一段被回放的童年存档。暂且抛开现实，在记忆里畅游。",
-      src: "./pic/video/最新掉进游戏机-高清.mp4",
-      poster: "./pic/video/posters/最新掉进游戏机-高清.webp",
+      title: "向日葵",
+      tag: "竖屏 · 产品展示",
+      description: "视觉方向：摄影级产品实拍感。一束晨光沿产品游走，逐步揭开整座向日葵庭院。温暖、细腻，适合突出成品。",
+      src: "./pic/video/向日葵.mp4",
+      poster: "./pic/video/posters/向日葵.webp",
+      portrait: true,
     },
   ];
 
@@ -853,6 +789,7 @@ if (aiVideoSection) {
     activeIndex = index;
     updateRail();
 
+    screen.classList.toggle("is-portrait", Boolean(work.portrait));
     player.poster = work.poster;
     player.setAttribute("aria-label", work.title);
     player.controls = true;
