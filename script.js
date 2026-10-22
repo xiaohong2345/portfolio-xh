@@ -868,6 +868,14 @@ const aiVideoSection = document.querySelector(".ai-video");
 if (aiVideoSection) {
   const works = [
     {
+      title: "向日葵",
+      tag: "竖屏 · 产品展示",
+      description: "视觉方向：摄影级产品实拍感。一束晨光沿产品游走，逐步揭开整座向日葵庭院。温暖、细腻，适合突出成品。",
+      src: "./pic/video/web/sunflower.mp4",
+      poster: "./pic/video/posters/向日葵.webp",
+      portrait: true,
+    },
+    {
       title: "vivo精彩随行",
       tag: "产品广告 · 手机TVC",
       description: "用高频使用场景来展示产品卖点：远处拍得清 → 身边拍得好 → 动态抓得住，然后卖点收束，进入产品展示，“这一切来自这台手机”，记录值得珍藏的鲜活记忆。",
@@ -887,14 +895,6 @@ if (aiVideoSection) {
       description: "把蓝莓拟人化、从种植园到入口的过程旅程化，从摘下枝头开始“锁鲜”，到通关时完好无损，叙事节奏松紧交替，强化故事情绪起伏。",
       src: "./pic/video/web/anmuxi.mp4",
       poster: "./pic/video/posters/鲜奇一路整颗满足.webp",
-    },
-    {
-      title: "向日葵",
-      tag: "竖屏 · 产品展示",
-      description: "视觉方向：摄影级产品实拍感。一束晨光沿产品游走，逐步揭开整座向日葵庭院。温暖、细腻，适合突出成品。",
-      src: "./pic/video/web/sunflower.mp4",
-      poster: "./pic/video/posters/向日葵.webp",
-      portrait: true,
     },
   ];
 
