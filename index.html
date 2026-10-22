@@ -11,6 +11,53 @@
     <meta property="og:title" content="XIAOHONG｜视觉设计、AI 视频与创意开发作品集（2026）" />
     <meta property="og:description" content="XIAOHONG 2026 作品集，展示活动视觉、IP 形象、文创设计、AI 工具与交互项目。" />
     <title>XIAOHONG｜视觉设计、AI 视频与创意开发作品集（2026）</title>
+    <style>
+      html.is-entry-loading,
+      html.is-entry-loading body { overflow: hidden; }
+      .entry-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        display: none;
+        place-items: center;
+        background: #0f1110;
+        color: #f5f0e8;
+        font: 500 18px/1 Arial, Helvetica, sans-serif;
+        letter-spacing: .22em;
+        opacity: 1;
+        transition: opacity .5s ease;
+      }
+      .is-entry-loading .entry-loader,
+      .is-entry-ready .entry-loader { display: grid; }
+      .is-entry-ready .entry-loader { opacity: 0; pointer-events: none; }
+      @media (prefers-reduced-motion: reduce) {
+        .entry-loader { transition: none; }
+      }
+    </style>
+    <script>
+      (() => {
+        const root = document.documentElement;
+        root.classList.add("is-entry-loading");
+        const startedAt = performance.now();
+        let finished = false;
+        let fallbackTimer;
+        window.entryLoading = {
+          startedAt,
+          finish() {
+            if (finished) return;
+            finished = true;
+            clearTimeout(fallbackTimer);
+            root.classList.remove("is-entry-loading");
+            root.classList.add("is-entry-ready");
+            setTimeout(() => {
+              document.querySelector(".entry-loader")?.remove();
+              root.classList.remove("is-entry-ready");
+            }, 550);
+          },
+        };
+        fallbackTimer = setTimeout(() => window.entryLoading.finish(), 8000);
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -23,6 +70,9 @@
     <script src="./script.js" defer></script>
   </head>
   <body>
+    <div class="entry-loader" role="status" aria-live="polite" aria-label="正在加载作品集">
+      <span class="entry-loader__text">loading...</span>
+    </div>
     <main>
     <section class="hero" aria-label="作品集首页">
       <iframe class="hero__scene" data-src="./pic/hero/scene.html" title="流星窗景动画" loading="eager" tabindex="-1"></iframe>
@@ -231,108 +281,6 @@
       </div>
     </section>
 
-    <section class="work-collection" aria-labelledby="work-collection-title">
-      <div class="work-collection__heading" data-reveal>
-        <h2 class="work-collection__eyebrow" id="work-collection-title">MORE</h2>
-      </div>
-
-      <div class="work-collection__cards">
-      <div class="work-collection__grid">
-        <article class="work-card">
-          <div class="work-card__content">
-            <span class="work-card__number" aria-hidden="true">01</span>
-            <h3>主题活动</h3>
-            <p>从节日主题到线下联动，以主视觉与活动物料串联不同场景。</p>
-          </div>
-          <div class="work-card__visual work-card__visual--marquee">
-            <div class="work-card__track">
-              <div class="work-card__track-group">
-                <img src="./pic/3-1.png" alt="爱在尔滨浪漫冰城禧CP活动视觉" width="882" height="496" loading="lazy" decoding="async" />
-                <img src="./pic/3-2.png" alt="夏遇冰城水漾心动活动视觉" width="1152" height="648" loading="lazy" decoding="async" />
-                <img src="./pic/3-3.png" alt="父母说媒家长见面会活动视觉" width="1152" height="648" loading="lazy" decoding="async" />
-                <img src="./pic/3-4.png" alt="爱在京城悦动健身活动视觉" width="1310" height="496" loading="lazy" decoding="async" />
-              </div>
-              <div class="work-card__track-group" aria-hidden="true">
-                <img src="./pic/3-1.png" alt="" width="882" height="496" loading="lazy" decoding="async" />
-                <img src="./pic/3-2.png" alt="" width="1152" height="648" loading="lazy" decoding="async" />
-                <img src="./pic/3-3.png" alt="" width="1152" height="648" loading="lazy" decoding="async" />
-                <img src="./pic/3-4.png" alt="" width="1310" height="496" loading="lazy" decoding="async" />
-              </div>
-            </div>
-          </div>
-          <button class="work-card__open work-card__open--event" type="button" aria-label="打开活动作品查看" aria-haspopup="dialog" aria-controls="eventViewer"></button>
-        </article>
-
-        <article class="work-card">
-          <div class="work-card__content">
-            <span class="work-card__number" aria-hidden="true">02</span>
-            <h3>运营活动设计</h3>
-            <p>用轻松有趣的互动体验与AI辅助设计，邀请用户进行趣味测试，参与活动</p>
-          </div>
-          <div class="work-card__visual work-card__visual--quiz">
-            <img src="./pic/4-1.png" alt="新年一起接正缘桃花签活动视觉" width="419" height="203" loading="lazy" decoding="async" />
-            <img src="./pic/4-2.png" alt="永不失联的 AI 女神节测试活动视觉" width="534" height="220" loading="lazy" decoding="async" />
-            <img src="./pic/4-3.png" alt="晒出你的梦幻 CP 感手机活动页面" width="700" height="934" loading="lazy" decoding="async" />
-          </div>
-          <button class="work-card__open work-card__open--quiz" type="button" aria-label="打开测一测作品查看" aria-haspopup="dialog" aria-controls="quizViewer"></button>
-        </article>
-
-        <article class="work-card">
-          <div class="work-card__content">
-            <span class="work-card__number" aria-hidden="true">03</span>
-            <h3>单身人群调研</h3>
-            <p>将婚俗调研内容转化为易读的页面与信息展示。</p>
-          </div>
-          <div class="work-card__visual work-card__visual--research">
-            <div class="work-card__research-banner">
-              <div class="work-card__research-track">
-                <img src="./pic/5-1调研.png" alt="珍爱网婚俗习惯调研展示，包含手机页面与调查数据" width="1920" height="1389" loading="lazy" decoding="async" />
-                <img src="./pic/5-2调研.png" alt="珍爱网脱单成本调研展示，包含手机页面与调查数据" width="1920" height="1379" loading="lazy" decoding="async" />
-                <img src="./pic/5-1调研.png" alt="" aria-hidden="true" width="1920" height="1389" loading="lazy" decoding="async" />
-              </div>
-            </div>
-          </div>
-          <button class="work-card__open work-card__open--research" type="button" aria-label="打开调研作品查看" aria-haspopup="dialog" aria-controls="researchViewer"></button>
-        </article>
-      </div>
-      <div class="work-collection__more">
-        <article class="work-collection__placeholder work-collection__placeholder--wide">
-          <div class="work-collection__app-heading">
-            <span class="work-card__number" aria-hidden="true">04</span>
-            <h3>作文纸条APP 丨 线上运营设计与设计优化</h3>
-          </div>
-          <div class="work-collection__app-media">
-            <div class="work-collection__app-track">
-              <div class="work-collection__app-group">
-                <img src="./pic/6-01.png" alt="高考锦鲤主题活动视觉" width="1075" height="589" loading="lazy" decoding="async" />
-                <img src="./pic/6-02.png" alt="纸条年会飞翔机遇主题视觉" width="1075" height="589" loading="lazy" decoding="async" />
-                <img src="./pic/6-1.png" alt="作文纸条第 14 期插画封面" width="779" height="1113" loading="lazy" decoding="async" />
-                <img src="./pic/6-2.png" alt="作文纸条雨中人物插画封面" width="779" height="1113" loading="lazy" decoding="async" />
-                <img src="./pic/6-3.png" alt="作文纸条篝火插画封面" width="779" height="1113" loading="lazy" decoding="async" />
-                <img src="./pic/6-4.png" alt="作文纸条蝴蝶与花插画封面" width="779" height="1113" loading="lazy" decoding="async" />
-              </div>
-              <div class="work-collection__app-group" aria-hidden="true">
-                <img src="./pic/6-01.png" alt="" width="1075" height="589" loading="lazy" decoding="async" />
-                <img src="./pic/6-02.png" alt="" width="1075" height="589" loading="lazy" decoding="async" />
-                <img src="./pic/6-1.png" alt="" width="779" height="1113" loading="lazy" decoding="async" />
-                <img src="./pic/6-2.png" alt="" width="779" height="1113" loading="lazy" decoding="async" />
-                <img src="./pic/6-3.png" alt="" width="779" height="1113" loading="lazy" decoding="async" />
-                <img src="./pic/6-4.png" alt="" width="779" height="1113" loading="lazy" decoding="async" />
-              </div>
-            </div>
-          </div>
-          <button class="work-card__open work-card__open--app" type="button" aria-label="打开作文纸条 APP 作品查看" aria-haspopup="dialog" aria-controls="appViewer"></button>
-        </article>
-        <article class="work-collection__placeholder work-collection__placeholder--square">
-          <span class="work-card__number" aria-hidden="true">05</span>
-          <h3>文创周边设计</h3>
-          <img class="work-collection__creative-image" src="./pic/文创.png" alt="反诈主题帆布包、手册与活动周边设计" width="548" height="273" loading="lazy" decoding="async" />
-          <button class="work-card__open work-card__open--creative" type="button" aria-label="打开文创周边设计作品查看" aria-haspopup="dialog" aria-controls="creativeViewer"></button>
-        </article>
-      </div>
-      </div>
-    </section>
-
     <section class="ai-video" id="ai-video" aria-labelledby="ai-video-title">
       <header class="ai-video__heading card-stack__heading section-heading" data-reveal>
         <span class="card-stack__eyebrow" aria-hidden="true">AI VIDEO CREATION</span>
@@ -462,11 +410,9 @@
       <div class="ip-design__gallery" aria-label="小象 IP 形象设计作品">
         <figure class="ip-design__item ip-design__item--a">
           <img src="./pic/IP设计/A.png" alt="两只小象在庭院中喝茶" width="740" height="412" loading="lazy" decoding="async" />
-          <video data-video-src="./pic/IP设计/A喝茶小象1.mp4" poster="./pic/IP设计/A.png" muted loop playsinline preload="none" aria-hidden="true"></video>
         </figure>
         <figure class="ip-design__item ip-design__item--b">
           <img src="./pic/IP设计/B.png" alt="森林里的军装小象" width="436" height="584" loading="lazy" decoding="async" />
-          <video data-video-src="./pic/IP设计/B军装小象踏步1.mp4" poster="./pic/IP设计/B.png" muted loop playsinline preload="none" aria-hidden="true"></video>
         </figure>
         <figure class="ip-design__item ip-design__item--c">
           <img src="./pic/IP设计/C.png" alt="街道上合影的小象角色群像" width="1288" height="720" loading="lazy" decoding="async" />
@@ -474,12 +420,112 @@
         </figure>
         <figure class="ip-design__item ip-design__item--d">
           <img src="./pic/IP设计/D.png" alt="花店里的粉色小象" width="680" height="444" loading="lazy" decoding="async" />
-          <video data-video-src="./pic/IP设计/D桃花1.mp4" poster="./pic/IP设计/D.png" muted loop playsinline preload="none" aria-hidden="true"></video>
         </figure>
         <figure class="ip-design__item ip-design__item--e">
           <img src="./pic/IP设计/E.png" alt="坐在车厢里的背包小象" width="384" height="516" loading="lazy" decoding="async" />
-          <video data-video-src="./pic/IP设计/E背包小象坐车.mp4" poster="./pic/IP设计/E.png" muted loop playsinline preload="none" aria-hidden="true"></video>
         </figure>
+      </div>
+    </section>
+
+    <section class="work-collection" aria-labelledby="work-collection-title">
+      <div class="work-collection__heading" data-reveal>
+        <h2 class="work-collection__eyebrow" id="work-collection-title">MORE</h2>
+      </div>
+
+      <div class="work-collection__cards">
+      <div class="work-collection__grid">
+        <article class="work-card">
+          <div class="work-card__content">
+            <span class="work-card__number" aria-hidden="true">01</span>
+            <h3>主题活动</h3>
+            <p>从节日主题到线下联动，以主视觉与活动物料串联不同场景。</p>
+          </div>
+          <div class="work-card__visual work-card__visual--marquee">
+            <div class="work-card__track">
+              <div class="work-card__track-group">
+                <img src="./pic/3-1.png" alt="爱在尔滨浪漫冰城禧CP活动视觉" width="882" height="496" loading="lazy" decoding="async" />
+                <img src="./pic/3-2.png" alt="夏遇冰城水漾心动活动视觉" width="1152" height="648" loading="lazy" decoding="async" />
+                <img src="./pic/3-3.png" alt="父母说媒家长见面会活动视觉" width="1152" height="648" loading="lazy" decoding="async" />
+                <img src="./pic/3-4.png" alt="爱在京城悦动健身活动视觉" width="1310" height="496" loading="lazy" decoding="async" />
+              </div>
+              <div class="work-card__track-group" aria-hidden="true">
+                <img src="./pic/3-1.png" alt="" width="882" height="496" loading="lazy" decoding="async" />
+                <img src="./pic/3-2.png" alt="" width="1152" height="648" loading="lazy" decoding="async" />
+                <img src="./pic/3-3.png" alt="" width="1152" height="648" loading="lazy" decoding="async" />
+                <img src="./pic/3-4.png" alt="" width="1310" height="496" loading="lazy" decoding="async" />
+              </div>
+            </div>
+          </div>
+          <button class="work-card__open work-card__open--event" type="button" aria-label="打开活动作品查看" aria-haspopup="dialog" aria-controls="eventViewer"></button>
+        </article>
+
+        <article class="work-card">
+          <div class="work-card__content">
+            <span class="work-card__number" aria-hidden="true">02</span>
+            <h3>运营活动设计</h3>
+            <p>用轻松有趣的互动体验与AI辅助设计，邀请用户进行趣味测试，参与活动</p>
+          </div>
+          <div class="work-card__visual work-card__visual--quiz">
+            <img src="./pic/4-1.png" alt="新年一起接正缘桃花签活动视觉" width="419" height="203" loading="lazy" decoding="async" />
+            <img src="./pic/4-2.png" alt="永不失联的 AI 女神节测试活动视觉" width="534" height="220" loading="lazy" decoding="async" />
+            <img src="./pic/4-3.png" alt="晒出你的梦幻 CP 感手机活动页面" width="700" height="934" loading="lazy" decoding="async" />
+          </div>
+          <button class="work-card__open work-card__open--quiz" type="button" aria-label="打开测一测作品查看" aria-haspopup="dialog" aria-controls="quizViewer"></button>
+        </article>
+
+        <article class="work-card">
+          <div class="work-card__content">
+            <span class="work-card__number" aria-hidden="true">03</span>
+            <h3>单身人群调研</h3>
+            <p>将婚俗调研内容转化为易读的页面与信息展示。</p>
+          </div>
+          <div class="work-card__visual work-card__visual--research">
+            <div class="work-card__research-banner">
+              <div class="work-card__research-track">
+                <img src="./pic/5-1调研.png" alt="珍爱网婚俗习惯调研展示，包含手机页面与调查数据" width="1920" height="1389" loading="lazy" decoding="async" />
+                <img src="./pic/5-2调研.png" alt="珍爱网脱单成本调研展示，包含手机页面与调查数据" width="1920" height="1379" loading="lazy" decoding="async" />
+                <img src="./pic/5-1调研.png" alt="" aria-hidden="true" width="1920" height="1389" loading="lazy" decoding="async" />
+              </div>
+            </div>
+          </div>
+          <button class="work-card__open work-card__open--research" type="button" aria-label="打开调研作品查看" aria-haspopup="dialog" aria-controls="researchViewer"></button>
+        </article>
+      </div>
+      <div class="work-collection__more">
+        <article class="work-collection__placeholder work-collection__placeholder--wide">
+          <div class="work-collection__app-heading">
+            <span class="work-card__number" aria-hidden="true">04</span>
+            <h3>作文纸条APP 丨 线上运营设计与设计优化</h3>
+          </div>
+          <div class="work-collection__app-media">
+            <div class="work-collection__app-track">
+              <div class="work-collection__app-group">
+                <img src="./pic/6-01.png" alt="高考锦鲤主题活动视觉" width="1075" height="589" loading="lazy" decoding="async" />
+                <img src="./pic/6-02.png" alt="纸条年会飞翔机遇主题视觉" width="1075" height="589" loading="lazy" decoding="async" />
+                <img src="./pic/6-1.png" alt="作文纸条第 14 期插画封面" width="779" height="1113" loading="lazy" decoding="async" />
+                <img src="./pic/6-2.png" alt="作文纸条雨中人物插画封面" width="779" height="1113" loading="lazy" decoding="async" />
+                <img src="./pic/6-3.png" alt="作文纸条篝火插画封面" width="779" height="1113" loading="lazy" decoding="async" />
+                <img src="./pic/6-4.png" alt="作文纸条蝴蝶与花插画封面" width="779" height="1113" loading="lazy" decoding="async" />
+              </div>
+              <div class="work-collection__app-group" aria-hidden="true">
+                <img src="./pic/6-01.png" alt="" width="1075" height="589" loading="lazy" decoding="async" />
+                <img src="./pic/6-02.png" alt="" width="1075" height="589" loading="lazy" decoding="async" />
+                <img src="./pic/6-1.png" alt="" width="779" height="1113" loading="lazy" decoding="async" />
+                <img src="./pic/6-2.png" alt="" width="779" height="1113" loading="lazy" decoding="async" />
+                <img src="./pic/6-3.png" alt="" width="779" height="1113" loading="lazy" decoding="async" />
+                <img src="./pic/6-4.png" alt="" width="779" height="1113" loading="lazy" decoding="async" />
+              </div>
+            </div>
+          </div>
+          <button class="work-card__open work-card__open--app" type="button" aria-label="打开作文纸条 APP 作品查看" aria-haspopup="dialog" aria-controls="appViewer"></button>
+        </article>
+        <article class="work-collection__placeholder work-collection__placeholder--square">
+          <span class="work-card__number" aria-hidden="true">05</span>
+          <h3>文创周边设计</h3>
+          <img class="work-collection__creative-image" src="./pic/文创.png" alt="反诈主题帆布包、手册与活动周边设计" width="548" height="273" loading="lazy" decoding="async" />
+          <button class="work-card__open work-card__open--creative" type="button" aria-label="打开文创周边设计作品查看" aria-haspopup="dialog" aria-controls="creativeViewer"></button>
+        </article>
+      </div>
       </div>
     </section>
 

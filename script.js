@@ -1,3 +1,34 @@
+if (window.entryLoading) {
+  const waitForImage = (image) => {
+    image.loading = "eager";
+    const decode = () => image.naturalWidth && typeof image.decode === "function"
+      ? image.decode().catch(() => {})
+      : Promise.resolve();
+    if (image.complete) return decode();
+    return new Promise((resolve) => {
+      image.addEventListener("load", resolve, { once: true });
+      image.addEventListener("error", resolve, { once: true });
+    }).then(decode);
+  };
+
+  const desktopScene = window.matchMedia("(min-width: 768px)").matches;
+  const heroAsset = desktopScene
+    ? document.querySelector(".hero__scene")
+    : document.querySelector(".hero__mobile-art");
+  const heroReady = desktopScene && heroAsset
+    ? new Promise((resolve) => {
+        heroAsset.addEventListener("load", resolve, { once: true });
+        heroAsset.addEventListener("error", resolve, { once: true });
+      })
+    : heroAsset ? waitForImage(heroAsset) : Promise.resolve();
+  const projectImages = [...document.querySelectorAll("#project-01 img")];
+
+  Promise.allSettled([heroReady, ...projectImages.map(waitForImage)]).then(() => {
+    const remaining = Math.max(0, 450 - (performance.now() - window.entryLoading.startedAt));
+    setTimeout(() => window.entryLoading.finish(), remaining);
+  });
+}
+
 const pageScroller = typeof Lenis !== "undefined"
   ? new Lenis({
       autoRaf: true,
@@ -1152,7 +1183,7 @@ if (stackCards.length) {
   queueStackUpdate();
 }
 
-const ipItems = [...document.querySelectorAll(".ip-design__item")];
+const ipItems = [...document.querySelectorAll(".ip-design__item")].filter((item) => item.querySelector("video"));
 
 if (ipItems.length) {
   const canPlayOnHover = window.matchMedia(

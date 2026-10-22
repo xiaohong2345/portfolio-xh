@@ -32,6 +32,21 @@ body {
   font-family: var(--font-sans);
 }
 
+.entry-loader__text {
+  display: block;
+  padding-left: .22em;
+  animation: entry-loader-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes entry-loader-pulse {
+  0%, 100% { opacity: .48; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry-loader__text { animation: none; }
+}
+
 p:lang(zh),
 dd:lang(zh) {
   word-break: normal;
