@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "include": ["/pic/video/*"],
+  "exclude": ["/pic/video/posters/*"]
+}
