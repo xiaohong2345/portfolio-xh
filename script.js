@@ -1103,7 +1103,7 @@ const stackCards = [...document.querySelectorAll(".card-stack__card")];
 
 if (stackCards.length) {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const compactStack = window.matchMedia("(max-width: 1100px), (max-height: 540px)");
+  const compactStack = window.matchMedia("(max-width: 1100px), (max-height: 620px)");
   const usesStaticLayout = () => reducedMotion.matches || compactStack.matches;
   const settledScale = 0.96;
   const stackSurfaces = stackCards.map((card) => card.querySelector(".card-stack__surface"));
