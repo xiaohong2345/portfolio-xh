@@ -339,6 +339,7 @@
         'use strict';
 
         const NS = 'http://www.w3.org/2000/svg';
+        const sceneSvg = document.querySelector('main > svg');
         const layer = document.querySelector('#meteor-layer');
         const approachLayer = document.querySelector('#approach-layer');
         const sillMeteorLayer = document.querySelector('#sill-meteor-layer');
@@ -814,10 +815,21 @@
           };
         }
 
-        function launchCapture(kind, opening = false) {
-          if (captures.length >= 2 || stars.length + captures.length >= MAX_STARS) return false;
-          const route = chooseCapturePath(kind);
-          const hue = Math.random() < .58 ? 'yellow' : 'orange';
+        function launchCapture(kind, opening = false, clickedPoint = null) {
+          if (captures.length >= (clickedPoint ? 7 : 2)) return false;
+          if (!clickedPoint && stars.length + captures.length >= MAX_STARS) return false;
+          const mouthX = clickedPoint ? clamp(610 + (clickedPoint.x - 610) * .035, 595, 625) : null;
+          const route = clickedPoint ? {
+            startX: clickedPoint.x,
+            startY: clickedPoint.y,
+            mouthX,
+            vx: 0,
+            vy: 155,
+            drag: .1,
+            gravity: 350,
+            approachDuration: clamp(.72 + Math.abs(clickedPoint.x - mouthX) / 790, .72, 1.42)
+          } : chooseCapturePath(kind);
+          const hue = clickedPoint ? 'yellow' : Math.random() < .58 ? 'yellow' : 'orange';
           const gradientId = ++captureGradientId;
           const whiteGradient = curveWhite.cloneNode(true);
           const warmGradient = (hue === 'yellow' ? curveYellow : curveOrange).cloneNode(true);
@@ -847,7 +859,7 @@
           approachLayer.append(skyWhiteGlow, skyWarmGlow, skyWhiteTail, skyWarmTail, group);
           bottleContent.append(innerWhiteGlow, innerWarmGlow, innerWhiteTail, innerWarmTail);
           captures.push({
-            group, whiteGroup, warmGroup, hue, opening, inside: false, elapsed: 0,
+            group, whiteGroup, warmGroup, hue, opening, manual: Boolean(clickedPoint), inside: false, elapsed: 0,
             ...route, x: route.startX, y: route.startY,
             history: [{ x: route.startX, y: route.startY, time: 0 }],
             mouthTime: Infinity,
@@ -871,7 +883,7 @@
           return points.join(' ');
         }
 
-        function landStar(x, y, instant = false, hue = null) {
+        function landStar(x, y, instant = false, hue = null, addMaterial = true) {
           hue = hue || (Math.random() < .58 ? 'yellow' : 'orange');
           const exposed = Math.random() < .42;
           const surfaceOffset = exposed ? random(3, 7) : random(-2, 1);
@@ -882,7 +894,7 @@
             d: starShape, fill: color, opacity: '.5', filter: 'url(#meteor-glow)'
           }));
           group.append(svgElement('path', { d: starShape, fill: color }));
-          depositSand(x, instant);
+          if (addMaterial) depositSand(x, instant);
           stars.push({
             group, x, y: SAND_FLOOR - surfaceAt(x) - surfaceOffset,
             vx: 0, surfaceOffset, exposed, age: instant ? 1 : 0,
@@ -1088,7 +1100,7 @@
             gradient.setAttribute('y2', oldest.y.toFixed(2));
           }
           const approachT = clamp(meteor.elapsed / meteor.approachDuration, 0, 1);
-          const warm = smooth(clamp((approachT - .16) / .68, 0, 1));
+          const warm = meteor.manual ? 1 : smooth(clamp((approachT - .16) / .68, 0, 1));
           meteor.whiteGroup.setAttribute('opacity', (1 - warm).toFixed(3));
           meteor.warmGroup.setAttribute('opacity', warm.toFixed(3));
           for (const tail of [meteor.skyWhiteTail, meteor.innerWhiteTail]) {
@@ -1124,6 +1136,30 @@
         function updateCapture(meteor, dt) {
           const previousX = meteor.x;
           const previousY = meteor.y;
+          if (meteor.manual && !meteor.inside) {
+            meteor.elapsed += dt;
+            const progress = clamp(meteor.elapsed / meteor.approachDuration, 0, 1);
+            const bend = meteor.startX > meteor.mouthX ? 1 : -1;
+            meteor.x = cubic(meteor.startX, meteor.startX, meteor.mouthX + bend * 82, meteor.mouthX, progress);
+            meteor.y = cubic(
+              meteor.startY,
+              meteor.startY + (306 - meteor.startY) * .32 - 32,
+              Math.min(246, meteor.startY + (306 - meteor.startY) * .78),
+              306,
+              progress
+            );
+            if (progress === 1) {
+              meteor.x = meteor.mouthX;
+              meteor.y = 306;
+              meteor.mouthTime = meteor.elapsed;
+              meteor.inside = true;
+              meteor.vx = clamp((610 - meteor.mouthX) * .7, -18, 18);
+              bottleContent.append(meteor.group);
+            }
+            meteor.history.push({ x: meteor.x, y: meteor.y, time: meteor.elapsed });
+            renderCapture(meteor);
+            return;
+          }
           const dragDecay = Math.exp(-meteor.drag * dt);
           meteor.x += meteor.vx * (1 - dragDecay) / meteor.drag;
           meteor.vx *= dragDecay;
@@ -1175,7 +1211,12 @@
             if (stars.length < 2) {
               triggerBottleShake(impactX < 609 ? -1 : 1, 6, .32);
             }
-            landStar(clamp(impactX, 568, 651), impactY, false, meteor.hue);
+            const replacingStar = meteor.manual && stars.length >= MAX_STARS;
+            if (replacingStar) {
+              stars.shift().group.remove();
+            }
+            landStar(clamp(impactX, 568, 651), impactY, false, meteor.hue, !replacingStar);
+            while (fragments.length > MAX_STARS * 6) fragments.shift().group.remove();
             if (meteor.opening && ++openingLandings === OPENING_CAPTURES.length) {
               openingCapturesActive = false;
               captureWave = OPENING_CAPTURES.length;
@@ -1444,12 +1485,28 @@
 
         window.addEventListener('message', (event) => {
           if (event.source !== window.parent) return;
+          if (location.protocol !== 'file:' && event.origin !== location.origin) return;
           if (event.data?.type === 'portfolio-scene:pause') {
             pausedByHost = true;
             stop();
           } else if (event.data?.type === 'portfolio-scene:resume') {
             pausedByHost = false;
             start();
+          } else if (event.data?.type === 'portfolio-scene:interactive-star') {
+            if (document.hidden || reducedMotion.matches || pausedByHost) return;
+            const { x, y } = event.data;
+            if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+            const matrix = sceneSvg.getScreenCTM();
+            if (!matrix) return;
+            const point = sceneSvg.createSVGPoint();
+            point.x = x;
+            point.y = y;
+            const origin = point.matrixTransform(matrix.inverse());
+            if (origin.x < 141 || origin.x > 1142 || origin.y < 5 || origin.y > 395) return;
+            if (origin.y > 295 && origin.x > 550 && origin.x < 735) return;
+            if (launchCapture('interactive', false, origin)) {
+              window.parent.postMessage({ type: 'portfolio-scene:interactive-star' }, '*');
+            }
           }
         });
 

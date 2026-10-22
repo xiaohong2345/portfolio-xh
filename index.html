@@ -37,6 +37,12 @@
         <h1 class="hero__title">PORTFOLIO</h1>
         <p class="hero__mobile-tip">电脑端更精彩，打开看看！</p>
       </header>
+      <p class="hero__interaction-hint" aria-label="点击窗景，送一颗星星进瓶子">
+        <svg viewBox="0 0 32 36" aria-hidden="true" focusable="false">
+          <path d="M4 3v27l7.2-6.1 4.7 9.2 5.3-2.7-4.7-9.2 10-.9L4 3Z" />
+        </svg>
+        <span>点击</span>
+      </p>
       <button class="hero__sound-toggle" type="button" aria-label="开启声音" aria-pressed="false" title="开启声音">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M4 9h4l5-4v14l-5-4H4z" />
@@ -44,6 +50,13 @@
           <path class="hero__sound-muted" d="m17 9 4 6m0-6-4 6" />
         </svg>
       </button>
+    </section>
+
+    <section class="coverflow" aria-label="作品轮播" aria-roledescription="carousel">
+      <div class="coverflow__stage" tabindex="0" aria-label="拖动卡片或使用左右方向键切换作品">
+        <div class="coverflow__track"></div>
+      </div>
+      <p class="coverflow__status" aria-live="polite" aria-atomic="true"></p>
     </section>
 
     <section class="activity-design-intro" id="activity-design" aria-labelledby="activity-design-title">

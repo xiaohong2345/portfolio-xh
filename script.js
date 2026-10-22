@@ -15,6 +15,7 @@ if (hero) {
   const scene = hero.querySelector(".hero__scene");
   if (scene) {
     const soundToggle = hero.querySelector(".hero__sound-toggle");
+    const interactionHint = hero.querySelector(".hero__interaction-hint");
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     const sceneOrigin = window.location.protocol === "file:" ? "*" : window.location.origin;
     const desktopScene = window.matchMedia("(min-width: 768px)");
@@ -28,6 +29,8 @@ if (hero) {
     let lastChimeAt = -Infinity;
     const playingVideos = new Set();
     let resumeMusicTimer;
+    let sceneReady = false;
+    let pendingStar = null;
 
     const updateSoundToggle = () => {
       if (!soundToggle) return;
@@ -138,10 +141,31 @@ if (hero) {
     });
 
     window.addEventListener("message", (event) => {
-      if (event.source !== scene.contentWindow || event.data?.type !== "portfolio-scene:star-impact") return;
+      if (event.source !== scene.contentWindow) return;
       if (window.location.protocol !== "file:" && event.origin !== window.location.origin) return;
+      if (event.data?.type === "portfolio-scene:interactive-star") {
+        interactionHint?.classList.add("is-dismissed");
+        interactionHint?.setAttribute("aria-hidden", "true");
+        return;
+      }
+      if (event.data?.type !== "portfolio-scene:star-impact") return;
       if (!soundEnabled || !desktopScene.matches || !sceneVisible || document.hidden) return;
       if (soundContext?.state === "running") playChime();
+    });
+
+    const sendInteractiveStar = (point) => {
+      if (!sceneReady) {
+        pendingStar = point;
+        return;
+      }
+      scene.contentWindow?.postMessage({ type: "portfolio-scene:interactive-star", ...point }, sceneOrigin);
+    };
+
+    hero.addEventListener("click", (event) => {
+      if (!desktopScene.matches || document.hidden || !sceneVisible || !scene.hasAttribute("src")) return;
+      if (event.target instanceof Element && event.target.closest(".hero__categories, .hero__sound-toggle")) return;
+      const bounds = scene.getBoundingClientRect();
+      sendInteractiveStar({ x: event.clientX - bounds.left, y: event.clientY - bounds.top });
     });
 
     const syncScene = () => {
@@ -154,7 +178,10 @@ if (hero) {
 
     const syncSceneWidth = () => {
       if (desktopScene.matches) {
-        if (!scene.hasAttribute("src")) scene.src = scene.dataset.src;
+        if (!scene.hasAttribute("src")) {
+          sceneReady = false;
+          scene.src = scene.dataset.src;
+        }
         else syncScene();
         startSound();
       } else {
@@ -162,12 +189,22 @@ if (hero) {
         if (scene.hasAttribute("src")) {
           scene.contentWindow?.postMessage({ type: "portfolio-scene:pause" }, sceneOrigin);
           scene.removeAttribute("src");
+          sceneReady = false;
+          pendingStar = null;
         }
       }
       updateSoundToggle();
     };
 
-    scene.addEventListener("load", syncScene);
+    scene.addEventListener("load", () => {
+      if (!desktopScene.matches || !scene.hasAttribute("src")) return;
+      sceneReady = true;
+      syncScene();
+      if (pendingStar) {
+        sendInteractiveStar(pendingStar);
+        pendingStar = null;
+      }
+    });
     desktopScene.addEventListener("change", syncSceneWidth);
     syncSceneWidth();
     if ("IntersectionObserver" in window) {
@@ -1298,4 +1335,174 @@ if (backToTop) {
       window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
     }
   });
+}
+
+const coverflow = document.querySelector(".coverflow");
+
+if (coverflow) {
+  const slides = [
+    { number: "01", src: "./pic/组件/01.png", alt: "户外木质机械蜻蜓与莲花装置" },
+    { number: "02", src: "./pic/组件/02.png", alt: "木质机械小提琴与红色帷幕" },
+    { number: "03", src: "./pic/组件/03.png", alt: "缘·记忆手卡包装展示" },
+    { number: "04", src: "./pic/组件/04.png", alt: "万用模板手卡包装展示" },
+    { number: "05", src: "./pic/组件/05.png", alt: "深色花园中的香水瓶" },
+    { number: "06", src: "./pic/组件/06.png", alt: "白色花朵间的香水瓶" },
+    { number: "07", src: "./pic/组件/07.png", alt: "水边的木质机械小提琴装置" },
+  ];
+
+  const stage = coverflow.querySelector(".coverflow__stage");
+  const track = coverflow.querySelector(".coverflow__track");
+  const status = coverflow.querySelector(".coverflow__status");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const cards = slides.map((slide, index) => {
+    const card = document.createElement("div");
+    card.className = "coverflow__card";
+    card.setAttribute("role", "group");
+    card.setAttribute("aria-roledescription", "slide");
+    card.setAttribute("aria-label", `第 ${index + 1} 张，共 ${slides.length} 张`);
+    if (slide.gradient) card.style.setProperty("--coverflow-gradient", slide.gradient);
+
+    if (slide.src) {
+      const image = document.createElement("img");
+      image.className = "coverflow__card-image";
+      image.src = slide.src;
+      image.alt = slide.alt || `作品 ${slide.number}`;
+      image.draggable = false;
+      image.loading = index === 0 ? "eager" : "lazy";
+      card.append(image);
+    } else {
+      card.classList.add("is-placeholder");
+      const number = document.createElement("span");
+      number.className = "coverflow__card-number";
+      number.textContent = slide.number;
+      number.setAttribute("aria-hidden", "true");
+      card.append(number);
+    }
+
+    track.append(card);
+    return card;
+  });
+
+  let position = 0;
+  let target = 0;
+  let cardWidth = 0;
+  const pitchRatio = 0.985;
+  let animationFrame = null;
+  let drag = null;
+
+  const selectedIndex = (value) => ((Math.round(value) % slides.length) + slides.length) % slides.length;
+
+  const updateSelection = (value) => {
+    const selected = selectedIndex(value);
+    cards.forEach((card, index) => {
+      if (index === selected) card.setAttribute("aria-current", "true");
+      else card.removeAttribute("aria-current");
+    });
+    status.textContent = `第 ${selected + 1} 张，共 ${slides.length} 张`;
+  };
+
+  const paint = () => {
+    if (!cardWidth) return;
+    const pitch = cardWidth * pitchRatio;
+
+    cards.forEach((card, index) => {
+      let offset = ((index - position) % slides.length + slides.length) % slides.length;
+      if (offset > slides.length / 2) offset -= slides.length;
+
+      const distance = Math.abs(offset);
+      const ramp = Math.pow(distance, 0.56);
+      const tilt = Math.min(44 * ramp, 82) * Math.sign(offset);
+      const edge = Math.min(1, Math.max(0, slides.length / 2 - distance));
+
+      card.style.transform = `translateX(calc(-50% + ${offset * pitch}px)) translateZ(${-0.6 * cardWidth * ramp}px) rotateY(${-tilt}deg)`;
+      card.style.opacity = String(Math.max(0, 1 - 0.1 * distance) * edge);
+      card.style.zIndex = String(100 - Math.round(distance));
+    });
+  };
+
+  const settle = (next) => {
+    if (animationFrame !== null) cancelAnimationFrame(animationFrame);
+    target = next;
+    updateSelection(target);
+
+    if (reduceMotion.matches) {
+      position = target;
+      animationFrame = null;
+      paint();
+      return;
+    }
+
+    const step = () => {
+      const remaining = target - position;
+      if (Math.abs(remaining) < 0.0004) {
+        position = target;
+        paint();
+        animationFrame = null;
+        return;
+      }
+      position += remaining * 0.16;
+      paint();
+      animationFrame = requestAnimationFrame(step);
+    };
+    animationFrame = requestAnimationFrame(step);
+  };
+
+  const measure = () => {
+    cardWidth = cards[0].offsetWidth;
+    paint();
+  };
+
+  measure();
+  if ("ResizeObserver" in window) new ResizeObserver(measure).observe(stage);
+  else window.addEventListener("resize", measure);
+
+  stage.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    settle(Math.round(target) + (event.key === "ArrowRight" ? 1 : -1));
+  });
+
+  stage.addEventListener("pointerdown", (event) => {
+    if (drag || !event.isPrimary) return;
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    if (animationFrame !== null) cancelAnimationFrame(animationFrame);
+    animationFrame = null;
+    stage.setPointerCapture(event.pointerId);
+    target = position;
+    drag = {
+      id: event.pointerId,
+      x: event.clientX,
+      startPosition: position,
+      velocity: 0,
+      time: performance.now(),
+    };
+    stage.classList.add("is-dragging");
+  });
+
+  stage.addEventListener("pointermove", (event) => {
+    if (!drag || drag.id !== event.pointerId || !cardWidth) return;
+    const now = performance.now();
+    const previous = position;
+    position = drag.startPosition - (event.clientX - drag.x) / (cardWidth * pitchRatio);
+    drag.velocity = (position - previous) / Math.max(now - drag.time, 1) * 1000;
+    drag.time = now;
+    paint();
+  });
+
+  const endDrag = (event) => {
+    if (!drag || drag.id !== event.pointerId) return;
+    const velocity = performance.now() - drag.time > 100 ? 0 : drag.velocity;
+    const carried = event.type === "pointercancel" ? 0 : Math.max(-2, Math.min(2, velocity * 0.18));
+    drag = null;
+    stage.classList.remove("is-dragging");
+    settle(Math.round(position + carried));
+  };
+
+  stage.addEventListener("pointerup", endDrag);
+  stage.addEventListener("pointercancel", endDrag);
+  stage.addEventListener("lostpointercapture", endDrag);
+  reduceMotion.addEventListener("change", () => {
+    if (reduceMotion.matches && animationFrame !== null) settle(target);
+  });
+  updateSelection(0);
 }

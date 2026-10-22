@@ -136,6 +136,52 @@ dd:lang(zh) {
   display: none;
 }
 
+.hero__interaction-hint {
+  position: absolute;
+  top: 55.5%;
+  left: 66.3%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  color: rgb(245 240 232 / 92%);
+  font-size: clamp(13px, .95vw, 16px);
+  letter-spacing: .18em;
+  line-height: 1;
+  text-shadow: 0 2px 8px rgb(0 0 0 / 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: opacity .5s ease, transform .5s ease;
+}
+
+.hero__interaction-hint svg {
+  display: block;
+  width: 32px;
+  height: 36px;
+  fill: currentColor;
+  stroke: #071a33;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 2px 5px rgb(0 0 0 / 70%));
+  animation: hero-click-nudge 2.4s ease-in-out infinite;
+}
+
+.hero__interaction-hint span {
+  padding-left: .18em;
+}
+
+.hero__interaction-hint.is-dismissed {
+  opacity: 0;
+  transform: translate(-50%, calc(-50% + 8px));
+}
+
+@keyframes hero-click-nudge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
 .hero__sound-toggle {
   position: absolute;
   right: clamp(22px, 3.2vw, 42px);
@@ -184,10 +230,130 @@ dd:lang(zh) {
   outline-offset: 3px;
 }
 
+.coverflow {
+  --coverflow-card: clamp(148px, 22vw, 260px);
+  width: 100%;
+  padding: clamp(51px, 6.75vw, 108px) 0 clamp(24px, 3.75vw, 60px);
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.coverflow__stage {
+  padding: 36px 0 48px;
+  overflow: hidden;
+  cursor: grab;
+  outline: none;
+  touch-action: pan-y;
+  perspective: calc(var(--coverflow-card) * 3);
+}
+
+.coverflow__stage.is-dragging {
+  cursor: grabbing;
+}
+
+.coverflow__stage:focus-visible:not(.is-dragging) .coverflow__card[aria-current="true"] {
+  box-shadow: 0 0 0 2px #ed6aab, 0 20px 36px rgb(0 0 0 / 35%);
+}
+
+.coverflow__track {
+  position: relative;
+  height: calc(var(--coverflow-card) * 1.333333);
+  user-select: none;
+  transform-style: preserve-3d;
+}
+
+.coverflow__card {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: var(--coverflow-card);
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 18px;
+  background: var(--coverflow-gradient, #151515);
+  box-shadow: 0 20px 36px rgb(0 0 0 / 35%);
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.coverflow__card.is-placeholder::before {
+  position: absolute;
+  inset: -15% -55% auto auto;
+  width: 90%;
+  aspect-ratio: 1;
+  border: 1px solid rgb(255 255 255 / 36%);
+  border-radius: 50%;
+  box-shadow: 0 0 0 34px rgb(255 255 255 / 7%), 0 0 0 70px rgb(255 255 255 / 5%);
+  content: "";
+}
+
+.coverflow__card-number {
+  position: relative;
+  color: rgb(255 255 255 / 85%);
+  font-size: clamp(70px, 8vw, 130px);
+  font-weight: 600;
+  letter-spacing: -.09em;
+  line-height: 1;
+  text-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+}
+
+.coverflow__card-image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.coverflow__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 767px) {
+  .coverflow {
+    --coverflow-card: clamp(136px, 42vw, 188px);
+    padding: 21px 0 30px;
+  }
+
+  .coverflow__stage {
+    padding: 13.5px 0 39px;
+  }
+
+  .coverflow__card {
+    border-radius: 14px;
+  }
+
+  .coverflow__card-number {
+    font-size: clamp(62px, 18vw, 92px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__interaction-hint {
+    display: none;
+  }
+
+  .coverflow__card {
+    will-change: auto;
+  }
+}
+
 .activity-design-intro {
   width: min(100%, 1600px);
   margin-inline: auto;
-  padding: clamp(24px, 2.5vw, 40px) var(--page-padding) 0;
+  padding: clamp(36px, 3.75vw, 60px) var(--page-padding) 0;
 }
 
 .activity-design-intro .card-stack__heading {
@@ -1999,7 +2165,8 @@ html.quiz-viewer-open body {
   .hero {
     --hero-mobile-title-top: clamp(150px, 26svh, 250px);
     --hero-mobile-art-height: min(28vw, 130px);
-    height: min(56svh, 394px);
+    height: calc(var(--hero-mobile-title-top) + 118px);
+    min-height: 0;
   }
 
   .activity-design-intro {
@@ -2011,6 +2178,10 @@ html.quiz-viewer-open body {
   }
 
   .hero__sound-toggle {
+    display: none;
+  }
+
+  .hero__interaction-hint {
     display: none;
   }
 
