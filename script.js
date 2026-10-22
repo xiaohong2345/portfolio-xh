@@ -18,27 +18,46 @@ if (hero) {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     const sceneOrigin = window.location.protocol === "file:" ? "*" : window.location.origin;
     const desktopScene = window.matchMedia("(min-width: 768px)");
+    const backgroundMusic = new Audio();
+    backgroundMusic.loop = true;
+    backgroundMusic.volume = 0.3;
+    backgroundMusic.preload = "none";
     let sceneVisible = true;
     let soundContext;
-    let soundEnabled = Boolean(AudioContextClass);
+    let soundEnabled = true;
     let lastChimeAt = -Infinity;
+    const playingVideos = new Set();
+    let resumeMusicTimer;
 
     const updateSoundToggle = () => {
-      const label = soundEnabled ? "关闭音效" : "开启音效";
+      if (!soundToggle) return;
+      const isPlaying = soundEnabled && desktopScene.matches && !document.hidden && !backgroundMusic.paused;
+      const label = isPlaying ? "关闭声音" : "开启声音";
       soundToggle.setAttribute("aria-label", label);
-      soundToggle.setAttribute("aria-pressed", String(soundEnabled));
+      soundToggle.setAttribute("aria-pressed", String(isPlaying));
       soundToggle.title = label;
     };
 
     const unlockSound = () => {
-      if (!soundEnabled || !desktopScene.matches || !soundToggle) return;
+      if (!soundEnabled || !desktopScene.matches || document.hidden || !AudioContextClass) return;
       try {
         soundContext ||= new AudioContextClass();
         if (soundContext.state !== "running") soundContext.resume().catch(() => {});
-      } catch {
-        soundEnabled = false;
-        soundToggle.hidden = true;
+      } catch {}
+    };
+
+    const startSound = () => {
+      if (!soundEnabled || !desktopScene.matches || document.hidden || playingVideos.size) return;
+      if (!backgroundMusic.hasAttribute("src")) {
+        backgroundMusic.src = "./ICARUS.MP3";
+        backgroundMusic.preload = "auto";
       }
+      unlockSound();
+      backgroundMusic.play().then(() => {
+        if (!soundEnabled || !desktopScene.matches || document.hidden || playingVideos.size) backgroundMusic.pause();
+        updateSoundToggle();
+      }).catch(updateSoundToggle);
+      updateSoundToggle();
     };
 
     const playChime = () => {
@@ -71,19 +90,52 @@ if (hero) {
       }
     };
 
-    if (AudioContextClass && soundToggle) {
+    if (soundToggle) {
       updateSoundToggle();
       soundToggle.addEventListener("click", () => {
-        soundEnabled = !soundEnabled;
-        updateSoundToggle();
-        if (soundEnabled) unlockSound();
+        if (soundEnabled && backgroundMusic.paused) {
+          startSound();
+        } else {
+          soundEnabled = !soundEnabled;
+          if (soundEnabled) startSound();
+          else backgroundMusic.pause();
+          updateSoundToggle();
+        }
       });
-      window.addEventListener("pointerdown", unlockSound, { capture: true });
-      window.addEventListener("keydown", unlockSound, { capture: true });
-      unlockSound();
-    } else if (soundToggle) {
-      soundToggle.hidden = true;
+      const startAfterInteraction = (event) => {
+        if (event.target instanceof Node && soundToggle.contains(event.target)) return;
+        if (backgroundMusic.paused) startSound();
+        else unlockSound();
+      };
+      window.addEventListener("pointerdown", startAfterInteraction, { capture: true });
+      window.addEventListener("keydown", startAfterInteraction, { capture: true });
     }
+
+    backgroundMusic.addEventListener("play", updateSoundToggle);
+    backgroundMusic.addEventListener("pause", updateSoundToggle);
+    for (const video of document.querySelectorAll("video")) {
+      video.addEventListener("play", () => {
+        clearTimeout(resumeMusicTimer);
+        playingVideos.add(video);
+        backgroundMusic.pause();
+        updateSoundToggle();
+      });
+
+      const resumeAfterVideo = () => {
+        if (!playingVideos.delete(video) || playingVideos.size) return;
+        clearTimeout(resumeMusicTimer);
+        resumeMusicTimer = setTimeout(startSound, 150);
+      };
+      video.addEventListener("pause", resumeAfterVideo);
+      video.addEventListener("ended", resumeAfterVideo);
+      video.addEventListener("error", resumeAfterVideo);
+      video.addEventListener("emptied", resumeAfterVideo);
+    }
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) backgroundMusic.pause();
+      else startSound();
+      updateSoundToggle();
+    });
 
     window.addEventListener("message", (event) => {
       if (event.source !== scene.contentWindow || event.data?.type !== "portfolio-scene:star-impact") return;
@@ -104,13 +156,15 @@ if (hero) {
       if (desktopScene.matches) {
         if (!scene.hasAttribute("src")) scene.src = scene.dataset.src;
         else syncScene();
-        unlockSound();
+        startSound();
       } else {
+        backgroundMusic.pause();
         if (scene.hasAttribute("src")) {
           scene.contentWindow?.postMessage({ type: "portfolio-scene:pause" }, sceneOrigin);
           scene.removeAttribute("src");
         }
       }
+      updateSoundToggle();
     };
 
     scene.addEventListener("load", syncScene);
@@ -1179,7 +1233,10 @@ if (portfolioContact) {
         });
 
         if (progress < 1) requestAnimationFrame(animate);
-        else revealDetails();
+        else {
+          titleLines.forEach((line) => { line.textContent = line.dataset.decryptText; });
+          revealDetails();
+        }
       };
 
       requestAnimationFrame(animate);

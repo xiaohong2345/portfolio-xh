@@ -39,21 +39,10 @@
       }
       .bottle-rim {
         fill: none;
-        stroke: #dce6f0;
+        stroke: #d0dce9;
         stroke-width: 1;
         stroke-linecap: round;
-        opacity: .92;
       }
-      .bottle-glow, .bottle-rim-glow {
-        fill: none;
-        stroke: #dcecff;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        pointer-events: none;
-        filter: blur(2.8px);
-      }
-      .bottle-glow { stroke-width: 3.5; opacity: .67; }
-      .bottle-rim-glow { stroke-width: 2.4; opacity: .5; }
     </style>
   </head>
   <body>
@@ -76,16 +65,16 @@
             <stop offset="1" stop-color="#8dbfff" stop-opacity="0" />
           </linearGradient>
           <linearGradient id="capture-tail-yellow" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#fff4bd" stop-opacity="1" />
-            <stop offset=".18" stop-color="#ffd766" stop-opacity=".82" />
-            <stop offset=".55" stop-color="#e9a93f" stop-opacity=".27" />
-            <stop offset="1" stop-color="#e9a93f" stop-opacity="0" />
+            <stop offset="0" stop-color="#f5edc7" stop-opacity="1" />
+            <stop offset=".18" stop-color="#e8cc7d" stop-opacity=".82" />
+            <stop offset=".55" stop-color="#d0a358" stop-opacity=".27" />
+            <stop offset="1" stop-color="#d0a358" stop-opacity="0" />
           </linearGradient>
           <linearGradient id="capture-tail-orange" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#ffe6aa" stop-opacity="1" />
-            <stop offset=".18" stop-color="#ffb65a" stop-opacity=".82" />
-            <stop offset=".55" stop-color="#dc7e2d" stop-opacity=".27" />
-            <stop offset="1" stop-color="#dc7e2d" stop-opacity="0" />
+            <stop offset="0" stop-color="#f2e1b7" stop-opacity="1" />
+            <stop offset=".18" stop-color="#e6b373" stop-opacity=".82" />
+            <stop offset=".55" stop-color="#c28047" stop-opacity=".27" />
+            <stop offset="1" stop-color="#c28047" stop-opacity="0" />
           </linearGradient>
           <linearGradient id="capture-curve-white" gradientUnits="userSpaceOnUse">
             <stop offset="0" stop-color="#f7fbff" stop-opacity=".95" />
@@ -93,14 +82,14 @@
             <stop offset="1" stop-color="#91c9ff" stop-opacity="0" />
           </linearGradient>
           <linearGradient id="capture-curve-yellow" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#fff0aa" stop-opacity=".98" />
-            <stop offset=".3" stop-color="#ffd36b" stop-opacity=".61" />
-            <stop offset="1" stop-color="#d99933" stop-opacity="0" />
+            <stop offset="0" stop-color="#f2e8b7" stop-opacity=".98" />
+            <stop offset=".3" stop-color="#e9ca81" stop-opacity=".61" />
+            <stop offset="1" stop-color="#c0934c" stop-opacity="0" />
           </linearGradient>
           <linearGradient id="capture-curve-orange" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#ffdda0" stop-opacity=".98" />
-            <stop offset=".3" stop-color="#ffb45f" stop-opacity=".61" />
-            <stop offset="1" stop-color="#d97933" stop-opacity="0" />
+            <stop offset="0" stop-color="#f1d9ae" stop-opacity=".98" />
+            <stop offset=".3" stop-color="#e7b377" stop-opacity=".61" />
+            <stop offset="1" stop-color="#c07d4c" stop-opacity="0" />
           </linearGradient>
           <linearGradient id="sand-fill" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#ffe179" stop-opacity=".9" />
@@ -117,14 +106,14 @@
             <stop offset="1" stop-color="#8fc5ff" stop-opacity="0" />
           </radialGradient>
           <radialGradient id="yellow-halo">
-            <stop offset="0" stop-color="#fff3b2" stop-opacity=".86" />
-            <stop offset=".45" stop-color="#ffd269" stop-opacity=".42" />
-            <stop offset="1" stop-color="#f9a73d" stop-opacity="0" />
+            <stop offset="0" stop-color="#f3ebbe" stop-opacity=".86" />
+            <stop offset=".45" stop-color="#e8c97f" stop-opacity=".42" />
+            <stop offset="1" stop-color="#dda359" stop-opacity="0" />
           </radialGradient>
           <radialGradient id="orange-halo">
-            <stop offset="0" stop-color="#ffe6ae" stop-opacity=".84" />
-            <stop offset=".45" stop-color="#ffad61" stop-opacity=".4" />
-            <stop offset="1" stop-color="#e87935" stop-opacity="0" />
+            <stop offset="0" stop-color="#f3e1ba" stop-opacity=".84" />
+            <stop offset=".45" stop-color="#e7ae79" stop-opacity=".4" />
+            <stop offset="1" stop-color="#cd7f50" stop-opacity="0" />
           </radialGradient>
           <radialGradient id="pile-halo-gradient">
             <stop offset="0" stop-color="#ffe8a0" stop-opacity=".56" />
@@ -140,18 +129,18 @@
         </defs>
 
         <rect width="1276" height="468" fill="#0F1110" />
-        <rect x="138" y="2" width="1007" height="400" fill="#0F1110" clip-path="url(#sky-clip)" />
+        <rect x="138" y="2" width="1007" height="400" fill="#001835" clip-path="url(#sky-clip)" />
 
         <!-- The moving layer stays inside the window outline and above the sill. -->
         <g id="meteor-layer" clip-path="url(#sky-clip)"></g>
 
-        <!-- A single subtly uneven edge on each side, joined at the top. -->
-        <path class="window-line" d="M 137.6 11 C 137.1 48 137.6 95 137.4 151 C 137.2 185 138.7 204 139.0 225 C 139.3 247 137.0 257 137.5 280 C 138.2 307 138.8 341 137.8 369 C 137.4 383 137.7 394 137.8 402" />
-        <path class="window-line" d="M 137.6 11 C 137.6 6 141.6 2 146.6 2 C 302 1.4 481 2.7 640 1.9 C 826 1.2 993 2.6 1136.3 2 C 1141.3 2 1145.3 6 1145.3 11" />
-        <path class="window-line" d="M 1145.3 11 C 1144.7 45 1144.1 87 1144.8 139 C 1145.3 172 1143.6 201 1144.9 224 C 1146.0 242 1145.0 257 1144.4 278 C 1143.9 313 1145.4 350 1144.8 402" />
+        <!-- Sparse hand-drawn bends keep the long stretches calm. -->
+        <path class="window-line" d="M 137.6 11 C 137.4 33 137.5 63 137.5 78 C 137.5 92 138.9 102 139.1 111 C 139.3 118 137.6 125 137.5 132 C 137.3 155 137.4 190 137.7 211 C 137.8 223 136.0 232 135.9 243 C 135.8 252 137.7 259 137.8 266 C 137.9 290 137.8 318 138.0 334 C 138.1 344 139.5 351 139.4 359 C 139.3 369 137.9 375 137.8 382 C 137.7 391 137.8 397 137.8 402" />
+        <path class="window-line" d="M 137.6 11 C 137.6 6 141.6 2 146.6 2 C 185 2 223 2 244 2 C 250 2 257 3.8 265 3.8 C 272 3.8 280 2 288 2 C 355 2 450 2 498 2 C 508 2 517 .9 527 .9 C 537 .9 546 2 555 2 C 635 2 721 2 752 2 C 761 2 770 3.5 780 3.5 C 790 3.5 800 2 810 2 C 890 2 992 2 1017 2 C 1026 2 1034 1.1 1042 1.1 C 1050 1.1 1058 2 1067 2 C 1090 2 1120 2 1136.3 2 C 1141.3 2 1145.3 6 1145.3 11" />
+        <path class="window-line" d="M 1145.3 11 C 1145.3 32 1145.0 55 1145.0 68 C 1144.9 76 1143.4 85 1143.4 93 C 1143.5 101 1145.0 107 1145.0 114 C 1145.0 132 1145.0 160 1144.9 170 C 1144.9 178 1146.7 187 1146.8 195 C 1146.8 204 1145.0 211 1144.9 219 C 1144.8 244 1144.6 266 1144.7 284 C 1144.7 293 1143.0 301 1143.0 310 C 1143.0 319 1144.7 325 1144.7 332 C 1144.8 350 1144.8 378 1144.8 402" />
 
         <g id="approach-layer" clip-path="url(#sky-clip)"></g>
-        <path class="sill-line" d="M 2 402 C 30 402.2 53 403.4 76 402.1 C 93 401.2 104 402 112.8 402 C 121 402 130 401.7 137.8 402 C 179 401.3 216 403 252 402 C 295 400.8 333 402.8 370 402 C 414 401.4 454 402.7 494 402 C 537 401.2 574 402.6 610 402 C 653 403.2 690 401.1 730 402 C 775 402.7 815 401.4 857 402 C 901 401.2 942 402.5 982 402 C 1027 401.5 1064 402.8 1102 402 C 1123 401.7 1135 401.8 1144.8 402 C 1153 402.2 1161 402.1 1168 402 C 1206 401.4 1240 402.7 1275 402" />
+        <path class="sill-line" d="M 2 402 C 30 402 50 402 65 402 C 74 402 80 403.6 88 403.6 C 96 403.6 105 402 114 402 C 122 402 130 402 137.8 402 C 180 402 225 402 245 402 C 252 402 261 400.2 268 400.2 C 276 400.2 285 402 295 402 C 350 402 415 402 451 402 C 460 402 469 403.8 478 403.8 C 488 403.8 498 402 508 402 C 600 402 693 402 725 402 C 734 402 744 400.5 754 400.5 C 765 400.5 775 402 787 402 C 855 402 948 402 983 402 C 991 402 998 403.7 1007 403.7 C 1016 403.7 1025 402 1035 402 C 1080 402 1128 402 1144.8 402 C 1165 402 1184 402 1198 402 C 1205 402 1212 400.4 1219 400.4 C 1227 400.4 1233 402 1241 402 C 1254 402 1266 402 1275 402" />
         <g id="sill-meteor-layer" clip-path="url(#sill-meteor-clip)"></g>
         <g id="bottle-scene">
         <!-- Hand-drawn bottle: uneven lip, shoulders, sides and rounded base. -->
@@ -359,14 +348,6 @@
         const svgDefs = document.querySelector('svg defs');
         const bottleScene = document.querySelector('#bottle-scene');
         const bottleContent = document.querySelector('#bottle-content');
-        const bottleBody = bottleScene.querySelector('.bottle-body');
-        const bottleRim = bottleScene.querySelector('.bottle-rim');
-        const bottleGlow = bottleBody.cloneNode(false);
-        bottleGlow.setAttribute('class', 'bottle-glow');
-        bottleBody.before(bottleGlow);
-        const rimGlow = bottleRim.cloneNode(false);
-        rimGlow.setAttribute('class', 'bottle-rim-glow');
-        bottleRim.before(rimGlow);
         const sandBed = document.querySelector('#sand-bed');
         const buriedPieces = document.querySelector('#buried-pieces');
         const sandFront = document.querySelector('#sand-front');
@@ -387,7 +368,7 @@
         const grains = [];
         const sandTransfers = [];
         // 调整这里：普通（蓝白色）流星的数量；金色过境流星一次最多 1 颗。
-        const NORMAL_METEOR_COUNT = 110;
+        const NORMAL_METEOR_COUNT = 130;
         const WARM_METEOR_COUNT = 1;
         const MAX_STARS = 40;
         const CAPTURE_RATE_MULTIPLIER = 1.3;
@@ -460,25 +441,36 @@
         }
 
         const outCubic = (t) => 1 - (1 - t) ** 3;
-        // Three restrained hand-drawn poses, timed with the rabbit. Endpoints stay fixed.
+        // Three hand-drawn poses, timed with the rabbit. Endpoints and sill junctions stay fixed.
         const linePosePaths = linePaths.map((path, index) => {
           const original = path.getAttribute('d');
           const coordinates = [...original.matchAll(/-?\d*\.?\d+/g)].map(match => Number(match[0]));
           const vertical = index === 0 || index === 2;
-          const start = vertical ? 11 : index === 1 ? 137.6 : 2;
-          const end = vertical ? 402 : index === 1 ? 1145.3 : 1275;
+          const fixedAlong = [
+            [11, 402], [137.6, 1145.3], [11, 402], [2, 137.8, 1144.8, 1275]
+          ][index];
+          const detailZones = [
+            [[111, 35], [243, 35], [359, 30]],
+            [[265, 45], [527, 55], [780, 50], [1042, 45]],
+            [[93, 32], [195, 33], [310, 33]],
+            [[88, 34], [268, 38], [478, 42], [754, 43], [1007, 40], [1219, 35]]
+          ][index];
           const drawPose = phase => {
             let coordinateIndex = 0;
             return original.replace(/-?\d*\.?\d+/g, value => {
               const pair = Math.floor(coordinateIndex / 2) * 2;
               const along = coordinates[pair + (vertical ? 1 : 0)];
               const perpendicular = (coordinateIndex++ % 2 === 0) === vertical;
-              if (!perpendicular) return value;
-              const progress = clamp((along - start) / (end - start), 0, 1);
-              const taper = Math.sin(Math.PI * progress);
+              if (!perpendicular || fixedAlong.some(anchor => Math.abs(along - anchor) < .001)) return value;
+              const envelope = Math.max(...detailZones.map(([center, radius]) => {
+                const distance = Math.abs(along - center) / radius;
+                return distance < 1 ? (1 - distance * distance) ** 2 : 0;
+              }));
+              if (!envelope) return value;
+              const progress = clamp((along - fixedAlong[0]) / (fixedAlong.at(-1) - fixedAlong[0]), 0, 1);
               const wave = .6 * Math.sin(progress * Math.PI * 6 + phase + index * .7)
                 + .4 * Math.sin(progress * Math.PI * 11 + phase * 1.4 + index);
-              return (Number(value) + .85 * taper * wave).toFixed(2);
+              return (Number(value) + 1.7 * envelope * wave).toFixed(2);
             });
           };
           return [original, drawPose(.4), drawPose(2.5)];
@@ -505,7 +497,7 @@
             speed: faint ? random(105, 270) : strong ? random(380, 640) : warm ? random(690, 940) : random(220, 450),
             slope: warm ? random(.12, .245) : .175,
             length: faint ? random(90, 238) : strong ? random(80, 175) : warm ? random(105, 145) : random(75, 185),
-            brightness: faint ? random(.18, .38) : strong ? random(.67, .84) : warm ? random(.8, .93) : random(.4, .65)
+            brightness: faint ? random(.28, .5) : strong ? random(.76, .92) : warm ? random(.8, .93) : random(.52, .74)
           };
 
           const group = svgElement('g', { opacity: meteor.brightness.toFixed(2) });
@@ -523,7 +515,7 @@
               svgElement('path', { d: `M 0 -1.1 L ${meteor.length.toFixed(1)} 0 L 0 1.1 Z`, fill: `url(#capture-tail-${hue})`, opacity: '.5', filter: 'url(#tail-glow)' }),
               svgElement('circle', { cx: 0, cy: 0, r: 13, fill: `url(#${hue}-halo)` }),
               svgElement('path', { d: `M 0 -1.1 L ${meteor.length.toFixed(1)} 0 L 0 1.1 Z`, fill: `url(#capture-tail-${hue})` }),
-              svgElement('circle', { cx: 0, cy: 0, r: 1.75, fill: hue === 'yellow' ? '#fff0a7' : '#ffd18a' })
+              svgElement('circle', { cx: 0, cy: 0, r: 1.75, fill: hue === 'yellow' ? '#f2e7b4' : '#edcd9c' })
             );
             group.append(whiteGroup, warmGroup);
             meteor.whiteGroup = whiteGroup;
@@ -841,7 +833,7 @@
           );
           warmGroup.append(
             svgElement('circle', { cx: 0, cy: 0, r: 14, fill: `url(#${hue}-halo)` }),
-            svgElement('circle', { cx: 0, cy: 0, r: 1.75, fill: hue === 'yellow' ? '#fff0a7' : '#ffd18a' })
+            svgElement('circle', { cx: 0, cy: 0, r: 1.75, fill: hue === 'yellow' ? '#f2e7b4' : '#edcd9c' })
           );
           group.append(whiteGroup, warmGroup);
           const skyWhiteGlow = svgElement('path', { fill: `url(#${whiteGradient.id})`, filter: 'url(#tail-glow)' });
@@ -960,7 +952,7 @@
           const head = svgElement('g', {});
           head.append(
             svgElement('circle', { cx: 0, cy: 0, r: 13, fill: 'url(#yellow-halo)' }),
-            svgElement('circle', { cx: 0, cy: 0, r: 2, fill: '#fff1ad' })
+            svgElement('circle', { cx: 0, cy: 0, r: 2, fill: '#f3e9b9' })
           );
           group.append(glow, tail, head);
           sillMeteorLayer.append(group);
@@ -986,8 +978,8 @@
           const star = svgElement('g', {});
           const shape = 'M 0 -12 C 1.4 -4.5 3 -2.5 11 0 C 3 2 1.5 4.5 0 12 C -1.5 4.5 -3 2 -11 0 C -3 -2.5 -1.4 -4.5 0 -12 Z';
           star.append(
-            svgElement('path', { d: shape, fill: '#ffd972', opacity: '.7', filter: 'url(#meteor-glow)' }),
-            svgElement('path', { d: shape, fill: '#ffe184' })
+            svgElement('path', { d: shape, fill: '#eacf87', opacity: '.7', filter: 'url(#meteor-glow)' }),
+            svgElement('path', { d: shape, fill: '#edd896' })
           );
           root.append(shadow, star);
           sillMeteorLayer.append(root);
