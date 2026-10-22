@@ -871,28 +871,28 @@ if (aiVideoSection) {
       title: "vivo精彩随行",
       tag: "产品广告 · 手机TVC",
       description: "用高频使用场景来展示产品卖点：远处拍得清 → 身边拍得好 → 动态抓得住，然后卖点收束，进入产品展示，“这一切来自这台手机”，记录值得珍藏的鲜活记忆。",
-      src: "./pic/video/最新手机.mp4",
+      src: "./pic/video/web/vivo.mp4",
       poster: "./pic/video/posters/最新手机.webp",
     },
     {
       title: "珍爱APP短片",
       tag: "产品宣传",
       description: "从相似的日常切入，珍爱网中的活动成为相遇的契机，让两个陌生人从线上到线下，在自然相处与共同经历中，完成从“相遇”到“相爱”的情感递进。",
-      src: "./pic/video/珍爱最新-换前段.mp4",
+      src: "./pic/video/web/zhenai.mp4",
       poster: "./pic/video/posters/珍爱最新-换前段.webp",
     },
     {
       title: "安慕希\n整颗蓝莓酸奶",
       tag: "食品广告 · 奇幻动画",
       description: "把蓝莓拟人化、从种植园到入口的过程旅程化，从摘下枝头开始“锁鲜”，到通关时完好无损，叙事节奏松紧交替，强化故事情绪起伏。",
-      src: "./pic/video/鲜奇一路整颗满足.mp4",
+      src: "./pic/video/web/anmuxi.mp4",
       poster: "./pic/video/posters/鲜奇一路整颗满足.webp",
     },
     {
       title: "向日葵",
       tag: "竖屏 · 产品展示",
       description: "视觉方向：摄影级产品实拍感。一束晨光沿产品游走，逐步揭开整座向日葵庭院。温暖、细腻，适合突出成品。",
-      src: "./pic/video/向日葵.mp4",
+      src: "./pic/video/web/sunflower.mp4",
       poster: "./pic/video/posters/向日葵.webp",
       portrait: true,
     },
@@ -914,6 +914,24 @@ if (aiVideoSection) {
   let firstVideoStartedByScroll = false;
   let screenVisible = false;
   let resumeFirstWhenVisible = false;
+  const suspendedImages = new Map();
+
+  const suspendOffscreenImages = () => {
+    for (const image of document.querySelectorAll("main img")) {
+      if (aiVideoSection.contains(image) || image.complete || !image.hasAttribute("src")) continue;
+      const bounds = image.getBoundingClientRect();
+      if (bounds.bottom > 0 && bounds.top < window.innerHeight) continue;
+      suspendedImages.set(image, image.getAttribute("src"));
+      image.removeAttribute("src");
+    }
+  };
+
+  const restoreOffscreenImages = () => {
+    for (const [image, src] of suspendedImages) {
+      if (image.isConnected && !image.hasAttribute("src")) image.setAttribute("src", src);
+    }
+    suspendedImages.clear();
+  };
 
   const updateRail = () => {
     const railHeight = rail.clientHeight;
@@ -968,8 +986,10 @@ if (aiVideoSection) {
   };
 
   const playVideo = (request) => {
+    suspendOffscreenImages();
     player.play().catch(() => {
       if (request !== playRequest || !player.hasAttribute("src")) return;
+      restoreOffscreenImages();
       errorMessage.textContent = "播放未能开始，请点击播放器的播放按钮或再次点击缩略图重试。";
       errorMessage.hidden = false;
     });
@@ -979,6 +999,7 @@ if (aiVideoSection) {
     const work = works[index];
     if (!work) return;
 
+    suspendOffscreenImages();
     const request = ++playRequest;
     releaseVideo();
     errorMessage.hidden = true;
@@ -1024,6 +1045,7 @@ if (aiVideoSection) {
     if (compactRail.matches && firstVideoStartedByScroll && !userSelectedVideo) {
       resumeFirstWhenVisible = player.hasAttribute("src") && !player.paused;
       player.pause();
+      restoreOffscreenImages();
       ++playRequest;
     } else {
       playFirstWhenVisible();
@@ -1035,14 +1057,17 @@ if (aiVideoSection) {
   player.addEventListener("playing", () => {
     errorMessage.hidden = true;
   });
+  player.addEventListener("play", suspendOffscreenImages);
 
   player.addEventListener("error", () => {
     if (!player.error || !player.hasAttribute("src")) return;
     ++playRequest;
     releaseVideo();
+    restoreOffscreenImages();
     errorMessage.textContent = "视频暂时无法播放，请再次点击缩略图重试。";
     errorMessage.hidden = false;
   });
+  player.addEventListener("ended", restoreOffscreenImages);
 
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
@@ -1050,6 +1075,7 @@ if (aiVideoSection) {
         resumeFirstWhenVisible = player.hasAttribute("src") && !player.paused;
       }
       player.pause();
+      restoreOffscreenImages();
       ++playRequest;
     } else {
       playFirstWhenVisible();
@@ -1064,6 +1090,7 @@ if (aiVideoSection) {
           resumeFirstWhenVisible = player.hasAttribute("src") && !player.paused;
         }
         player.pause();
+        restoreOffscreenImages();
         ++playRequest;
       } else {
         playFirstWhenVisible();
