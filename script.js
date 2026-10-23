@@ -1,3 +1,17 @@
+let startEntryWait;
+let entrySceneReady = false;
+let resolveEntryScene;
+let entryScenePromise = new Promise((resolve) => {
+  resolveEntryScene = resolve;
+});
+
+const resetEntryScene = () => {
+  entrySceneReady = false;
+  entryScenePromise = new Promise((resolve) => {
+    resolveEntryScene = resolve;
+  });
+};
+
 if (window.entryLoading) {
   const waitForImage = (image) => {
     image.loading = "eager";
@@ -11,22 +25,52 @@ if (window.entryLoading) {
     }).then(decode);
   };
 
-  const desktopScene = window.matchMedia("(min-width: 768px)").matches;
-  const heroAsset = desktopScene
-    ? document.querySelector(".hero__scene")
-    : document.querySelector(".hero__mobile-art");
-  const heroReady = desktopScene && heroAsset
-    ? new Promise((resolve) => {
-        heroAsset.addEventListener("load", resolve, { once: true });
-        heroAsset.addEventListener("error", resolve, { once: true });
-      })
-    : heroAsset ? waitForImage(heroAsset) : Promise.resolve();
-  const projectImages = [...document.querySelectorAll("#project-01 img")];
+  const desktopScene = window.matchMedia("(min-width: 768px)");
+  const root = document.documentElement;
+  let revision = 0;
+  let minimumTimer;
+  const isInViewport = (image) => {
+    const bounds = image.getBoundingClientRect();
+    return bounds.width > 0 && bounds.height > 0
+      && bounds.right > 0 && bounds.left < window.innerWidth
+      && bounds.bottom > 0 && bounds.top < window.innerHeight;
+  };
 
-  Promise.allSettled([heroReady, ...projectImages.map(waitForImage)]).then(() => {
-    const remaining = Math.max(0, 450 - (performance.now() - window.entryLoading.startedAt));
-    setTimeout(() => window.entryLoading.finish(), remaining);
-  });
+  const checkVisibleAssets = () => {
+    if (!root.classList.contains("is-entry-loading")) {
+      desktopScene.removeEventListener("change", checkVisibleAssets);
+      window.removeEventListener("resize", checkVisibleAssets);
+      return;
+    }
+    const currentRevision = ++revision;
+    clearTimeout(minimumTimer);
+    let assets;
+    if (desktopScene.matches) {
+      assets = [entrySceneReady ? Promise.resolve() : entryScenePromise];
+    } else {
+      const mobileArt = document.querySelector(".hero__mobile-art");
+      const visibleCardImages = [...document.querySelectorAll(".coverflow__card-image")]
+        .filter(isInViewport);
+      assets = [mobileArt, ...visibleCardImages].filter(Boolean).map(waitForImage);
+    }
+
+    Promise.allSettled(assets).then(() => {
+      if (currentRevision !== revision || !root.classList.contains("is-entry-loading")) return;
+      const remaining = Math.max(0, 450 - (performance.now() - window.entryLoading.startedAt));
+      minimumTimer = setTimeout(() => {
+        if (currentRevision !== revision) return;
+        desktopScene.removeEventListener("change", checkVisibleAssets);
+        window.removeEventListener("resize", checkVisibleAssets);
+        window.entryLoading.finish();
+      }, remaining);
+    });
+  };
+
+  startEntryWait = () => {
+    desktopScene.addEventListener("change", checkVisibleAssets);
+    window.addEventListener("resize", checkVisibleAssets);
+    checkVisibleAssets();
+  };
 }
 
 const pageScroller = typeof Lenis !== "undefined"
@@ -211,6 +255,7 @@ if (hero) {
       if (desktopScene.matches) {
         if (!scene.hasAttribute("src")) {
           sceneReady = false;
+          resetEntryScene();
           scene.src = scene.dataset.src;
         }
         else syncScene();
@@ -221,6 +266,7 @@ if (hero) {
           scene.contentWindow?.postMessage({ type: "portfolio-scene:pause" }, sceneOrigin);
           scene.removeAttribute("src");
           sceneReady = false;
+          resetEntryScene();
           pendingStar = null;
         }
       }
@@ -230,6 +276,8 @@ if (hero) {
     scene.addEventListener("load", () => {
       if (!desktopScene.matches || !scene.hasAttribute("src")) return;
       sceneReady = true;
+      entrySceneReady = true;
+      resolveEntryScene();
       syncScene();
       if (pendingStar) {
         sendInteractiveStar(pendingStar);
@@ -295,12 +343,6 @@ if (workCards) {
 const compactWorkViewer = window.matchMedia("(max-width: 900px)");
 const ecommerceTrigger = document.querySelector(".ecommerce-design__open");
 const ecommerceViewer = document.getElementById("ecommerceViewer");
-const ecommercePreviewGallery = document.querySelector(".ecommerce-design__images");
-
-if (ecommerceViewer && ecommercePreviewGallery) {
-  const gallery = ecommerceViewer.querySelector(".ecommerce-viewer__gallery");
-  if (gallery) ecommercePreviewGallery.append(...[...gallery.children].map((figure) => figure.cloneNode(true)));
-}
 
 if (ecommerceTrigger && ecommerceViewer) {
   const backButton = ecommerceViewer.querySelector(".ecommerce-viewer__back");
@@ -1436,8 +1478,8 @@ if (coverflow) {
     { number: "02", src: "./pic/组件/02.png", alt: "木质机械小提琴与红色帷幕" },
     { number: "03", src: "./pic/组件/03.png", alt: "缘·记忆手卡包装展示" },
     { number: "04", src: "./pic/组件/04.png", alt: "万用模板手卡包装展示" },
-    { number: "05", src: "./pic/组件/手卡1.jpg", alt: "识字碰碰卡包装与竖立的识字卡片" },
-    { number: "06", src: "./pic/组件/手卡2.jpg", alt: "识字碰碰卡包装与铺开的识字卡片" },
+    { number: "05", src: "./pic/组件/手卡1.png", alt: "识字碰碰卡包装与竖立的识字卡片" },
+    { number: "06", src: "./pic/组件/手卡2.png", alt: "识字碰碰卡包装与铺开的识字卡片" },
     { number: "07", src: "./pic/组件/05.png", alt: "深色花园中的香水瓶" },
     { number: "08", src: "./pic/组件/06.png", alt: "白色花朵间的香水瓶" },
     { number: "09", src: "./pic/组件/07.png", alt: "水边的木质机械小提琴装置" },
@@ -1599,3 +1641,5 @@ if (coverflow) {
   });
   updateSelection(0);
 }
+
+startEntryWait?.();

@@ -3168,31 +3168,11 @@ html.quiz-viewer-open body {
   border-radius: clamp(22px, 2.6vw, 38px);
 }
 
-.ecommerce-design__images {
-  width: 100%;
-  column-count: 3;
-  column-gap: clamp(10px, 1.5vw, 22px);
-  transition: transform 1.2s ease-out;
-}
-
-.ecommerce-design__images figure {
-  margin: 0 0 clamp(10px, 1.5vw, 22px);
-  break-inside: avoid;
-}
-
-.ecommerce-design__images img {
+.ecommerce-design__image {
   display: block;
   width: 100%;
   height: auto;
   border-radius: clamp(6px, 0.7vw, 10px);
-}
-
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .ecommerce-design__preview:hover .ecommerce-design__images {
-    transform: translateY(-1400px);
-    transition-duration: 16s;
-    transition-timing-function: linear;
-  }
 }
 
 .ecommerce-design__preview::after {
@@ -3298,10 +3278,6 @@ html.quiz-viewer-open body {
 }
 
 @media (max-width: 1100px) {
-  .ecommerce-design__images {
-    column-count: 2;
-  }
-
   .card-stack {
     --stack-top: clamp(40px, 7svh, 72px);
     --stack-step: clamp(40px, 6svh, 58px);
@@ -3867,14 +3843,20 @@ html.quiz-viewer-open body {
 }
 
 @media (max-width: 600px) {
-  .ecommerce-design__images {
-    column-count: 1;
+  .ecommerce-design__preview {
+    aspect-ratio: 2.3;
+    padding: clamp(8px, 2.8vw, 14px);
   }
 
   .ecommerce-viewer__gallery {
     width: calc(100% - 32px);
     padding: 72px 0 64px;
-    column-count: 1;
+    column-count: 3;
+    column-gap: 8px;
+  }
+
+  .ecommerce-viewer__gallery figure {
+    margin-bottom: 8px;
   }
 }
 
