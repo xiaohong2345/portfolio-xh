@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio 首屏接入示例</title>
+    <style>
+      :root { --page-bg: #0F1110; --header-clearance: clamp(150px, 21vh, 170px); }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; background: var(--page-bg); color: #f5f0e8; font-family: Arial, Helvetica, sans-serif; }
+      .hero { position: relative; height: 100svh; min-height: 320px; overflow: hidden; }
+      .hero-scene { position: absolute; inset: 0; display: block; width: 100%; height: 100%; border: 0; pointer-events: none; }
+      .site-header { position: absolute; inset: 0 0 auto; z-index: 1; height: var(--header-clearance); pointer-events: none; }
+      .site-brand { position: absolute; top: 22px; right: clamp(22px, 3.2vw, 42px); font-size: clamp(14px, .95vw, 18px); font-weight: 700; line-height: 1; }
+      .site-title { position: absolute; bottom: -34px; left: 50%; margin: 0; transform: translateX(-50%); font-size: clamp(44px, calc(5.7vw + 4px), 114px); font-weight: 800; letter-spacing: -.04em; line-height: .96; }
+      .site-categories { position: absolute; top: 22px; left: clamp(22px, 3.2vw, 42px); display: flex; flex-direction: column; align-items: flex-start; gap: 4px; font-size: clamp(14px, .95vw, 18px); font-weight: 700; line-height: 1; white-space: nowrap; pointer-events: auto; }
+      .site-categories a { color: inherit; text-decoration: none; }
+      .site-categories a:hover, .site-categories a:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
+      .example-section { min-height: 65svh; padding: max(8vw, 48px); border-top: 1px solid rgba(245, 240, 232, .2); }
+      .example-section h2 { margin: 0; font-size: clamp(32px, 6vw, 76px); }
+    </style>
+  </head>
+  <body>
+    <section class="hero" aria-label="Portfolio 首屏">
+      <iframe class="hero-scene" src="./scene.html" title="流星窗景动画" loading="eager" tabindex="-1"></iframe>
+      <header class="site-header">
+        <nav class="site-categories" aria-label="作品分类">
+          <a href="#visual-design">Visual Design</a>
+          <a href="#ai-video">AI Video</a>
+          <a href="#vibe-coding">Vibe Coding</a>
+        </nav>
+        <span class="site-brand">xiaohong</span>
+        <h1 class="site-title">PORTFOLIO</h1>
+      </header>
+    </section>
+    <section class="example-section" id="visual-design"><h2>Visual Design</h2></section>
+    <section class="example-section" id="ai-video"><h2>AI Video</h2></section>
+    <section class="example-section" id="vibe-coding"><h2>Vibe Coding</h2></section>
+    <script>
+      const hero = document.querySelector('.hero');
+      const scene = document.querySelector('.hero-scene');
+      const sceneOrigin = location.protocol === 'file:' ? '*' : location.origin;
+      let sceneVisible = true;
+
+      function syncScene() {
+        scene.contentWindow?.postMessage(
+          { type: sceneVisible ? 'portfolio-scene:resume' : 'portfolio-scene:pause' },
+          sceneOrigin
+        );
+      }
+
+      scene.addEventListener('load', syncScene);
+      new IntersectionObserver(([entry]) => {
+        sceneVisible = entry.isIntersecting;
+        syncScene();
+      }).observe(hero);
+    </script>
+  </body>
+</html>

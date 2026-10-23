@@ -293,33 +293,65 @@ if (workCards) {
 }
 
 const compactWorkViewer = window.matchMedia("(max-width: 900px)");
-const eventTrigger = document.querySelector(".work-card__open--event");
-const eventViewer = document.getElementById("eventViewer");
+const ecommerceTrigger = document.querySelector(".ecommerce-design__open");
+const ecommerceViewer = document.getElementById("ecommerceViewer");
+const ecommercePreviewGallery = document.querySelector(".ecommerce-design__images");
 
-if (eventTrigger && eventViewer) {
-  const backButton = eventViewer.querySelector(".event-viewer__back");
-  const media = [...eventViewer.querySelectorAll(".event-viewer__media")];
+if (ecommerceViewer && ecommercePreviewGallery) {
+  const gallery = ecommerceViewer.querySelector(".ecommerce-viewer__gallery");
+  if (gallery) ecommercePreviewGallery.append(...[...gallery.children].map((figure) => figure.cloneNode(true)));
+}
+
+if (ecommerceTrigger && ecommerceViewer) {
+  const backButton = ecommerceViewer.querySelector(".ecommerce-viewer__back");
   let openedScrollY = 0;
 
-  eventTrigger.addEventListener("click", () => {
+  ecommerceTrigger.addEventListener("click", () => {
     openedScrollY = window.scrollY;
-    eventViewer.showModal();
-    eventViewer.scrollTop = 0;
-    media.forEach((item) => { item.scrollLeft = 0; });
-    document.documentElement.classList.add("event-viewer-open");
+    ecommerceViewer.showModal();
+    ecommerceViewer.scrollTop = 0;
+    document.documentElement.classList.add("ecommerce-viewer-open");
     pageScroller?.stop();
     backButton.focus({ preventScroll: true });
   });
 
-  backButton.addEventListener("click", () => eventViewer.close());
-  eventViewer.addEventListener("close", () => {
-    document.documentElement.classList.remove("event-viewer-open");
+  backButton.addEventListener("click", () => ecommerceViewer.close());
+  ecommerceViewer.addEventListener("close", () => {
+    document.documentElement.classList.remove("ecommerce-viewer-open");
     pageScroller?.start();
     if (Math.abs(window.scrollY - openedScrollY) > 1) {
       if (pageScroller) pageScroller.scrollTo(openedScrollY, { immediate: true, force: true });
       else window.scrollTo(0, openedScrollY);
     }
-    eventTrigger.focus({ preventScroll: true });
+    ecommerceTrigger.focus({ preventScroll: true });
+  });
+}
+
+const ipTrigger = document.querySelector(".work-card__open--ip");
+const ipViewer = document.getElementById("ipViewer");
+
+if (ipTrigger && ipViewer) {
+  const backButton = ipViewer.querySelector(".ip-viewer__back");
+  let openedScrollY = 0;
+
+  ipTrigger.addEventListener("click", () => {
+    openedScrollY = window.scrollY;
+    ipViewer.showModal();
+    ipViewer.scrollTop = 0;
+    document.documentElement.classList.add("ip-viewer-open");
+    pageScroller?.stop();
+    backButton.focus({ preventScroll: true });
+  });
+
+  backButton.addEventListener("click", () => ipViewer.close());
+  ipViewer.addEventListener("close", () => {
+    document.documentElement.classList.remove("ip-viewer-open");
+    pageScroller?.start();
+    if (Math.abs(window.scrollY - openedScrollY) > 1) {
+      if (pageScroller) pageScroller.scrollTo(openedScrollY, { immediate: true, force: true });
+      else window.scrollTo(0, openedScrollY);
+    }
+    ipTrigger.focus({ preventScroll: true });
   });
 }
 
@@ -918,7 +950,7 @@ if (aiVideoSection) {
 
   const suspendOffscreenImages = () => {
     for (const image of document.querySelectorAll("main img")) {
-      if (aiVideoSection.contains(image) || image.complete || !image.hasAttribute("src")) continue;
+      if (aiVideoSection.contains(image) || image.closest(".ecommerce-design__preview") || image.complete || !image.hasAttribute("src")) continue;
       const bounds = image.getBoundingClientRect();
       if (bounds.bottom > 0 && bounds.top < window.innerHeight) continue;
       suspendedImages.set(image, image.getAttribute("src"));
@@ -1268,6 +1300,7 @@ if (ipItems.length) {
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) stopVideos.forEach((stop) => stop());
   });
+  ipViewer?.addEventListener("close", () => stopVideos.forEach((stop) => stop()));
 }
 
 const portfolioContact = document.querySelector(".portfolio-contact");
@@ -1403,9 +1436,11 @@ if (coverflow) {
     { number: "02", src: "./pic/组件/02.png", alt: "木质机械小提琴与红色帷幕" },
     { number: "03", src: "./pic/组件/03.png", alt: "缘·记忆手卡包装展示" },
     { number: "04", src: "./pic/组件/04.png", alt: "万用模板手卡包装展示" },
-    { number: "05", src: "./pic/组件/05.png", alt: "深色花园中的香水瓶" },
-    { number: "06", src: "./pic/组件/06.png", alt: "白色花朵间的香水瓶" },
-    { number: "07", src: "./pic/组件/07.png", alt: "水边的木质机械小提琴装置" },
+    { number: "05", src: "./pic/组件/手卡1.jpg", alt: "识字碰碰卡包装与竖立的识字卡片" },
+    { number: "06", src: "./pic/组件/手卡2.jpg", alt: "识字碰碰卡包装与铺开的识字卡片" },
+    { number: "07", src: "./pic/组件/05.png", alt: "深色花园中的香水瓶" },
+    { number: "08", src: "./pic/组件/06.png", alt: "白色花朵间的香水瓶" },
+    { number: "09", src: "./pic/组件/07.png", alt: "水边的木质机械小提琴装置" },
   ];
 
   const stage = coverflow.querySelector(".coverflow__stage");

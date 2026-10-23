@@ -79,8 +79,8 @@
       <img class="hero__mobile-art" src="./pic/hero/瓶子.png" alt="装着星星的瓶子与兔子插画" width="1304" height="1104" decoding="async" />
       <header class="hero__header">
         <nav class="hero__categories" aria-label="作品分类">
-          <a href="#activity-design">Visual Design</a>
           <a href="#ai-video">AI Video</a>
+          <a href="#activity-design">Visual Design</a>
           <a href="#vibe-coding">Vibe Coding</a>
         </nav>
         <span class="hero__brand">xiaohong</span>
@@ -107,6 +107,42 @@
         <div class="coverflow__track"></div>
       </div>
       <p class="coverflow__status" aria-live="polite" aria-atomic="true"></p>
+    </section>
+
+    <section class="ai-video" id="ai-video" aria-labelledby="ai-video-title">
+      <header class="ai-video__heading card-stack__heading section-heading" data-reveal>
+        <span class="card-stack__eyebrow" aria-hidden="true">AI VIDEO CREATION</span>
+        <h2 id="ai-video-title">AI Video<svg class="section-heading__accent" viewBox="0 0 174 32" aria-hidden="true" focusable="false"><path d="M0.195312 31.0779C28.2322 24.3578 94.8197 6.97291 82.1155 13.9856M42.6887 27.1338C64.7385 20.852 150.105 2.59095 173.235 0.837891" /></svg></h2>
+        <div class="card-stack__details" aria-hidden="true">
+          <img src="./pic/tt/视频TT1.svg" alt="" width="279" height="22" loading="lazy" decoding="async" />
+          <img src="./pic/tt/视频tt2.svg" alt="" width="176" height="21" loading="lazy" decoding="async" />
+        </div>
+      </header>
+
+      <div class="ai-video__showcase" data-reveal>
+        <div class="ai-video__copy" aria-live="polite">
+          <h3 class="ai-video__work-title">向日葵</h3>
+          <span class="ai-video__tag">竖屏 · 产品展示</span>
+          <p class="ai-video__description">视觉方向：摄影级产品实拍感。一束晨光沿产品游走，逐步揭开整座向日葵庭院。温暖、细腻，适合突出成品。</p>
+        </div>
+
+        <div class="ai-video__screen is-portrait">
+          <video class="ai-video__player" preload="none" playsinline muted poster="./pic/video/posters/向日葵.webp" width="1080" height="1920" aria-label="向日葵"></video>
+          <p class="ai-video__error" role="status" hidden>视频暂时无法播放，请再次点击缩略图重试。</p>
+        </div>
+
+        <nav class="ai-video__rail" aria-label="选择 AI 视频作品">
+          <div class="ai-video__counter" aria-live="polite"><span class="ai-video__current">01</span><span class="ai-video__total">/ 04</span></div>
+          <div class="ai-video__rail-viewport">
+            <div class="ai-video__thumbs">
+              <button class="ai-video__thumb ai-video__thumb--portrait is-active" type="button" data-video-index="0" aria-label="播放 向日葵" aria-pressed="true"><img src="./pic/video/posters/向日葵.webp" alt="" loading="lazy" decoding="async" /></button>
+              <button class="ai-video__thumb" type="button" data-video-index="1" aria-label="播放 vivo精彩随行" aria-pressed="false"><img src="./pic/video/posters/最新手机.webp" alt="" loading="lazy" decoding="async" /></button>
+              <button class="ai-video__thumb" type="button" data-video-index="2" aria-label="播放 珍爱APP短片" aria-pressed="false"><img src="./pic/video/posters/珍爱最新-换前段.webp" alt="" loading="lazy" decoding="async" /></button>
+              <button class="ai-video__thumb" type="button" data-video-index="3" aria-label="播放 安慕希整颗蓝莓酸奶" aria-pressed="false"><img src="./pic/video/posters/鲜奇一路整颗满足.webp" alt="" loading="lazy" decoding="async" /></button>
+            </div>
+          </div>
+        </nav>
+      </div>
     </section>
 
     <section class="activity-design-intro" id="activity-design" aria-labelledby="activity-design-title">
@@ -281,42 +317,6 @@
       </div>
     </section>
 
-    <section class="ai-video" id="ai-video" aria-labelledby="ai-video-title">
-      <header class="ai-video__heading card-stack__heading section-heading" data-reveal>
-        <span class="card-stack__eyebrow" aria-hidden="true">AI VIDEO CREATION</span>
-        <h2 id="ai-video-title">AI Video<svg class="section-heading__accent" viewBox="0 0 174 32" aria-hidden="true" focusable="false"><path d="M0.195312 31.0779C28.2322 24.3578 94.8197 6.97291 82.1155 13.9856M42.6887 27.1338C64.7385 20.852 150.105 2.59095 173.235 0.837891" /></svg></h2>
-        <div class="card-stack__details" aria-hidden="true">
-          <img src="./pic/tt/视频TT1.svg" alt="" width="279" height="22" loading="lazy" decoding="async" />
-          <img src="./pic/tt/视频tt2.svg" alt="" width="176" height="21" loading="lazy" decoding="async" />
-        </div>
-      </header>
-
-      <div class="ai-video__showcase" data-reveal>
-        <div class="ai-video__copy" aria-live="polite">
-          <h3 class="ai-video__work-title">向日葵</h3>
-          <span class="ai-video__tag">竖屏 · 产品展示</span>
-          <p class="ai-video__description">视觉方向：摄影级产品实拍感。一束晨光沿产品游走，逐步揭开整座向日葵庭院。温暖、细腻，适合突出成品。</p>
-        </div>
-
-        <div class="ai-video__screen is-portrait">
-          <video class="ai-video__player" preload="none" playsinline muted poster="./pic/video/posters/向日葵.webp" width="1080" height="1920" aria-label="向日葵"></video>
-          <p class="ai-video__error" role="status" hidden>视频暂时无法播放，请再次点击缩略图重试。</p>
-        </div>
-
-        <nav class="ai-video__rail" aria-label="选择 AI 视频作品">
-          <div class="ai-video__counter" aria-live="polite"><span class="ai-video__current">01</span><span class="ai-video__total">/ 04</span></div>
-          <div class="ai-video__rail-viewport">
-            <div class="ai-video__thumbs">
-              <button class="ai-video__thumb ai-video__thumb--portrait is-active" type="button" data-video-index="0" aria-label="播放 向日葵" aria-pressed="true"><img src="./pic/video/posters/向日葵.webp" alt="" loading="lazy" decoding="async" /></button>
-              <button class="ai-video__thumb" type="button" data-video-index="1" aria-label="播放 vivo精彩随行" aria-pressed="false"><img src="./pic/video/posters/最新手机.webp" alt="" loading="lazy" decoding="async" /></button>
-              <button class="ai-video__thumb" type="button" data-video-index="2" aria-label="播放 珍爱APP短片" aria-pressed="false"><img src="./pic/video/posters/珍爱最新-换前段.webp" alt="" loading="lazy" decoding="async" /></button>
-              <button class="ai-video__thumb" type="button" data-video-index="3" aria-label="播放 安慕希整颗蓝莓酸奶" aria-pressed="false"><img src="./pic/video/posters/鲜奇一路整颗满足.webp" alt="" loading="lazy" decoding="async" /></button>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </section>
-
     <section class="card-stack" id="vibe-coding" aria-labelledby="card-stack-title">
       <header class="card-stack__heading section-heading">
         <span class="card-stack__eyebrow" aria-hidden="true">AI TOOLING</span>
@@ -394,36 +394,18 @@
     </section>
     <div class="card-stack__exit" aria-hidden="true"></div>
 
-    <section class="ip-design" aria-labelledby="ip-design-title">
+    <section class="ecommerce-design" aria-labelledby="ecommerce-design-title">
       <header class="card-stack__heading section-heading">
-        <span class="card-stack__eyebrow" aria-hidden="true">IP DESIGN</span>
-        <h2 id="ip-design-title">IP Design<svg class="section-heading__accent" viewBox="0 0 174 32" aria-hidden="true" focusable="false"><path d="M0.195312 31.0779C28.2322 24.3578 94.8197 6.97291 82.1155 13.9856M42.6887 27.1338C64.7385 20.852 150.105 2.59095 173.235 0.837891" /></svg></h2>
-        <div class="card-stack__details">
-          <img src="./pic/tt/视频TT1.svg" alt="" width="279" height="22" loading="lazy" decoding="async" />
-          <img src="./pic/tt/IPTT2.svg" alt="" width="289" height="21" loading="lazy" decoding="async" />
+        <span class="card-stack__eyebrow" aria-hidden="true">E-COMMERCE DESIGN</span>
+        <h2 id="ecommerce-design-title">电商设计<svg class="section-heading__accent" viewBox="0 0 174 32" aria-hidden="true" focusable="false"><path d="M0.195312 31.0779C28.2322 24.3578 94.8197 6.97291 82.1155 13.9856M42.6887 27.1338C64.7385 20.852 150.105 2.59095 173.235 0.837891" /></svg></h2>
+        <div class="card-stack__details" aria-hidden="true">
+          <img src="./pic/tt/电商TT1.svg" alt="" width="138" height="20" loading="lazy" decoding="async" />
+          <img src="./pic/tt/电商TT2.svg" alt="" width="128" height="20" loading="lazy" decoding="async" />
         </div>
       </header>
-      <div class="ip-design__features" aria-label="小象 IP 主题视觉设计">
-        <img src="./pic/秋日.png" alt="秋日枫叶中的小象主题视觉" width="1214" height="678" loading="lazy" decoding="async" />
-        <img src="./pic/荷花 .png" alt="小象与小猫泛舟荷塘的主题视觉" width="1214" height="678" loading="lazy" decoding="async" />
-      </div>
-      <div class="ip-design__gallery" aria-label="小象 IP 形象设计作品">
-        <figure class="ip-design__item ip-design__item--a">
-          <img src="./pic/IP设计/A.png" alt="两只小象在庭院中喝茶" width="740" height="412" loading="lazy" decoding="async" />
-        </figure>
-        <figure class="ip-design__item ip-design__item--b">
-          <img src="./pic/IP设计/B.png" alt="森林里的军装小象" width="436" height="584" loading="lazy" decoding="async" />
-        </figure>
-        <figure class="ip-design__item ip-design__item--c">
-          <img src="./pic/IP设计/C.png" alt="街道上合影的小象角色群像" width="1288" height="720" loading="lazy" decoding="async" />
-          <video data-video-src="./pic/IP设计/C小象.mp4" poster="./pic/IP设计/C.png" muted loop playsinline preload="none" aria-hidden="true"></video>
-        </figure>
-        <figure class="ip-design__item ip-design__item--d">
-          <img src="./pic/IP设计/D.png" alt="花店里的粉色小象" width="680" height="444" loading="lazy" decoding="async" />
-        </figure>
-        <figure class="ip-design__item ip-design__item--e">
-          <img src="./pic/IP设计/E.png" alt="坐在车厢里的背包小象" width="384" height="516" loading="lazy" decoding="async" />
-        </figure>
+      <div class="ecommerce-design__preview">
+        <div class="ecommerce-design__images" aria-hidden="true"></div>
+        <button class="ecommerce-design__open" type="button" aria-label="打开电商设计作品查看" aria-haspopup="dialog" aria-controls="ecommerceViewer"></button>
       </div>
     </section>
 
@@ -437,26 +419,26 @@
         <article class="work-card">
           <div class="work-card__content">
             <span class="work-card__number" aria-hidden="true">01</span>
-            <h3>主题活动</h3>
-            <p>从节日主题到线下联动，以主视觉与活动物料串联不同场景。</p>
+            <h3>IP设计</h3>
+            <p>以小象角色为核心，延展主题主视觉与生活化场景，通过静态画面和动态影像呈现角色个性。</p>
           </div>
           <div class="work-card__visual work-card__visual--marquee">
             <div class="work-card__track">
               <div class="work-card__track-group">
-                <img src="./pic/3-1.png" alt="爱在尔滨浪漫冰城禧CP活动视觉" width="882" height="496" loading="lazy" decoding="async" />
-                <img src="./pic/3-2.png" alt="夏遇冰城水漾心动活动视觉" width="1152" height="648" loading="lazy" decoding="async" />
-                <img src="./pic/3-3.png" alt="父母说媒家长见面会活动视觉" width="1152" height="648" loading="lazy" decoding="async" />
-                <img src="./pic/3-4.png" alt="爱在京城悦动健身活动视觉" width="1310" height="496" loading="lazy" decoding="async" />
+                <img src="./pic/秋日.png" alt="秋日枫叶中的小象主题视觉" width="1214" height="678" loading="lazy" decoding="async" />
+                <img src="./pic/荷花 .png" alt="小象与小猫泛舟荷塘的主题视觉" width="1214" height="678" loading="lazy" decoding="async" />
+                <img src="./pic/IP设计/C.png" alt="街道上合影的小象角色群像" width="1288" height="720" loading="lazy" decoding="async" />
+                <img src="./pic/IP设计/A.png" alt="两只小象在庭院中喝茶" width="740" height="412" loading="lazy" decoding="async" />
               </div>
               <div class="work-card__track-group" aria-hidden="true">
-                <img src="./pic/3-1.png" alt="" width="882" height="496" loading="lazy" decoding="async" />
-                <img src="./pic/3-2.png" alt="" width="1152" height="648" loading="lazy" decoding="async" />
-                <img src="./pic/3-3.png" alt="" width="1152" height="648" loading="lazy" decoding="async" />
-                <img src="./pic/3-4.png" alt="" width="1310" height="496" loading="lazy" decoding="async" />
+                <img src="./pic/秋日.png" alt="" width="1214" height="678" loading="lazy" decoding="async" />
+                <img src="./pic/荷花 .png" alt="" width="1214" height="678" loading="lazy" decoding="async" />
+                <img src="./pic/IP设计/C.png" alt="" width="1288" height="720" loading="lazy" decoding="async" />
+                <img src="./pic/IP设计/A.png" alt="" width="740" height="412" loading="lazy" decoding="async" />
               </div>
             </div>
           </div>
-          <button class="work-card__open work-card__open--event" type="button" aria-label="打开活动作品查看" aria-haspopup="dialog" aria-controls="eventViewer"></button>
+          <button class="work-card__open work-card__open--ip" type="button" aria-label="打开 IP 设计作品查看" aria-haspopup="dialog" aria-controls="ipViewer"></button>
         </article>
 
         <article class="work-card">
@@ -545,49 +527,70 @@
       <footer class="portfolio-footer" aria-hidden="true"></footer>
     </section>
     </main>
-    <dialog class="event-viewer" id="eventViewer" aria-label="活动作品查看" data-lenis-prevent>
-      <header class="event-viewer__toolbar">
-        <button class="work-viewer__back event-viewer__back" type="button" aria-label="返回作品列表"></button>
+    <dialog class="ecommerce-viewer" id="ecommerceViewer" aria-label="电商设计作品查看" data-lenis-prevent>
+      <header class="ecommerce-viewer__toolbar">
+        <button class="work-viewer__back ecommerce-viewer__back" type="button" aria-label="返回作品列表"></button>
       </header>
-      <div class="event-viewer__body">
-        <div class="event-viewer__intro">
-          <h2>「幸福联线」多主题线下活动主视觉</h2>
-          <p>SERIES EVENT VISUALS</p>
-          <span>主视觉设计 ｜ 活动详情页 ｜ 线下物料设计</span>
-        </div>
-        <div class="event-viewer__cases">
-          <section class="event-viewer__case" aria-labelledby="event-case-1">
-            <div class="event-viewer__copy">
-              <span class="event-viewer__number" aria-hidden="true">01</span>
-              <h3 id="event-case-1">爱在京城，悦动健身</h3>
-              <p>2025年5月，以“运动”为主题，“幸福联线”全国示范交友联谊活动在北京市举行。</p>
-            </div>
-            <div class="event-viewer__media" tabindex="0" aria-label="查看爱在京城活动视觉">
-              <img class="event-viewer__image" src="./pic/测试结果/01运动.png" alt="爱在京城悦动健身活动：冰场主视觉、现场布置与立牌" width="1896" height="696" loading="lazy" decoding="async" />
-            </div>
-          </section>
-          <section class="event-viewer__case event-viewer__case--reverse" aria-labelledby="event-case-2">
-            <div class="event-viewer__copy">
-              <span class="event-viewer__number" aria-hidden="true">02</span>
-              <h3 id="event-case-2">夏遇冰城，水漾心动</h3>
-              <p>2025年8月，水上主题单身青年联谊活动。结合水枪戏水人物，搭配涂鸦元素，营造轻松活泼氛围。</p>
-            </div>
-            <div class="event-viewer__media" tabindex="0" aria-label="查看夏遇冰城活动视觉">
-              <img class="event-viewer__image" src="./pic/测试结果/02泼水.png" alt="夏遇冰城水漾心动活动：两幅户外主题视觉" width="1902" height="696" loading="lazy" decoding="async" />
-            </div>
-          </section>
-          <section class="event-viewer__case" aria-labelledby="event-case-3">
-            <div class="event-viewer__copy">
-              <span class="event-viewer__number" aria-hidden="true">03</span>
-              <h3 id="event-case-3">爱在尔滨，浪漫冰城</h3>
-              <p>2025年3月，黑龙江省妇联携手中国婚恋网举办为期5天的“冰雪+非遗+文旅+交友”联谊活动，参与1600+人。线上主视觉覆盖报名宣传与后期视频延展，以粉蓝冰雪色调融合哈尔滨地标、冰雪与非遗元素，营造文旅交友氛围。</p>
-            </div>
-            <div class="event-viewer__media" tabindex="0" aria-label="查看爱在尔滨活动视觉">
-              <img class="event-viewer__image" src="./pic/测试结果/03冰城.png" alt="爱在尔滨浪漫冰城活动：海报、现场应用和手机详情页" width="2222" height="820" loading="lazy" decoding="async" />
-            </div>
-          </section>
-        </div>
+      <div class="ecommerce-viewer__gallery">
+        <figure><img src="./pic/电商/01.png" alt="欧珑双十一香水活动详情页" width="750" height="2541" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/02.png" alt="欧珑双十一香水礼盒促销横幅" width="640" height="200" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/03.png" alt="欧珑双十一环球寻香促销横幅" width="640" height="200" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/04.png" alt="欧珑精醇工坊抽奖活动详情页" width="750" height="2987" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/05.png" alt="欧珑天猫 U 先香水试用详情页" width="640" height="4096" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/820封面 1.png" alt="卡诗七夕钜惠活动横幅" width="750" height="422" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/9 86.png" alt="美妆产品方形电商视觉" width="1000" height="1000" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/产品质地-发膜黑2 1.png" alt="发膜质地与产品展示视觉" width="513" height="750" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/产品质地2-发膜手1 1.png" alt="手持发膜的产品质地展示视觉一" width="513" height="750" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/产品质地2-发膜手3 1.png" alt="手持发膜的产品质地展示视觉二" width="513" height="750" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/超荐-多色 1.png" alt="多色美妆产品推荐海报" width="750" height="1125" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/超荐-发膜 1.png" alt="发膜产品推荐海报" width="750" height="1125" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/超荐-洗发水 1.png" alt="洗发水产品推荐海报" width="750" height="1125" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/超荐-组合 1.png" alt="洗护产品组合推荐海报" width="750" height="1125" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/发膜品专 750x360 1.png" alt="发膜产品品牌专区横幅" width="750" height="360" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/浆果罐  1.png" alt="浆果罐产品推广横幅" width="750" height="360" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/净油 1.png" alt="净油洗护产品推广横幅" width="750" height="360" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/品专-sp 750x360 1.png" alt="洗护产品品牌专区横幅" width="750" height="360" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/桃罐 1.png" alt="桃罐产品推广横幅" width="750" height="360" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/吸金2-750x360 1.png" alt="吸金洗护系列推广横幅" width="750" height="360" loading="lazy" decoding="async" /></figure>
+        <figure><img src="./pic/电商/致臻发膜 1.png" alt="致臻发膜产品推广横幅" width="750" height="360" loading="lazy" decoding="async" /></figure>
       </div>
+    </dialog>
+    <dialog class="ip-viewer" id="ipViewer" aria-label="IP 设计作品查看" data-lenis-prevent>
+      <header class="ip-viewer__toolbar">
+        <button class="work-viewer__back ip-viewer__back" type="button" aria-label="返回作品列表"></button>
+      </header>
+      <section class="ip-design" aria-labelledby="ip-design-title">
+        <header class="card-stack__heading section-heading">
+          <span class="card-stack__eyebrow" aria-hidden="true">IP DESIGN</span>
+          <h2 id="ip-design-title">IP Design<svg class="section-heading__accent" viewBox="0 0 174 32" aria-hidden="true" focusable="false"><path d="M0.195312 31.0779C28.2322 24.3578 94.8197 6.97291 82.1155 13.9856M42.6887 27.1338C64.7385 20.852 150.105 2.59095 173.235 0.837891" /></svg></h2>
+          <div class="card-stack__details">
+            <img src="./pic/tt/视频TT1.svg" alt="" width="279" height="22" loading="lazy" decoding="async" />
+            <img src="./pic/tt/IPTT2.svg" alt="" width="289" height="21" loading="lazy" decoding="async" />
+          </div>
+        </header>
+        <div class="ip-design__features" aria-label="小象 IP 主题视觉设计">
+          <img src="./pic/秋日.png" alt="秋日枫叶中的小象主题视觉" width="1214" height="678" loading="lazy" decoding="async" />
+          <img src="./pic/荷花 .png" alt="小象与小猫泛舟荷塘的主题视觉" width="1214" height="678" loading="lazy" decoding="async" />
+        </div>
+        <div class="ip-design__gallery" aria-label="小象 IP 形象设计作品">
+          <figure class="ip-design__item ip-design__item--a">
+            <img src="./pic/IP设计/A.png" alt="两只小象在庭院中喝茶" width="740" height="412" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="ip-design__item ip-design__item--b">
+            <img src="./pic/IP设计/B.png" alt="森林里的军装小象" width="436" height="584" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="ip-design__item ip-design__item--c">
+            <img src="./pic/IP设计/C.png" alt="街道上合影的小象角色群像" width="1288" height="720" loading="lazy" decoding="async" />
+            <video data-video-src="./pic/IP设计/C小象.mp4" poster="./pic/IP设计/C.png" muted loop playsinline preload="none" aria-hidden="true"></video>
+          </figure>
+          <figure class="ip-design__item ip-design__item--d">
+            <img src="./pic/IP设计/D.png" alt="花店里的粉色小象" width="680" height="444" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="ip-design__item ip-design__item--e">
+            <img src="./pic/IP设计/E.png" alt="坐在车厢里的背包小象" width="384" height="516" loading="lazy" decoding="async" />
+          </figure>
+        </div>
+      </section>
     </dialog>
     <dialog class="quiz-viewer" id="quizViewer" aria-label="测一测作品查看" data-lenis-prevent>
       <header class="quiz-viewer__header">
