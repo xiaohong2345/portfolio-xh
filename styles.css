@@ -665,8 +665,96 @@ dd:lang(zh) {
   grid-column: 1 / -1;
 }
 
-.project__gallery-images--coffee {
-  grid-template-columns: minmax(0, 2.51517fr) minmax(0, 1fr);
+#project-02 > .project__eyebrow {
+  position: relative;
+  z-index: 0;
+  translate: none;
+  margin-bottom: clamp(-12px, -0.7vw, -6px);
+}
+
+.project-02__layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  gap: clamp(24px, 4vw, 72px);
+  width: min(100%, 1320px);
+  margin-inline: auto;
+}
+
+.project-02__copy,
+.project-02__media {
+  min-width: 0;
+}
+
+#project-02 .project__heading img {
+  width: min(80%, 264px);
+  margin-inline: auto;
+}
+
+#project-02 .project__heading .project-02__heading-logo {
+  width: min(80%, 130px);
+  height: auto;
+  margin-top: clamp(10px, 1vw, 16px);
+}
+
+#project-02 .project__tags {
+  justify-content: center;
+  margin-top: clamp(20px, 2.5vw, 36px);
+}
+
+#project-02 .project__feature-copy {
+  width: 86%;
+  margin-top: clamp(12px, 1.5vw, 22px);
+  margin-inline: auto;
+  padding-right: 0;
+}
+
+#project-02 .project__feature-copy p:first-child {
+  margin-top: 0;
+}
+
+.project-02__poster {
+  width: min(78%, 520px);
+  margin: clamp(24px, 3vw, 44px) auto 0;
+}
+
+.project-02__poster img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+}
+
+#project-02 .project__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: clamp(32px, 4vw, 58px);
+}
+
+#project-02 .project__meta span:last-child {
+  margin-left: auto;
+  text-align: right;
+}
+
+#project-02 .project__meta-rule {
+  display: block;
+  margin-top: 16px;
+  border-top: 1px solid var(--project-line);
+}
+
+#project-02 .project__meta-rule::after {
+  content: none;
+}
+
+#project-02 .project__visual {
+  margin: 0;
+}
+
+#project-02 .project__collage {
+  width: 100%;
+  margin: 60px 0 0;
 }
 
 .project__collage {
@@ -2140,9 +2228,9 @@ html.quiz-viewer-open body {
   }
 }
 
-/* Project 01 and 02 keep the 1440px desktop geometry scaled to the phone width. */
+/* Project layouts keep their desktop geometry scaled to the phone width. */
 @media (max-width: 767px) {
-  :is(#project-01, #project-02) {
+  #project-01 {
     --grid-gap: 1.5vw;
     padding-inline: 4vw;
     font-size: 1.1111vw;
@@ -2158,90 +2246,162 @@ html.quiz-viewer-open body {
     padding-bottom: 3.75vw;
   }
 
-  :is(#project-01, #project-02) .project__intro {
+  #project-01 .project__intro {
     row-gap: 4vw;
   }
 
-  :is(#project-01, #project-02) .project__eyebrow {
+  #project-01 .project__eyebrow {
     font-size: 5vw;
   }
 
-  :is(#project-01, #project-02) .project__heading h2 {
+  #project-01 .project__heading h2 {
     font-size: 4vw;
   }
 
-  :is(#project-01, #project-02) .project__heading img {
+  #project-01 .project__heading img {
     width: min(100%, 22.9167vw);
   }
 
-  :is(#project-01, #project-02) .project__description-cn,
-  :is(#project-01, #project-02) .project__feature-copy p {
+  #project-01 .project__description-cn,
+  #project-01 .project__feature-copy p {
     font-size: 1.0417vw;
   }
 
-  :is(#project-01, #project-02) .project__tags {
+  #project-01 .project__tags {
     gap: 0.6944vw;
     margin-top: 4vw;
   }
 
-  :is(#project-01, #project-02) .project__tags li {
+  #project-01 .project__tags li {
     padding: 0.5556vw 1.25vw;
     border-width: 0.0694vw;
     font-size: 0.9028vw;
   }
 
-  :is(#project-01, #project-02) .project__meta {
+  #project-01 .project__meta {
     margin-top: 5vw;
     font-size: 0.85vw;
   }
 
-  :is(#project-01, #project-02) .project__meta-rule {
+  #project-01 .project__meta-rule {
     margin-top: 1.1111vw;
   }
 
-  :is(#project-01, #project-02) .project__meta-mark {
+  #project-01 .project__meta-mark {
     width: 0.9722vw;
     border-width: 0.1389vw;
   }
 
-  :is(#project-01, #project-02) .project__feature,
-  :is(#project-01, #project-02) .project__gallery {
+  #project-01 .project__feature,
+  #project-01 .project__gallery {
     margin-top: 4vw;
   }
 
-  :is(#project-01, #project-02) .project__feature-copy {
+  #project-01 .project__feature-copy {
     padding-right: 2vw;
   }
 
-  :is(#project-01, #project-02) .project__index {
+  #project-01 .project__index {
     font-size: 0.9028vw;
   }
 
-  :is(#project-01, #project-02) .project__feature-copy p {
+  #project-01 .project__feature-copy p {
     margin-top: 1.6667vw;
   }
 
-  :is(#project-01, #project-02) .project__visual img,
-  :is(#project-01, #project-02) .project__gallery-images img {
+  #project-01 .project__visual img,
+  #project-01 .project__gallery-images img {
     border-radius: 1.1111vw;
   }
 
-  :is(#project-01, #project-02) .project__gallery {
+  #project-01 .project__gallery {
     row-gap: 4vw;
   }
 
-  :is(#project-01, #project-02) .project__gallery-heading {
+  #project-01 .project__gallery-heading {
     gap: 1.1111vw;
     padding-bottom: 1.1111vw;
     font-size: 0.85vw;
   }
 
-  :is(#project-01, #project-02) .project__gallery-images {
+  #project-01 .project__gallery-images {
     row-gap: 3.1667vw;
   }
 
-  #project-02 .project__collage {
+  #project-02 {
+    padding-inline: 4vw;
+  }
+
+  #project-02 > .project__eyebrow {
+    margin-bottom: -0.7vw;
+    font-size: 5vw;
+  }
+
+  .project-02__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+    gap: 4vw;
+  }
+
+  #project-02 .project__heading img {
+    width: min(80%, 18.3333vw);
+  }
+
+  #project-02 .project__heading .project-02__heading-logo {
+    width: min(80%, 9.0278vw);
+    margin-top: 1vw;
+  }
+
+  #project-02 .project__tags {
+    gap: 0.6944vw;
+    margin-top: 2.5vw;
+    opacity: 0.65;
+  }
+
+  #project-02 .project__tags li {
+    padding: 0.5556vw 1.25vw;
+    border-width: 0.0694vw;
+    font-size: 0.9028vw;
+    line-height: 1.4;
+  }
+
+  #project-02 .project__feature-copy p {
+    margin-top: 1.6667vw;
+    font-size: 1.0417vw;
+    line-height: 1.8;
+  }
+
+  #project-02 .project__feature-copy {
+    width: 86%;
+    margin-top: 1.5vw;
+  }
+
+  #project-02 .project__feature-copy p + p {
+    margin-top: 1.6667vw;
+  }
+
+  #project-02 .project__meta {
+    gap: 1.3889vw;
     margin-top: 4vw;
+    font-size: 0.85vw;
+  }
+
+  #project-02 .project__meta-rule {
+    margin-top: 1.1111vw;
+    border-top-width: 0.0694vw;
+  }
+
+  .project-02__poster {
+    width: 78%;
+    margin-top: 3vw;
+  }
+
+  #project-02 .project__visual img,
+  .project-02__poster img {
+    border-radius: 1.1111vw;
+  }
+
+  #project-02 .project__collage {
+    margin-top: 4.1667vw;
   }
 }
 
@@ -3108,35 +3268,6 @@ html.quiz-viewer-open body {
   width: clamp(34px, 4vw, 50px);
 }
 
-.card-stack__visual--calendar {
-  --visual-pull: clamp(46px, calc(10.6vw - 71px), 102px);
-  display: block;
-  width: min(69%, 405px);
-  height: auto;
-  aspect-ratio: 563 / 416;
-  max-height: min(44svh, 360px);
-}
-
-.card-stack__visual--calendar .card-stack__calendar-base,
-.card-stack__visual--calendar .card-stack__calendar-dialog {
-  position: absolute;
-  max-height: none;
-}
-
-.card-stack__calendar-base {
-  top: 0;
-  left: 0;
-  width: 75%;
-  border-radius: 16px;
-}
-
-.card-stack__calendar-dialog {
-  right: 0;
-  bottom: 10%;
-  width: 41%;
-  border-radius: 12px;
-}
-
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .card-stack__visual {
     transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -3340,11 +3471,6 @@ html.quiz-viewer-open body {
     width: min(83%, 480px);
     height: min(50svh, 360px);
   }
-
-  .card-stack__visual--calendar {
-    width: min(68%, 405px);
-    height: auto;
-  }
 }
 
 @media (max-width: 1100px), (max-height: 620px), (prefers-reduced-motion: reduce) {
@@ -3407,11 +3533,6 @@ html.quiz-viewer-open body {
     max-height: none;
   }
 
-  .card-stack__visual--calendar {
-    width: min(70.4%, 464px);
-    max-height: none;
-  }
-
   .card-stack__hold,
   .card-stack__exit {
     display: none;
@@ -3445,10 +3566,6 @@ html.quiz-viewer-open body {
     width: min(83%, 420px);
     height: auto;
     max-height: none;
-  }
-
-  .card-stack__visual--calendar {
-    width: min(68%, 350px);
   }
 }
 
@@ -3539,10 +3656,6 @@ html.quiz-viewer-open body {
 
   .card-stack__visual {
     width: min(74%, 250px);
-  }
-
-  .card-stack__visual--calendar {
-    width: min(66%, 230px);
   }
 
   .card-stack__prompt-icon {
