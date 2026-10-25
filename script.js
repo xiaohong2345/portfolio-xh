@@ -89,7 +89,7 @@ const hero = document.querySelector(".hero");
 if (hero) {
   const scene = hero.querySelector(".hero__scene");
   if (scene) {
-    const soundToggle = hero.querySelector(".hero__sound-toggle");
+    const soundToggle = document.querySelector(".hero__sound-toggle");
     const interactionHint = hero.querySelector(".hero__interaction-hint");
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     const sceneOrigin = window.location.protocol === "file:" ? "*" : window.location.origin;
@@ -953,7 +953,7 @@ if (aiVideoSection) {
       title: "vivo精彩随行",
       tag: "产品广告 · 手机TVC",
       description: "用高频使用场景来展示产品卖点：远处拍得清 → 身边拍得好 → 动态抓得住，然后卖点收束，进入产品展示，“这一切来自这台手机”，记录值得珍藏的鲜活记忆。",
-      src: "./pic/video/web/vivo.mp4",
+      src: "./pic/video/手机更新2.mp4",
       poster: "./pic/video/posters/最新手机.webp",
     },
     {

@@ -198,10 +198,10 @@ dd:lang(zh) {
 }
 
 .hero__sound-toggle {
-  position: absolute;
-  right: clamp(22px, 3.2vw, 42px);
-  bottom: 38px;
-  z-index: 2;
+  position: fixed;
+  right: 24px;
+  bottom: 84px;
+  z-index: 100;
   display: grid;
   place-items: center;
   width: 32px;
@@ -730,7 +730,7 @@ dd:lang(zh) {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  margin-top: clamp(32px, 4vw, 58px);
+  margin-top: 0;
 }
 
 #project-02 .project__meta span:last-child {
@@ -2381,7 +2381,7 @@ html.quiz-viewer-open body {
 
   #project-02 .project__meta {
     gap: 1.3889vw;
-    margin-top: 4vw;
+    margin-top: 0;
     font-size: 0.85vw;
   }
 
