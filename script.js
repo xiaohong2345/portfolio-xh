@@ -341,6 +341,45 @@ if (workCards) {
 }
 
 const compactWorkViewer = window.matchMedia("(max-width: 900px)");
+const coffeeTrigger = document.querySelector(".project-02__open");
+const coffeeViewer = document.getElementById("coffeeViewer");
+
+if (coffeeTrigger && coffeeViewer) {
+  const closeButton = coffeeViewer.querySelector(".coffee-viewer__close");
+  const coffeeDesktop = window.matchMedia("(min-width: 768px)");
+  let openedScrollY = 0;
+
+  coffeeTrigger.addEventListener("click", () => {
+    if (!coffeeDesktop.matches) return;
+    openedScrollY = window.scrollY;
+    coffeeViewer.showModal();
+    coffeeViewer.scrollTop = 0;
+    document.documentElement.classList.add("coffee-viewer-open");
+    pageScroller?.stop();
+    closeButton.focus({ preventScroll: true });
+  });
+
+  closeButton.addEventListener("click", () => coffeeViewer.close());
+  coffeeDesktop.addEventListener("change", () => {
+    if (!coffeeDesktop.matches && coffeeViewer.open) coffeeViewer.close();
+  });
+  coffeeViewer.addEventListener("click", (event) => {
+    if (event.target !== coffeeViewer) return;
+    const bounds = coffeeViewer.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right
+      || event.clientY < bounds.top || event.clientY > bounds.bottom) coffeeViewer.close();
+  });
+  coffeeViewer.addEventListener("close", () => {
+    document.documentElement.classList.remove("coffee-viewer-open");
+    pageScroller?.start();
+    if (Math.abs(window.scrollY - openedScrollY) > 1) {
+      if (pageScroller) pageScroller.scrollTo(openedScrollY, { immediate: true, force: true });
+      else window.scrollTo(0, openedScrollY);
+    }
+    if (coffeeDesktop.matches) coffeeTrigger.focus({ preventScroll: true });
+  });
+}
+
 const ecommerceTrigger = document.querySelector(".ecommerce-design__open");
 const ecommerceViewer = document.getElementById("ecommerceViewer");
 
@@ -942,19 +981,19 @@ const aiVideoSection = document.querySelector(".ai-video");
 if (aiVideoSection) {
   const works = [
     {
+      title: "vivo精彩随行",
+      tag: "产品广告 · 手机TVC",
+      description: "用高频使用场景来展示产品卖点：远处拍得清 → 身边拍得好 → 动态抓得住，然后卖点收束，进入产品展示，“这一切来自这台手机”，记录值得珍藏的鲜活记忆。",
+      src: "./pic/video/手机新.mp4",
+      poster: "./pic/video/posters/最新手机.webp?v=4138156d6c",
+    },
+    {
       title: "向日葵",
       tag: "竖屏 · 产品展示",
       description: "视觉方向：摄影级产品实拍感。一束晨光沿产品游走，逐步揭开整座向日葵庭院。温暖、细腻，适合突出成品。",
       src: "./pic/video/web/sunflower.mp4",
       poster: "./pic/video/posters/向日葵.webp",
       portrait: true,
-    },
-    {
-      title: "vivo精彩随行",
-      tag: "产品广告 · 手机TVC",
-      description: "用高频使用场景来展示产品卖点：远处拍得清 → 身边拍得好 → 动态抓得住，然后卖点收束，进入产品展示，“这一切来自这台手机”，记录值得珍藏的鲜活记忆。",
-      src: "./pic/video/手机更新2.mp4",
-      poster: "./pic/video/posters/最新手机.webp",
     },
     {
       title: "珍爱APP短片",

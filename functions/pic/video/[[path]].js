@@ -4,6 +4,7 @@
 // Pages' ASSETS binding omits Content-Length in local development, so keep the
 // byte sizes of these checked-in videos as a fallback when they are replaced.
 const videoSizes = {
+  "手机新.mp4": 14041051,
   "最新手机.mp4": 23552896,
   "珍爱最新-换前段.mp4": 21558432,
   "鲜奇一路整颗满足.mp4": 23419186,

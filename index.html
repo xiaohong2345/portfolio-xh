@@ -114,13 +114,13 @@
 
       <div class="ai-video__showcase" data-reveal>
         <div class="ai-video__copy" aria-live="polite">
-          <h3 class="ai-video__work-title">向日葵</h3>
-          <span class="ai-video__tag">竖屏 · 产品展示</span>
-          <p class="ai-video__description">视觉方向：摄影级产品实拍感。一束晨光沿产品游走，逐步揭开整座向日葵庭院。温暖、细腻，适合突出成品。</p>
+          <h3 class="ai-video__work-title">vivo精彩随行</h3>
+          <span class="ai-video__tag">产品广告 · 手机TVC</span>
+          <p class="ai-video__description">用高频使用场景来展示产品卖点：远处拍得清 → 身边拍得好 → 动态抓得住，然后卖点收束，进入产品展示，“这一切来自这台手机”，记录值得珍藏的鲜活记忆。</p>
         </div>
 
-        <div class="ai-video__screen is-portrait">
-          <video class="ai-video__player" preload="none" playsinline muted poster="./pic/video/posters/向日葵.webp" width="1080" height="1920" aria-label="向日葵"></video>
+        <div class="ai-video__screen">
+          <video class="ai-video__player" preload="none" playsinline muted poster="./pic/video/posters/最新手机.webp?v=4138156d6c" width="1920" height="1080" aria-label="vivo精彩随行"></video>
           <p class="ai-video__error" role="status" hidden>视频暂时无法播放，请再次点击缩略图重试。</p>
         </div>
 
@@ -128,8 +128,8 @@
           <div class="ai-video__counter" aria-live="polite"><span class="ai-video__current">01</span><span class="ai-video__total">/ 04</span></div>
           <div class="ai-video__rail-viewport">
             <div class="ai-video__thumbs">
-              <button class="ai-video__thumb ai-video__thumb--portrait is-active" type="button" data-video-index="0" aria-label="播放 向日葵" aria-pressed="true"><img src="./pic/video/posters/向日葵.webp" alt="" loading="lazy" decoding="async" /></button>
-              <button class="ai-video__thumb" type="button" data-video-index="1" aria-label="播放 vivo精彩随行" aria-pressed="false"><img src="./pic/video/posters/最新手机.webp" alt="" loading="lazy" decoding="async" /></button>
+              <button class="ai-video__thumb is-active" type="button" data-video-index="0" aria-label="播放 vivo精彩随行" aria-pressed="true"><img src="./pic/video/posters/最新手机.webp?v=4138156d6c" alt="" loading="lazy" decoding="async" /></button>
+              <button class="ai-video__thumb ai-video__thumb--portrait" type="button" data-video-index="1" aria-label="播放 向日葵" aria-pressed="false"><img src="./pic/video/posters/向日葵.webp" alt="" loading="lazy" decoding="async" /></button>
               <button class="ai-video__thumb" type="button" data-video-index="2" aria-label="播放 珍爱APP短片" aria-pressed="false"><img src="./pic/video/posters/珍爱最新-换前段.webp" alt="" loading="lazy" decoding="async" /></button>
               <button class="ai-video__thumb" type="button" data-video-index="3" aria-label="播放 安慕希整颗蓝莓酸奶" aria-pressed="false"><img src="./pic/video/posters/鲜奇一路整颗满足.webp" alt="" loading="lazy" decoding="async" /></button>
             </div>
@@ -249,21 +249,22 @@
             <p>珍爱网联合新民周刊网举办“咖友对对碰”公益交友活动。活动依托珍爱网“甜蜜约会”小程序，采用线上互选 + 线下见面的模式，完成从兴趣匹配到真实见面的社交闭环。近200名青年参与，48对成功匹配。</p>
             <p>咖啡从共同兴趣变成见面的理由。暖色城市街景、举杯的角色与轻松的互动，把线上互选的心动，延伸到线下真实相遇。</p>
           </div>
-          <figure class="project-02__poster" data-reveal>
-            <img
-              src="./pic/2-2咖啡.png?v=3b41b29b37"
-              alt="咖友对对碰活动海报：两位年轻人隔窗碰杯，画面展示上海站和甜蜜约会信息"
-              width="2752"
-              height="1536"
-              loading="lazy"
-              decoding="async"
-            />
-          </figure>
         </div>
 
         <div class="project-02__media">
           <figure class="project__visual" data-reveal>
+            <button class="project-02__open" type="button" aria-label="查看咖友对对碰项目详情" aria-haspopup="dialog" aria-controls="coffeeViewer">
+              <img
+                src="./pic/2-1咖啡.png"
+                alt="咖友对对碰活动主视觉：上海城市街景中，两位年轻人举起咖啡碰杯"
+                width="1073"
+                height="599"
+                loading="lazy"
+                decoding="async"
+              />
+            </button>
             <img
+              class="project-02__mobile-visual"
               src="./pic/2-1咖啡.png"
               alt="咖友对对碰活动主视觉：上海城市街景中，两位年轻人举起咖啡碰杯"
               width="1073"
@@ -272,22 +273,8 @@
               decoding="async"
             />
           </figure>
-          <div class="project__collage" aria-label="咖友对对碰线下活动展示" data-reveal>
-            <img class="project__collage-item project__collage-item--intro" src="./pic/coffee/Group 1940699209.png" alt="一杯咖啡八分钟，高效率约会对的TA" width="432" height="215" loading="lazy" decoding="async" />
-            <img class="project__collage-item project__collage-item--echo" src="./pic/coffee/Group 1940699215.png" alt="咖啡店内参与者合影及两张碰头点活动卡" width="620" height="306" loading="lazy" decoding="async" />
-            <img class="project__collage-item project__collage-item--dada" src="./pic/coffee/Group 1940699216.png" alt="参与者与宠物互动，展示毛孩子碰头点" width="617" height="527" loading="lazy" decoding="async" />
-            <img class="project__collage-item project__collage-item--cafe" src="./pic/coffee/Group 1940699217.png" alt="咖啡店碰头点现场，展示你们碰头我们买单活动" width="738" height="532" loading="lazy" decoding="async" />
-            <img class="project__collage-item project__collage-item--meet" src="./pic/coffee/Group 1940699219.png" alt="12月20日，来威海路一起碰个头" width="499" height="185" loading="lazy" decoding="async" />
-            <img class="project__collage-item project__collage-item--shen" src="./pic/coffee/Group 1940699218.png" alt="申活馆碰头点现场，两位参与者合影" width="541" height="336" loading="lazy" decoding="async" />
-            <img class="project__collage-item project__collage-item--brut" src="./pic/coffee/Group 1940699214.png" alt="咖啡店打卡与心动的TA碰头活动画面" width="692" height="316" loading="lazy" decoding="async" />
-          </div>
         </div>
       </div>
-      <div class="project__meta" aria-label="项目信息" data-reveal>
-        <span>活动视觉设计</span>
-        <span>AI辅助设计· nano banana</span>
-      </div>
-      <div class="project__meta-rule" aria-hidden="true" data-reveal></div>
     </section>
 
     <section class="card-stack" id="vibe-coding" aria-labelledby="card-stack-title">
@@ -499,6 +486,55 @@
       <footer class="portfolio-footer" aria-hidden="true"></footer>
     </section>
     </main>
+    <dialog class="coffee-viewer" id="coffeeViewer" aria-labelledby="coffee-viewer-title" data-lenis-prevent>
+      <header class="coffee-viewer__toolbar">
+        <span>02 / PROJECT DETAIL</span>
+        <button class="coffee-viewer__close" type="button" aria-label="关闭项目详情">关闭 <span aria-hidden="true">×</span></button>
+      </header>
+      <div class="project coffee-viewer__content">
+        <span class="project__eyebrow" aria-hidden="true">02 / PROJECT</span>
+        <div class="project-02__layout">
+          <div class="project-02__copy">
+            <div class="project__heading">
+              <h2 id="coffee-viewer-title"><img src="./pic/2-0咖啡tt.svg" alt="咖友对对碰" width="876" height="647" loading="lazy" decoding="async" /></h2>
+              <img class="project-02__heading-logo" src="./pic/tt/珍爱logo.svg" alt="珍爱网与新民周刊联合标识" width="185" height="43" loading="lazy" decoding="async" />
+            </div>
+            <ul class="project__tags" aria-label="项目关键词">
+              <li>公益交友</li>
+              <li>AIGC</li>
+              <li>线上互选</li>
+              <li>线下见面</li>
+            </ul>
+            <div class="project__feature-copy">
+              <p>珍爱网联合新民周刊网举办“咖友对对碰”公益交友活动。活动依托珍爱网“甜蜜约会”小程序，采用线上互选 + 线下见面的模式，完成从兴趣匹配到真实见面的社交闭环。近200名青年参与，48对成功匹配。</p>
+              <p>咖啡从共同兴趣变成见面的理由。暖色城市街景、举杯的角色与轻松的互动，把线上互选的心动，延伸到线下真实相遇。</p>
+            </div>
+            <figure class="project-02__poster">
+              <img src="./pic/2-2咖啡.png?v=3b41b29b37" alt="咖友对对碰活动海报：两位年轻人隔窗碰杯，画面展示上海站和甜蜜约会信息" width="2752" height="1536" loading="lazy" decoding="async" />
+            </figure>
+          </div>
+          <div class="project-02__media">
+            <figure class="project__visual">
+              <img src="./pic/2-1咖啡.png" alt="咖友对对碰活动主视觉：上海城市街景中，两位年轻人举起咖啡碰杯" width="1073" height="599" loading="lazy" decoding="async" />
+            </figure>
+            <div class="project__collage" role="group" aria-label="咖友对对碰线下活动展示">
+              <img class="project__collage-item project__collage-item--intro" src="./pic/coffee/Group 1940699209.png" alt="一杯咖啡八分钟，高效率约会对的TA" width="432" height="215" loading="lazy" decoding="async" />
+              <img class="project__collage-item project__collage-item--echo" src="./pic/coffee/Group 1940699215.png" alt="咖啡店内参与者合影及两张碰头点活动卡" width="620" height="306" loading="lazy" decoding="async" />
+              <img class="project__collage-item project__collage-item--dada" src="./pic/coffee/Group 1940699216.png" alt="参与者与宠物互动，展示毛孩子碰头点" width="617" height="527" loading="lazy" decoding="async" />
+              <img class="project__collage-item project__collage-item--cafe" src="./pic/coffee/Group 1940699217.png" alt="咖啡店碰头点现场，展示你们碰头我们买单活动" width="738" height="532" loading="lazy" decoding="async" />
+              <img class="project__collage-item project__collage-item--meet" src="./pic/coffee/Group 1940699219.png" alt="12月20日，来威海路一起碰个头" width="499" height="185" loading="lazy" decoding="async" />
+              <img class="project__collage-item project__collage-item--shen" src="./pic/coffee/Group 1940699218.png" alt="申活馆碰头点现场，两位参与者合影" width="541" height="336" loading="lazy" decoding="async" />
+              <img class="project__collage-item project__collage-item--brut" src="./pic/coffee/Group 1940699214.png" alt="咖啡店打卡与心动的TA碰头活动画面" width="692" height="316" loading="lazy" decoding="async" />
+            </div>
+          </div>
+        </div>
+        <div class="project__meta" aria-label="项目信息">
+          <span>活动视觉设计</span>
+          <span>AI辅助设计· nano banana</span>
+        </div>
+        <div class="project__meta-rule" aria-hidden="true"></div>
+      </div>
+    </dialog>
     <dialog class="ecommerce-viewer" id="ecommerceViewer" aria-label="电商设计作品查看" data-lenis-prevent>
       <header class="ecommerce-viewer__toolbar">
         <button class="work-viewer__back ecommerce-viewer__back" type="button" aria-label="返回作品列表"></button>
