@@ -1478,11 +1478,10 @@ if (coverflow) {
     { number: "02", src: "./pic/组件/02.png", alt: "木质机械小提琴与红色帷幕" },
     { number: "03", src: "./pic/组件/03.png", alt: "缘·记忆手卡包装展示" },
     { number: "04", src: "./pic/组件/04.png", alt: "万用模板手卡包装展示" },
-    { number: "05", src: "./pic/组件/手卡1.png", alt: "识字碰碰卡包装与竖立的识字卡片" },
-    { number: "06", src: "./pic/组件/手卡2.png", alt: "识字碰碰卡包装与铺开的识字卡片" },
-    { number: "07", src: "./pic/组件/05.png", alt: "深色花园中的香水瓶" },
-    { number: "08", src: "./pic/组件/06.png", alt: "白色花朵间的香水瓶" },
-    { number: "09", src: "./pic/组件/07.png", alt: "水边的木质机械小提琴装置" },
+    { number: "05", src: "./pic/组件/06.png", alt: "白色花朵间的香水瓶" },
+    { number: "06", src: "./pic/组件/07.png", alt: "水边的木质机械小提琴装置" },
+    { number: "07", src: "./pic/6-2.png", alt: "作文纸条雨中人物插画封面" },
+    { number: "08", src: "./pic/6-3.png", alt: "作文纸条篝火插画封面" },
   ];
 
   const stage = coverflow.querySelector(".coverflow__stage");
