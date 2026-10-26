@@ -7,11 +7,9 @@ const videoSizes = {
   "手机新.mp4": 14041051,
   "最新手机.mp4": 23552896,
   "鲜奇一路整颗满足.mp4": 23419186,
-  "向日葵.mp4": 7524546,
   "vivo.mp4": 4942460,
   "fanxiejiao.mp4": 23314061,
   "anmuxi.mp4": 8636852,
-  "sunflower.mp4": 2030535,
 };
 
 export async function onRequestGet(context) {

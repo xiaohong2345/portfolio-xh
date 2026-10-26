@@ -3078,7 +3078,6 @@ html.quiz-viewer-open body {
 
 .ai-video__thumb:nth-child(2) { transform: translateY(88px) scale(.96); }
 .ai-video__thumb:nth-child(3) { transform: translateY(176px) scale(.92); }
-.ai-video__thumb:nth-child(4) { transform: translateY(264px) scale(.88); }
 
 .ai-video__thumb::after {
   position: absolute;
@@ -3224,7 +3223,7 @@ html.quiz-viewer-open body {
   .ai-video__thumbs {
     position: static;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
     width: 100%;
   }

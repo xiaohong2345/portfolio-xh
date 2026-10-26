@@ -1021,12 +1021,11 @@ if (aiVideoSection) {
       poster: "./pic/video/posters/最新手机.webp?v=4138156d6c",
     },
     {
-      title: "向日葵摆件",
-      tag: "竖屏 · 产品展示",
-      description: "视觉方向：摄影级产品实拍感。\n一束晨光沿产品游走，逐步揭开整座向日葵庭院。温暖、细腻，适合突出成品。",
-      src: "./pic/video/web/sunflower.mp4",
-      poster: "./pic/video/posters/向日葵.webp",
-      portrait: true,
+      title: "安慕希\n整颗蓝莓酸奶",
+      tag: "食品广告 · 奇幻动画",
+      description: "把蓝莓拟人化、从种植园到入口的过程旅程化，从摘下枝头开始“锁鲜”，到通关时完好无损，叙事节奏松紧交替，强化故事情绪起伏。",
+      src: "./pic/video/web/anmuxi.mp4",
+      poster: "./pic/video/posters/鲜奇一路整颗满足.webp",
     },
     {
       title: "反邪教宣传短片",
@@ -1035,13 +1034,6 @@ if (aiVideoSection) {
       src: "./pic/video/web/fanxiejiao.mp4",
       poster: "./pic/video/posters/反邪教.webp",
       portrait: true,
-    },
-    {
-      title: "安慕希\n整颗蓝莓酸奶",
-      tag: "食品广告 · 奇幻动画",
-      description: "把蓝莓拟人化、从种植园到入口的过程旅程化，从摘下枝头开始“锁鲜”，到通关时完好无损，叙事节奏松紧交替，强化故事情绪起伏。",
-      src: "./pic/video/web/anmuxi.mp4",
-      poster: "./pic/video/posters/鲜奇一路整颗满足.webp",
     },
   ];
 
