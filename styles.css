@@ -3615,7 +3615,7 @@ html.quiz-viewer-open body {
   .card-stack {
     --stack-top: clamp(40px, 7svh, 72px);
     --stack-step: clamp(40px, 6svh, 58px);
-    --stack-height: min(68svh, calc(100svh - var(--stack-top) - var(--stack-step) - var(--stack-step) - 24px));
+    --stack-height: min(74svh, calc(100svh - var(--stack-top) - var(--stack-step) - var(--stack-step) - 24px));
     --stack-notch: clamp(30px, 5vw, 44px);
   }
 }
@@ -3676,7 +3676,50 @@ html.quiz-viewer-open body {
   }
 }
 
-@media (max-width: 1280px), (max-height: 620px), (prefers-reduced-motion: reduce) {
+@media (min-width: 601px) and (max-width: 1280px) and (min-height: 621px) {
+  .card-stack__content {
+    left: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 1.5vw, 20px);
+    padding: clamp(16px, 2.2vw, 28px);
+    padding-left: calc(var(--stack-notch) + clamp(16px, 2.2vw, 28px));
+  }
+
+  .card-stack__copy {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .card-stack__fields {
+    gap: clamp(9px, 1.5svh, 16px);
+  }
+
+  .card-stack__field:not(.card-stack__field--name) dd {
+    font-size: clamp(12px, 1.15vw, 15px);
+    line-height: 1.6;
+  }
+
+  .card-stack__field h3 {
+    font-size: clamp(22px, 2.2vw, 30px);
+  }
+
+  .card-stack__visual {
+    left: 0;
+    width: 100%;
+    height: min(55svh, 460px);
+  }
+
+  .card-stack__visual--workflow {
+    width: 100%;
+  }
+
+  .card-stack__visual--workflow img {
+    width: auto;
+    max-height: 100%;
+  }
+}
+
+@media (max-width: 600px), (max-height: 620px), (prefers-reduced-motion: reduce) {
   .card-stack {
     width: min(100%, 1600px);
     padding-bottom: clamp(72px, 10vw, 144px);
