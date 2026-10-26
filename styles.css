@@ -2800,6 +2800,23 @@ html.quiz-viewer-open body {
   display: none;
 }
 
+.card-stack__details-bottom {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  width: max-content;
+}
+
+.card-stack .card-stack__subtitle {
+  margin: 0;
+  color: #c9c7c2;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+
 .section-heading h2 {
   isolation: isolate;
   width: max-content;
@@ -2906,6 +2923,7 @@ html.quiz-viewer-open body {
 .ai-video__description {
   width: min(100%, 265px);
   margin: 18px 0 0;
+  white-space: pre-line;
   color: #fff;
   font-size: clamp(15px, 0.95vw, 18px);
   font-weight: 300;
@@ -3409,7 +3427,12 @@ html.quiz-viewer-open body {
   object-fit: contain;
 }
 
-.card-stack__card--second .card-stack__visual img {
+.card-stack__visual--workflow {
+  width: min(93.6%, 552px);
+  height: min(52.8svh, 432px);
+}
+
+.card-stack__visual--workflow img {
   width: 100%;
   max-height: 100%;
   border-radius: 16px;
@@ -3693,7 +3716,11 @@ html.quiz-viewer-open body {
     margin-inline: auto;
   }
 
-  .card-stack__card--second .card-stack__visual img {
+  .card-stack__visual--workflow {
+    width: min(96%, 633.6px);
+  }
+
+  .card-stack__visual--workflow img {
     max-height: none;
   }
 
@@ -3730,6 +3757,10 @@ html.quiz-viewer-open body {
     width: min(83%, 420px);
     height: auto;
     max-height: none;
+  }
+
+  .card-stack__visual--workflow {
+    width: min(99.6%, 504px);
   }
 }
 
@@ -3820,6 +3851,10 @@ html.quiz-viewer-open body {
 
   .card-stack__visual {
     width: min(74%, 250px);
+  }
+
+  .card-stack__visual--workflow {
+    width: min(88.8%, 300px);
   }
 
   .card-stack__prompt-icon {
@@ -4098,6 +4133,29 @@ html.quiz-viewer-open body {
 
   .section-heading .card-stack__details {
     display: none;
+  }
+
+  .card-stack > .section-heading .card-stack__details {
+    display: block;
+    justify-self: stretch;
+    width: 100%;
+    transform: none;
+  }
+
+  .card-stack > .section-heading .card-stack__details img {
+    display: none;
+  }
+
+  .card-stack__details-bottom {
+    display: block;
+    width: 100%;
+  }
+
+  .card-stack .card-stack__subtitle {
+    font-size: clamp(13px, 3.4vw, 15px);
+    line-height: 1.6;
+    white-space: normal;
+    text-wrap: pretty;
   }
 
   .ip-design {

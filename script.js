@@ -988,19 +988,20 @@ if (aiVideoSection) {
       poster: "./pic/video/posters/最新手机.webp?v=4138156d6c",
     },
     {
-      title: "向日葵",
+      title: "向日葵摆件",
       tag: "竖屏 · 产品展示",
-      description: "视觉方向：摄影级产品实拍感。一束晨光沿产品游走，逐步揭开整座向日葵庭院。温暖、细腻，适合突出成品。",
+      description: "视觉方向：摄影级产品实拍感。\n一束晨光沿产品游走，逐步揭开整座向日葵庭院。温暖、细腻，适合突出成品。",
       src: "./pic/video/web/sunflower.mp4",
       poster: "./pic/video/posters/向日葵.webp",
       portrait: true,
     },
     {
-      title: "珍爱APP短片",
-      tag: "产品宣传",
-      description: "从相似的日常切入，珍爱网中的活动成为相遇的契机，让两个陌生人从线上到线下，在自然相处与共同经历中，完成从“相遇”到“相爱”的情感递进。",
-      src: "./pic/video/web/zhenai.mp4",
-      poster: "./pic/video/posters/珍爱最新-换前段.webp",
+      title: "反邪教宣传短片",
+      tag: "公益广告",
+      description: "以邪教头目的视角，呈现邪教如何借“神迹”“救赎”与恐惧操控认知。揭露邪教洗脑机制，倡导理性判断与科学生活",
+      src: "./pic/video/web/fanxiejiao.mp4",
+      poster: "./pic/video/posters/反邪教.webp",
+      portrait: true,
     },
     {
       title: "安慕希\n整颗蓝莓酸奶",
@@ -1519,9 +1520,11 @@ if (coverflow) {
     { number: "04", src: "./pic/组件/04.png", alt: "万用模板手卡包装展示" },
     { number: "05", src: "./pic/组件/06.png", alt: "白色花朵间的香水瓶" },
     { number: "06", src: "./pic/组件/07.png", alt: "水边的木质机械小提琴装置" },
-    { number: "07", src: "./pic/6-2.png", alt: "作文纸条雨中人物插画封面" },
-    { number: "08", src: "./pic/6-3.png", alt: "作文纸条篝火插画封面" },
+    { number: "07", src: "./pic/6-4.png", alt: "范文月刊蝴蝶花插画封面" },
+    { number: "08", src: "./pic/6-2.png", alt: "作文纸条雨中人物插画封面" },
+    { number: "09", src: "./pic/6-3.png", alt: "作文纸条篝火插画封面" },
   ];
+  const initialIndex = 7;
 
   const stage = coverflow.querySelector(".coverflow__stage");
   const track = coverflow.querySelector(".coverflow__track");
@@ -1541,7 +1544,7 @@ if (coverflow) {
       image.src = slide.src;
       image.alt = slide.alt || `作品 ${slide.number}`;
       image.draggable = false;
-      image.loading = index === 0 ? "eager" : "lazy";
+      image.loading = Math.abs(index - initialIndex) <= 1 ? "eager" : "lazy";
       card.append(image);
     } else {
       card.classList.add("is-placeholder");
@@ -1556,8 +1559,8 @@ if (coverflow) {
     return card;
   });
 
-  let position = 0;
-  let target = 0;
+  let position = initialIndex;
+  let target = initialIndex;
   let cardWidth = 0;
   const pitchRatio = 0.985;
   let animationFrame = null;
@@ -1677,7 +1680,7 @@ if (coverflow) {
   reduceMotion.addEventListener("change", () => {
     if (reduceMotion.matches && animationFrame !== null) settle(target);
   });
-  updateSelection(0);
+  updateSelection(initialIndex);
 }
 
 startEntryWait?.();
