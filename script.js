@@ -385,15 +385,48 @@ const ecommerceViewer = document.getElementById("ecommerceViewer");
 
 if (ecommerceTrigger && ecommerceViewer) {
   const backButton = ecommerceViewer.querySelector(".ecommerce-viewer__back");
+  const gallery = ecommerceViewer.querySelector(".ecommerce-viewer__gallery");
+  const figures = [...gallery.querySelectorAll("figure")];
   let openedScrollY = 0;
+
+  const balanceGallery = () => {
+    const styles = getComputedStyle(gallery);
+    const columnCount = Number(styles.getPropertyValue("--ecommerce-columns"));
+    const gap = parseFloat(styles.getPropertyValue("--ecommerce-gap"));
+    const columnWidth = (gallery.clientWidth - gap * (columnCount - 1)) / columnCount;
+    if (columnWidth <= 0) return;
+
+    const columns = Array.from({ length: columnCount }, () => {
+      const column = document.createElement("div");
+      column.className = "ecommerce-viewer__column";
+      return column;
+    });
+    const heights = Array(columnCount).fill(0);
+
+    figures.forEach((figure) => {
+      const image = figure.querySelector("img");
+      const ratio = Number(image.getAttribute("height")) / Number(image.getAttribute("width"));
+      const columnIndex = heights.indexOf(Math.min(...heights));
+      columns[columnIndex].append(figure);
+      heights[columnIndex] += columnWidth * ratio + gap;
+    });
+
+    gallery.replaceChildren(...columns);
+    gallery.classList.add("is-balanced");
+  };
 
   ecommerceTrigger.addEventListener("click", () => {
     openedScrollY = window.scrollY;
     ecommerceViewer.showModal();
+    balanceGallery();
     ecommerceViewer.scrollTop = 0;
     document.documentElement.classList.add("ecommerce-viewer-open");
     pageScroller?.stop();
     backButton.focus({ preventScroll: true });
+  });
+
+  window.addEventListener("resize", () => {
+    if (ecommerceViewer.open) balanceGallery();
   });
 
   backButton.addEventListener("click", () => ecommerceViewer.close());
