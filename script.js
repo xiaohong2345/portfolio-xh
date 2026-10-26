@@ -1518,13 +1518,16 @@ if (coverflow) {
     { number: "02", src: "./pic/组件/02.png", alt: "木质机械小提琴与红色帷幕" },
     { number: "03", src: "./pic/组件/03.png", alt: "缘·记忆手卡包装展示" },
     { number: "04", src: "./pic/组件/04.png", alt: "万用模板手卡包装展示" },
-    { number: "05", src: "./pic/组件/06.png", alt: "白色花朵间的香水瓶" },
-    { number: "06", src: "./pic/组件/07.png", alt: "水边的木质机械小提琴装置" },
-    { number: "07", src: "./pic/6-4.png", alt: "范文月刊蝴蝶花插画封面" },
-    { number: "08", src: "./pic/6-2.png", alt: "作文纸条雨中人物插画封面" },
-    { number: "09", src: "./pic/6-3.png", alt: "作文纸条篝火插画封面" },
+    { number: "05", src: "./pic/组件/333.png", alt: "红糖生姜牛奶礼盒与盒装饮品，搭配生姜、红糖和牛奶" },
+    { number: "06", src: "./pic/组件/444.png", alt: "红糖生姜牛奶礼盒与盒装饮品，搭配生姜主题背景" },
+    { number: "07", src: "./pic/组件/555.png", alt: "红糖生姜牛奶礼盒与盒装饮品，搭配生姜和红糖陈列" },
+    { number: "08", src: "./pic/6-4.png", alt: "范文月刊蝴蝶花插画封面" },
+    { number: "09", src: "./pic/6-2.png", alt: "作文纸条雨中人物插画封面" },
+    { number: "10", src: "./pic/6-3.png", alt: "作文纸条篝火插画封面" },
+    { number: "11", src: "./pic/组件/111.png", alt: "橙色标签古龙水瓶与花朵的木质桌面场景" },
+    { number: "12", src: "./pic/组件/222.png", alt: "橙色标签古龙水瓶与葡萄柚、花朵和黑莓" },
   ];
-  const initialIndex = 7;
+  const initialIndex = 8;
 
   const stage = coverflow.querySelector(".coverflow__stage");
   const track = coverflow.querySelector(".coverflow__track");
