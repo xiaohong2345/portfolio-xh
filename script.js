@@ -48,10 +48,9 @@ if (window.entryLoading) {
     if (desktopScene.matches) {
       assets = [entrySceneReady ? Promise.resolve() : entryScenePromise];
     } else {
-      const mobileArt = document.querySelector(".hero__mobile-art");
       const visibleCardImages = [...document.querySelectorAll(".coverflow__card-image")]
         .filter(isInViewport);
-      assets = [mobileArt, ...visibleCardImages].filter(Boolean).map(waitForImage);
+      assets = visibleCardImages.map(waitForImage);
     }
 
     Promise.allSettled(assets).then(() => {
