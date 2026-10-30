@@ -93,25 +93,18 @@ if (hero) {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     const sceneOrigin = window.location.protocol === "file:" ? "*" : window.location.origin;
     const desktopScene = window.matchMedia("(min-width: 768px)");
-    const backgroundMusic = new Audio();
-    backgroundMusic.loop = true;
-    backgroundMusic.volume = 0.3;
-    backgroundMusic.preload = "none";
     let sceneVisible = true;
     let soundContext;
     let soundEnabled = true;
     let lastChimeAt = -Infinity;
-    const playingVideos = new Set();
-    let resumeMusicTimer;
     let sceneReady = false;
     let pendingStar = null;
 
     const updateSoundToggle = () => {
       if (!soundToggle) return;
-      const isPlaying = soundEnabled && desktopScene.matches && !document.hidden && !backgroundMusic.paused;
-      const label = isPlaying ? "关闭声音" : "开启声音";
+      const label = soundEnabled ? "关闭提示音" : "开启提示音";
       soundToggle.setAttribute("aria-label", label);
-      soundToggle.setAttribute("aria-pressed", String(isPlaying));
+      soundToggle.setAttribute("aria-pressed", String(soundEnabled));
       soundToggle.title = label;
     };
 
@@ -121,20 +114,6 @@ if (hero) {
         soundContext ||= new AudioContextClass();
         if (soundContext.state !== "running") soundContext.resume().catch(() => {});
       } catch {}
-    };
-
-    const startSound = () => {
-      if (!soundEnabled || !desktopScene.matches || document.hidden || playingVideos.size) return;
-      if (!backgroundMusic.hasAttribute("src")) {
-        backgroundMusic.src = "./ICARUS.MP3";
-        backgroundMusic.preload = "auto";
-      }
-      unlockSound();
-      backgroundMusic.play().then(() => {
-        if (!soundEnabled || !desktopScene.matches || document.hidden || playingVideos.size) backgroundMusic.pause();
-        updateSoundToggle();
-      }).catch(updateSoundToggle);
-      updateSoundToggle();
     };
 
     const playChime = () => {
@@ -170,49 +149,17 @@ if (hero) {
     if (soundToggle) {
       updateSoundToggle();
       soundToggle.addEventListener("click", () => {
-        if (soundEnabled && backgroundMusic.paused) {
-          startSound();
-        } else {
-          soundEnabled = !soundEnabled;
-          if (soundEnabled) startSound();
-          else backgroundMusic.pause();
-          updateSoundToggle();
-        }
+        soundEnabled = !soundEnabled;
+        if (soundEnabled) unlockSound();
+        updateSoundToggle();
       });
       const startAfterInteraction = (event) => {
         if (event.target instanceof Node && soundToggle.contains(event.target)) return;
-        if (backgroundMusic.paused) startSound();
-        else unlockSound();
+        unlockSound();
       };
       window.addEventListener("pointerdown", startAfterInteraction, { capture: true });
       window.addEventListener("keydown", startAfterInteraction, { capture: true });
     }
-
-    backgroundMusic.addEventListener("play", updateSoundToggle);
-    backgroundMusic.addEventListener("pause", updateSoundToggle);
-    for (const video of document.querySelectorAll("video")) {
-      video.addEventListener("play", () => {
-        clearTimeout(resumeMusicTimer);
-        playingVideos.add(video);
-        backgroundMusic.pause();
-        updateSoundToggle();
-      });
-
-      const resumeAfterVideo = () => {
-        if (!playingVideos.delete(video) || playingVideos.size) return;
-        clearTimeout(resumeMusicTimer);
-        resumeMusicTimer = setTimeout(startSound, 150);
-      };
-      video.addEventListener("pause", resumeAfterVideo);
-      video.addEventListener("ended", resumeAfterVideo);
-      video.addEventListener("error", resumeAfterVideo);
-      video.addEventListener("emptied", resumeAfterVideo);
-    }
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) backgroundMusic.pause();
-      else startSound();
-      updateSoundToggle();
-    });
 
     window.addEventListener("message", (event) => {
       if (event.source !== scene.contentWindow) return;
@@ -258,9 +205,7 @@ if (hero) {
           scene.src = scene.dataset.src;
         }
         else syncScene();
-        startSound();
       } else {
-        backgroundMusic.pause();
         if (scene.hasAttribute("src")) {
           scene.contentWindow?.postMessage({ type: "portfolio-scene:pause" }, sceneOrigin);
           scene.removeAttribute("src");
@@ -772,130 +717,223 @@ const quizViewer = document.getElementById("quizViewer");
 
 if (quizTrigger && quizViewer) {
   const backButton = quizViewer.querySelector(".quiz-viewer__back");
-  const activities = [...quizViewer.querySelectorAll(".quiz-viewer__activity")];
-  const flows = [...quizViewer.querySelectorAll(".quiz-viewer__flow")];
-  const peachResult = quizViewer.querySelector(".quiz-viewer__result");
+  const phoneStage = quizViewer.querySelector(".quiz-viewer__phone-stage");
+  const projectList = quizViewer.querySelector(".quiz-viewer__projects");
+  const projectPhones = [...quizViewer.querySelectorAll(".quiz-viewer__project-phone")];
+  const projectRows = [...quizViewer.querySelectorAll(".quiz-viewer__project[data-project-index]")];
+  const peachResult = quizViewer.querySelector(".project-03__result");
+  const peachVideo = peachResult.querySelector(".quiz-viewer__result-video");
+  const peachImage = peachResult.querySelector(".quiz-viewer__result-image");
+  const peachPrevious = peachResult.querySelector(".quiz-viewer__result-arrow--previous");
+  const peachNext = peachResult.querySelector(".quiz-viewer__result-arrow--next");
+  const peachCount = peachResult.querySelector(".quiz-viewer__result-count");
   const aiResult = quizViewer.querySelector(".quiz-viewer__ai-result");
-  const resultImage = peachResult.querySelector(".quiz-viewer__result-image");
-  const previousButton = peachResult.querySelector(".quiz-viewer__result-arrow--previous");
-  const nextButton = peachResult.querySelector(".quiz-viewer__result-arrow--next");
-  const resultCount = peachResult.querySelector(".quiz-viewer__result-count");
-  const aiResultImage = aiResult.querySelector(".quiz-viewer__ai-result-image");
-  const aiPreviousButton = aiResult.querySelector(".quiz-viewer__result-arrow--previous");
-  const aiNextButton = aiResult.querySelector(".quiz-viewer__result-arrow--next");
-  const aiResultCount = aiResult.querySelector(".quiz-viewer__result-count");
-  const aiVideo = quizViewer.querySelector(".quiz-viewer__ai-video video");
-  const aiVideoPlay = quizViewer.querySelector(".quiz-viewer__video-play");
-  const aiPopupVideo = quizViewer.querySelector(".quiz-viewer__ai-popup video");
-  const colorVideo = quizViewer.querySelector(".quiz-viewer__color-video video");
-  const quizVideos = [aiVideo, aiPopupVideo, colorVideo];
+  const aiVideo = aiResult.querySelector(".quiz-viewer__ai-intro-video");
+  const aiImage = aiResult.querySelector(".quiz-viewer__ai-result-image");
+  const aiPrevious = aiResult.querySelector(".quiz-viewer__result-arrow--previous");
+  const aiNext = aiResult.querySelector(".quiz-viewer__result-arrow--next");
+  const aiCount = aiResult.querySelector(".quiz-viewer__result-count");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const resultImages = [1, 2, 3, 4].map((number) => `./pic/测试结果/桃花结果${number}.png`);
-  const aiResultImages = Array.from({ length: 8 }, (_, index) => `./pic/测试结果/恋人结果${index + 1}.png`);
-  let resultIndex = 0;
-  let aiResultIndex = 0;
-  let activityIndex = 0;
+  const peachPages = [
+    { type: "video" },
+    { src: "./pic/测试结果/答题2.png", alt: "桃花签答题 2/4：爱情中最重要的是什么" },
+    { src: "./pic/测试结果/答题3.png", alt: "桃花签答题 3/4：对爱情的态度" },
+    { src: "./pic/测试结果/答题4.png", alt: "桃花签答题 4/4：朋友圈中的哪类人" },
+    ...[1, 2, 3, 4].map((number) => ({
+      src: `./pic/测试结果/桃花结果${number}.png`,
+      alt: `桃花签测试结果 ${number}`,
+    })),
+  ];
+  const aiResults = Array.from({ length: 8 }, (_, index) => `./pic/测试结果/恋人结果${index + 1}.png`);
+  let activeProject = 0;
+  let peachIndex = 0;
+  let aiIndex = 0;
+  let peachPlays = 0;
+  let phoneVisible = false;
   let openedScrollY = 0;
-  let wheelTotal = 0;
-  let lastWheelTime = 0;
-  let wheelLockedUntil = 0;
-  let touchStart = null;
+  let wheelDelta = 0;
+  let wheelLocked = false;
+  let wheelIdleTimer = 0;
 
-  const showResult = (index) => {
-    resultIndex = Math.max(0, Math.min(resultImages.length - 1, index));
-    resultImage.src = resultImages[resultIndex];
-    resultImage.alt = `桃花签测试结果 ${resultIndex + 1}，共 ${resultImages.length} 个结果`;
-    resultCount.textContent = `${resultIndex + 1} / ${resultImages.length}`;
-    previousButton.disabled = resultIndex === 0;
-    nextButton.disabled = resultIndex === resultImages.length - 1;
+  const resetWheelGesture = () => {
+    window.clearTimeout(wheelIdleTimer);
+    wheelIdleTimer = 0;
+    wheelDelta = 0;
+    wheelLocked = false;
   };
 
-  const showAiResult = (index) => {
-    aiResultIndex = Math.max(0, Math.min(aiResultImages.length - 1, index));
-    aiResultImage.src = aiResultImages[aiResultIndex];
-    aiResultImage.alt = `AI 恋人测试结果 ${aiResultIndex + 1}，共 ${aiResultImages.length} 个结果`;
-    aiResultCount.textContent = `${aiResultIndex + 1} / ${aiResultImages.length}`;
-    aiPreviousButton.disabled = aiResultIndex === 0;
-    aiNextButton.disabled = aiResultIndex === aiResultImages.length - 1;
+  const scheduleWheelReset = () => {
+    window.clearTimeout(wheelIdleTimer);
+    wheelIdleTimer = window.setTimeout(resetWheelGesture, 320);
   };
 
-  const showActivity = (index, focus = false) => {
-    const nextIndex = Math.max(0, Math.min(activities.length - 1, index));
-    if (activityIndex === nextIndex && quizViewer.open) return;
+  const pauseVideos = () => {
+    peachVideo.pause();
+    aiVideo.pause();
+  };
 
-    if (nextIndex === 2 && activityIndex !== 2) flows[2].scrollTop = 0;
-    activityIndex = nextIndex;
-    quizViewer.classList.toggle("is-ai", activityIndex === 1);
-    quizViewer.classList.toggle("is-color", activityIndex === 2);
-    activities.forEach((activity, activityNumber) => {
-      const active = activityNumber === activityIndex;
-      activity.setAttribute("aria-hidden", String(!active));
-      if (active) activity.removeAttribute("inert");
-      else activity.setAttribute("inert", "");
-    });
+  const playCurrentVideo = () => {
+    if (!quizViewer.open || !phoneVisible || document.hidden || reducedMotion.matches) return;
+    if (activeProject === 0 && peachIndex === 0 && peachPlays < 2) {
+      if (peachVideo.ended) peachVideo.currentTime = 0;
+      peachVideo.muted = true;
+      Promise.resolve(peachVideo.play()).catch(() => { peachVideo.controls = true; });
+    }
+    if (activeProject === 1 && aiIndex === 0) {
+      if (!aiVideo.src) aiVideo.src = aiVideo.dataset.src;
+      aiVideo.muted = true;
+      Promise.resolve(aiVideo.play()).catch(() => { aiVideo.controls = true; });
+    }
+  };
 
-    if (activityIndex === 1 && !compactWorkViewer.matches) {
-      if (!aiPopupVideo.getAttribute("src")) aiPopupVideo.src = aiPopupVideo.dataset.src;
-      if (!reducedMotion.matches) aiPopupVideo.play()?.catch(() => {});
-    } else {
-      aiPopupVideo.pause();
+  const showPeachPage = (index) => {
+    const nextIndex = Math.max(0, Math.min(peachPages.length - 1, index));
+    if (peachIndex === 0 && nextIndex !== 0) {
+      peachVideo.pause();
+      peachPlays = 0;
+      if (peachVideo.readyState > 0) peachVideo.currentTime = 0;
+      peachVideo.controls = false;
+    }
+    peachIndex = nextIndex;
+    const page = peachPages[peachIndex];
+    const isVideo = page.type === "video";
+    if (!isVideo) {
+      peachImage.src = page.src;
+      peachImage.alt = page.alt;
+    }
+    peachVideo.hidden = !isVideo;
+    peachImage.hidden = isVideo;
+    peachCount.textContent = `${peachIndex + 1} / ${peachPages.length}`;
+    peachPrevious.disabled = peachIndex === 0;
+    peachNext.disabled = peachIndex === peachPages.length - 1;
+    if (isVideo) playCurrentVideo();
+  };
+
+  const showAiPage = (index) => {
+    aiIndex = Math.max(0, Math.min(aiResults.length, index));
+    const isVideo = aiIndex === 0;
+    if (!isVideo) {
       aiVideo.pause();
+      aiImage.src = aiResults[aiIndex - 1];
+      aiImage.alt = `AI 恋人测试结果 ${aiIndex}，共 ${aiResults.length} 个结果`;
     }
-    if (activityIndex === 2 && !compactWorkViewer.matches) {
-      if (!colorVideo.getAttribute("src")) colorVideo.src = colorVideo.dataset.src;
-      if (!reducedMotion.matches) colorVideo.play()?.catch(() => {});
-    } else colorVideo.pause();
-    if (focus) activities[activityIndex].focus({ preventScroll: true });
+    aiVideo.hidden = !isVideo;
+    aiImage.hidden = isVideo;
+    aiCount.textContent = `${aiIndex + 1} / ${aiResults.length + 1}`;
+    aiPrevious.disabled = aiIndex === 0;
+    aiNext.disabled = aiIndex === aiResults.length;
+    if (isVideo) playCurrentVideo();
   };
 
-  const syncQuizMode = () => {
-    activities.forEach((activity, index) => {
-      const visible = compactWorkViewer.matches || index === activityIndex;
-      activity.setAttribute("aria-hidden", String(!visible));
-      if (visible) activity.removeAttribute("inert");
-      else activity.setAttribute("inert", "");
+  const showProject = (index) => {
+    if (index < 0 || index >= projectRows.length) return;
+    pauseVideos();
+    activeProject = index;
+    peachPlays = 0;
+    if (peachVideo.readyState > 0) peachVideo.currentTime = 0;
+    peachVideo.controls = reducedMotion.matches;
+    aiVideo.controls = reducedMotion.matches;
+    projectPhones.forEach((phone, phoneIndex) => { phone.hidden = phoneIndex !== index; });
+    projectRows.forEach((row, rowIndex) => {
+      const active = rowIndex === index;
+      row.classList.toggle("is-active", active);
+      row.querySelector(".quiz-viewer__project-toggle").setAttribute("aria-expanded", String(active));
+      row.querySelector(".quiz-viewer__project-details").hidden = !active;
     });
-    if (compactWorkViewer.matches) {
-      for (const video of quizVideos) {
-        video.pause();
-        if (video.hasAttribute("src")) {
-          video.removeAttribute("src");
-          video.load();
-        }
-      }
-      quizViewer.scrollTop = 0;
-    } else if (activityIndex === 1) {
-      if (!aiPopupVideo.hasAttribute("src")) aiPopupVideo.src = aiPopupVideo.dataset.src;
-      if (!reducedMotion.matches) aiPopupVideo.play()?.catch(() => {});
-    } else if (activityIndex === 2) {
-      if (!colorVideo.hasAttribute("src")) colorVideo.src = colorVideo.dataset.src;
-      if (!reducedMotion.matches) colorVideo.play()?.catch(() => {});
-    }
+    if (index === 0) showPeachPage(0);
+    else if (index === 1) showAiPage(0);
+    if (quizViewer.scrollTop > 0) quizViewer.scrollTo({ top: 0, behavior: reducedMotion.matches ? "auto" : "smooth" });
+    playCurrentVideo();
   };
+
+  peachVideo.addEventListener("ended", () => {
+    if (activeProject !== 0 || peachIndex !== 0) return;
+    peachPlays = Math.min(2, peachPlays + 1);
+    if (peachPlays < 2) playCurrentVideo();
+  });
+  peachPrevious.addEventListener("click", () => showPeachPage(peachIndex - 1));
+  peachNext.addEventListener("click", () => showPeachPage(peachIndex + 1));
+  aiPrevious.addEventListener("click", () => showAiPage(aiIndex - 1));
+  aiNext.addEventListener("click", () => showAiPage(aiIndex + 1));
+  projectRows.forEach((row, index) => {
+    row.querySelector(".quiz-viewer__project-toggle").addEventListener("click", () => showProject(index));
+  });
+
+  projectList.addEventListener("wheel", (event) => {
+    if (!quizViewer.open || compactWorkViewer.matches || event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+    const direction = Math.sign(event.deltaY);
+    if (!direction) return;
+
+    if (wheelLocked) {
+      event.preventDefault();
+      scheduleWheelReset();
+      return;
+    }
+
+    const maxScroll = Math.max(0, quizViewer.scrollHeight - quizViewer.clientHeight);
+    const canScroll = direction > 0
+      ? quizViewer.scrollTop < maxScroll - 2
+      : quizViewer.scrollTop > 2;
+    if (canScroll) {
+      resetWheelGesture();
+      return;
+    }
+
+    event.preventDefault();
+    scheduleWheelReset();
+    const delta = event.deltaMode === 1 ? event.deltaY * 16
+      : event.deltaMode === 2 ? event.deltaY * quizViewer.clientHeight : event.deltaY;
+    if (wheelDelta && Math.sign(wheelDelta) !== direction) wheelDelta = 0;
+    wheelDelta += delta;
+    if (Math.abs(wheelDelta) < 40) return;
+
+    wheelLocked = true;
+    showProject(activeProject + direction);
+  }, { passive: false });
+
+  phoneStage.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    if (activeProject > 1) return;
+    event.preventDefault();
+    const direction = event.key === "ArrowRight" ? 1 : -1;
+    if (activeProject === 0) showPeachPage(peachIndex + direction);
+    else if (activeProject === 1) showAiPage(aiIndex + direction);
+  });
+
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(([entry]) => {
+      phoneVisible = entry.intersectionRatio >= 0.2;
+      if (phoneVisible) playCurrentVideo();
+      else pauseVideos();
+    }, { threshold: [0, 0.2] }).observe(phoneStage);
+  } else phoneVisible = true;
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) pauseVideos();
+    else playCurrentVideo();
+  });
+  reducedMotion.addEventListener("change", () => {
+    peachVideo.controls = reducedMotion.matches;
+    aiVideo.controls = reducedMotion.matches;
+    if (reducedMotion.matches) pauseVideos();
+    else playCurrentVideo();
+  });
 
   quizTrigger.addEventListener("click", () => {
+    resetWheelGesture();
     openedScrollY = window.scrollY;
-    wheelTotal = 0;
-    lastWheelTime = 0;
-    wheelLockedUntil = 0;
-    touchStart = null;
-    showResult(0);
-    showAiResult(0);
-    showActivity(0);
     quizViewer.showModal();
-    syncQuizMode();
-    flows.forEach((flow) => { flow.scrollLeft = 0; });
+    quizViewer.scrollTop = 0;
     document.documentElement.classList.add("quiz-viewer-open");
     pageScroller?.stop();
+    showProject(0);
     backButton.focus({ preventScroll: true });
   });
 
   backButton.addEventListener("click", () => quizViewer.close());
   quizViewer.addEventListener("close", () => {
-    aiVideo.pause();
-    aiPopupVideo.pause();
-    colorVideo.pause();
-    showActivity(0);
+    resetWheelGesture();
+    pauseVideos();
     document.documentElement.classList.remove("quiz-viewer-open");
     pageScroller?.start();
     if (Math.abs(window.scrollY - openedScrollY) > 1) {
@@ -903,108 +941,6 @@ if (quizTrigger && quizViewer) {
       else window.scrollTo(0, openedScrollY);
     }
     quizTrigger.focus({ preventScroll: true });
-  });
-
-  previousButton.addEventListener("click", () => showResult(resultIndex - 1));
-  nextButton.addEventListener("click", () => showResult(resultIndex + 1));
-  aiPreviousButton.addEventListener("click", () => showAiResult(aiResultIndex - 1));
-  aiNextButton.addEventListener("click", () => showAiResult(aiResultIndex + 1));
-  aiVideoPlay.addEventListener("click", () => {
-    if (compactWorkViewer.matches) return;
-    if (!aiVideo.getAttribute("src")) aiVideo.src = aiVideo.dataset.src;
-    aiVideo.play()?.catch(() => {});
-  });
-  aiVideo.addEventListener("play", () => aiVideo.parentElement.classList.add("is-playing"));
-  aiVideo.addEventListener("pause", () => aiVideo.parentElement.classList.remove("is-playing"));
-  aiVideo.addEventListener("ended", () => aiVideo.parentElement.classList.remove("is-playing"));
-  reducedMotion.addEventListener("change", (event) => {
-    if (event.matches) {
-      aiPopupVideo.pause();
-      colorVideo.pause();
-    }
-  });
-
-  quizViewer.addEventListener("wheel", (event) => {
-    if (compactWorkViewer.matches) return;
-    if (event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
-    event.preventDefault();
-    const flow = event.target.closest(".quiz-viewer__flow");
-    if (event.shiftKey && flow) {
-      flow.scrollLeft += event.deltaY;
-      return;
-    }
-
-    const now = performance.now();
-    const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1);
-    if (activityIndex === 2) {
-      const colorFlow = flows[2];
-      const maxScroll = colorFlow.scrollHeight - colorFlow.clientHeight;
-      if ((delta > 0 && colorFlow.scrollTop < maxScroll - 1) || (delta < 0 && colorFlow.scrollTop > 1)) {
-        colorFlow.scrollTop += delta;
-        wheelTotal = 0;
-        return;
-      }
-      if (delta > 0) return;
-    }
-    if (now < wheelLockedUntil) return;
-    if (now - lastWheelTime > 200 || Math.sign(delta) !== Math.sign(wheelTotal)) wheelTotal = 0;
-    lastWheelTime = now;
-    wheelTotal += delta;
-    if (Math.abs(wheelTotal) >= 65) {
-      showActivity(activityIndex + Math.sign(wheelTotal), true);
-      wheelTotal = 0;
-      wheelLockedUntil = now + 650;
-    }
-  }, { passive: false });
-
-  quizViewer.addEventListener("touchstart", (event) => {
-    if (compactWorkViewer.matches) return;
-    touchStart = event.touches.length === 1
-      ? { x: event.touches[0].clientX, y: event.touches[0].clientY }
-      : null;
-  }, { passive: true });
-
-  quizViewer.addEventListener("touchend", (event) => {
-    if (compactWorkViewer.matches) return;
-    if (!touchStart || event.changedTouches.length !== 1) return;
-    const distanceX = event.changedTouches[0].clientX - touchStart.x;
-    const distanceY = event.changedTouches[0].clientY - touchStart.y;
-    touchStart = null;
-    if (Math.abs(distanceY) > 60 && Math.abs(distanceY) > Math.abs(distanceX) * 1.2) {
-      if (activityIndex === 2) {
-        if (distanceY > 0 && flows[2].scrollTop <= 1) showActivity(1, true);
-        return;
-      }
-      showActivity(activityIndex + (distanceY < 0 ? 1 : -1), true);
-    }
-  }, { passive: true });
-
-  quizViewer.addEventListener("keydown", (event) => {
-    if (compactWorkViewer.matches) return;
-    if (event.target.closest("video")) return;
-    if (event.key === "ArrowDown" || event.key === "PageDown" || event.key === "ArrowUp" || event.key === "PageUp") {
-      event.preventDefault();
-      const direction = (event.key === "ArrowDown" || event.key === "PageDown") ? 1 : -1;
-      if (activityIndex === 2) {
-        const colorFlow = flows[2];
-        const maxScroll = colorFlow.scrollHeight - colorFlow.clientHeight;
-        if ((direction > 0 && colorFlow.scrollTop < maxScroll - 1) || (direction < 0 && colorFlow.scrollTop > 1)) {
-          colorFlow.scrollTop += direction * (event.key.startsWith("Page") ? colorFlow.clientHeight * 0.8 : 100);
-          return;
-        }
-      }
-      showActivity(activityIndex + direction, true);
-      return;
-    }
-    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-      event.preventDefault();
-      if (activityIndex === 0) showResult(resultIndex + (event.key === "ArrowRight" ? 1 : -1));
-      else if (activityIndex === 1) showAiResult(aiResultIndex + (event.key === "ArrowRight" ? 1 : -1));
-    }
-  });
-
-  compactWorkViewer.addEventListener("change", () => {
-    if (quizViewer.open) syncQuizMode();
   });
 }
 

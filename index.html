@@ -163,7 +163,7 @@
                 <div class="card-stack__field card-stack__field--name"><dt>[Tool Name]</dt><dd><h3>互动小游戏及作品网站</h3></dd></div>
                 <div class="card-stack__field"><dt>[Category]</dt><dd>互动游戏 / 作品网站</dd></div>
                 <div class="card-stack__field"><dt>[Keywords]</dt><dd>星光收集 × 作品展示 × 趣味探索</dd></div>
-                <div class="card-stack__field card-stack__field--description"><dt>[Description]</dt><dd>以夜空、流星和小兔构建作品网站的互动开场，引导访客参与小游戏并触发背景音乐。轻松的探索让访客自然停留，为下方作品图片的加载留出时间，也为网站增添趣味与记忆点。</dd></div>
+                <div class="card-stack__field card-stack__field--description"><dt>[Description]</dt><dd>以夜空、流星和小兔构建作品网站的互动开场，引导访客参与小游戏，点击星星可触发提示音。轻松的探索让访客自然停留，为下方作品图片的加载留出时间，也为网站增添趣味与记忆点。</dd></div>
               </dl>
             </div>
             <div class="card-stack__visual">
@@ -275,13 +275,7 @@
             <img src="./pic/1-2缘分墙.jpg" alt="心动缘分墙活动主视觉" width="2752" height="1536" loading="lazy" decoding="async" />
           </div>
           <p class="project__gallery-tagline">SHAPED BY ETERNITY<br />SOFTENED BY LOVE</p>
-          <img class="project__gallery-phone" src="./pic/1-2缘分墙报名页.png" alt="心动缘分墙线上报名页" width="375" height="812" loading="lazy" decoding="async" />
-          <div class="project__gallery-crop project__gallery-crop--wall" role="img" aria-label="线下缘分墙互动装置与两位品牌形象角色">
-            <img src="./pic/1-4缘分墙线下.png" alt="" width="1309" height="268" loading="lazy" decoding="async" />
-          </div>
-          <div class="project__gallery-crop project__gallery-crop--signup" role="img" aria-label="心动缘分墙活动报名引导视觉">
-            <img src="./pic/1-4缘分墙线下.png" alt="" width="1309" height="268" loading="lazy" decoding="async" />
-          </div>
+          <img class="project__gallery-offline" src="./pic/1-4缘分墙线下.png" alt="心动缘分墙线下装置、互动道具与线上报名展示" width="1496" height="316" loading="lazy" decoding="async" />
         </div>
       </div>
     </section>
@@ -408,7 +402,7 @@
             <p>用轻松有趣的互动体验与AI辅助设计，邀请用户进行趣味测试，参与活动</p>
           </div>
           <div class="work-card__visual work-card__visual--quiz">
-            <img src="./pic/4-1.png" alt="新年一起接正缘桃花签活动视觉" width="419" height="203" loading="lazy" decoding="async" />
+            <img src="./pic/4-1.png" alt="正缘桃花签新春互动活动视觉" width="419" height="203" loading="lazy" decoding="async" />
             <img src="./pic/4-2.png" alt="永不失联的 AI 女神节测试活动视觉" width="534" height="220" loading="lazy" decoding="async" />
             <img src="./pic/4-3.png" alt="晒出你的梦幻 CP 感手机活动页面" width="700" height="934" loading="lazy" decoding="async" />
           </div>
@@ -626,62 +620,68 @@
         <button class="work-viewer__back quiz-viewer__back" type="button" aria-label="返回作品列表"></button>
       </header>
       <div class="quiz-viewer__content">
-        <section class="quiz-viewer__activity quiz-viewer__activity--peach" aria-label="正缘桃花签" tabindex="-1">
-          <div class="quiz-viewer__flow" tabindex="0" aria-label="正缘桃花签测试流程">
-            <div class="quiz-viewer__canvas">
-              <img class="quiz-viewer__artwork" src="./pic/4-4.png" alt="正缘桃花签视觉设计：项目介绍、四道测试题和查看结果流程" width="1466" height="849" loading="lazy" decoding="async" />
-              <div class="quiz-viewer__result">
-                <button class="quiz-viewer__result-arrow quiz-viewer__result-arrow--previous" type="button" aria-label="上一个桃花签结果" disabled>‹</button>
+        <div class="quiz-viewer__layout">
+          <div class="quiz-viewer__phone-stage" aria-label="当前项目手机页面">
+            <section class="quiz-viewer__project-phone" id="project-03" aria-labelledby="project-03-title">
+              <div class="project-03__result" tabindex="0" aria-label="桃花签页面，可用左右方向键切换">
+                <button class="quiz-viewer__result-arrow quiz-viewer__result-arrow--previous" type="button" aria-label="上一页桃花签展示" disabled>‹</button>
                 <div class="quiz-viewer__phone">
                   <div class="quiz-viewer__screen">
-                    <img class="quiz-viewer__result-image" src="./pic/测试结果/桃花结果1.png" alt="桃花签测试结果 1，共 4 个结果" width="424" height="910" loading="lazy" decoding="async" />
+                    <video class="quiz-viewer__result-video" src="./pic/测试结果/测试首屏.mp4" poster="./pic/测试结果/桃花签答题1.png" width="750" height="1624" preload="none" muted playsinline aria-label="桃花签测试首屏视频"></video>
+                    <img class="quiz-viewer__result-image" src="./pic/测试结果/答题2.png" alt="桃花签答题 2/4：爱情中最重要的是什么" width="750" height="1624" loading="lazy" decoding="async" hidden />
                   </div>
                   <img class="quiz-viewer__shell" src="./pic/测试结果/桃花签手机.svg" alt="" aria-hidden="true" width="250" height="480" loading="lazy" decoding="async" />
                 </div>
-                <button class="quiz-viewer__result-arrow quiz-viewer__result-arrow--next" type="button" aria-label="下一个桃花签结果">›</button>
-                <span class="quiz-viewer__result-count" aria-live="polite">1 / 4</span>
+                <button class="quiz-viewer__result-arrow quiz-viewer__result-arrow--next" type="button" aria-label="下一页桃花签展示">›</button>
+                <span class="quiz-viewer__result-count" aria-live="polite">1 / 8</span>
               </div>
-            </div>
-          </div>
-        </section>
-        <section class="quiz-viewer__activity quiz-viewer__activity--ai" aria-label="一日 AI 恋人" aria-hidden="true" tabindex="-1" inert>
-          <div class="quiz-viewer__flow quiz-viewer__flow--ai" tabindex="0" aria-label="一日 AI 恋人测试流程">
-            <div class="quiz-viewer__canvas quiz-viewer__canvas--ai">
-              <img class="quiz-viewer__artwork" src="./pic/测试结果/恋人测试1.png" alt="一日 AI 恋人活动介绍、首屏弹窗、测试页面及查看结果流程" width="1466" height="849" loading="lazy" decoding="async" />
-              <div class="quiz-viewer__ai-popup">
-                <video muted loop playsinline preload="none" poster="./pic/测试结果/恋人测试1-0.png" width="720" height="1280" data-src="./pic/测试结果/视频AI恋人1.mp4" aria-label="一日 AI 恋人首屏弹窗视频"></video>
-                <img class="quiz-viewer__mobile-poster" src="./pic/测试结果/恋人测试1-0.png" alt="一日 AI 恋人首屏弹窗静态画面" width="720" height="1280" loading="lazy" decoding="async" />
-              </div>
-              <div class="quiz-viewer__ai-result">
-                <button class="quiz-viewer__result-arrow quiz-viewer__result-arrow--previous" type="button" aria-label="上一个 AI 恋人结果" disabled>‹</button>
+            </section>
+            <section class="quiz-viewer__project-phone" id="quiz-ai-phone" aria-labelledby="quiz-ai-title" hidden>
+              <div class="quiz-viewer__ai-result" tabindex="0" aria-label="AI 恋人页面，可用左右方向键切换">
+                <button class="quiz-viewer__result-arrow quiz-viewer__result-arrow--previous" type="button" aria-label="上一页 AI 恋人展示" disabled>‹</button>
                 <div class="quiz-viewer__ai-phone">
                   <div class="quiz-viewer__ai-screen">
-                    <img class="quiz-viewer__ai-result-image" src="./pic/测试结果/恋人结果1.png" alt="AI 恋人测试结果 1，共 8 个结果" width="750" height="1563" loading="lazy" decoding="async" />
+                    <video class="quiz-viewer__ai-intro-video" muted loop playsinline preload="none" poster="./pic/测试结果/恋人测试1-0.png" width="720" height="1280" data-src="./pic/测试结果/视频AI恋人1.mp4" aria-label="一日 AI 恋人弹窗动画"></video>
+                    <img class="quiz-viewer__ai-result-image" src="./pic/测试结果/恋人结果1.png" alt="AI 恋人测试结果 1，共 8 个结果" width="750" height="1563" loading="lazy" decoding="async" hidden />
                   </div>
                   <img class="quiz-viewer__ai-shell" src="./pic/测试结果/一日恋人手机.png" alt="" aria-hidden="true" width="362" height="684" loading="lazy" decoding="async" />
                 </div>
-                <button class="quiz-viewer__result-arrow quiz-viewer__result-arrow--next" type="button" aria-label="下一个 AI 恋人结果">›</button>
-                <span class="quiz-viewer__result-count" aria-live="polite">1 / 8</span>
+                <button class="quiz-viewer__result-arrow quiz-viewer__result-arrow--next" type="button" aria-label="下一页 AI 恋人展示">›</button>
+                <span class="quiz-viewer__result-count" aria-live="polite">1 / 9</span>
               </div>
-              <div class="quiz-viewer__ai-video">
-                <video controls muted loop playsinline preload="none" poster="./pic/测试结果/ai恋人视频封面.webp" width="1280" height="720" data-src="./pic/测试结果/ai恋人视频.mp4" aria-label="一日 AI 恋人结果视频"></video>
-                <img class="quiz-viewer__mobile-poster" src="./pic/测试结果/ai恋人视频封面.webp" alt="一日 AI 恋人结果视频封面" width="1280" height="720" loading="lazy" decoding="async" />
-                <button class="quiz-viewer__video-play" type="button" aria-label="播放一日 AI 恋人结果视频"><span aria-hidden="true"></span></button>
+            </section>
+            <section class="quiz-viewer__project-phone" id="quiz-christmas-phone" aria-labelledby="quiz-christmas-title" hidden>
+              <div class="quiz-viewer__phone">
+                <div class="quiz-viewer__screen"><img class="quiz-viewer__single-image" src="./pic/圣诞.png" alt="圣诞奇遇夜活动手机页面" width="750" height="1624" loading="lazy" decoding="async" /></div>
+                <img class="quiz-viewer__shell" src="./pic/测试结果/桃花签手机.svg" alt="" aria-hidden="true" width="250" height="480" loading="lazy" decoding="async" />
               </div>
-            </div>
+            </section>
+            <section class="quiz-viewer__project-phone" id="quiz-color-phone" aria-labelledby="quiz-color-title" hidden>
+              <div class="quiz-viewer__phone">
+                <div class="quiz-viewer__screen"><img class="quiz-viewer__single-image" src="./pic/色卡.png" alt="心动色卡活动手机页面" width="750" height="1624" loading="lazy" decoding="async" /></div>
+                <img class="quiz-viewer__shell" src="./pic/测试结果/桃花签手机.svg" alt="" aria-hidden="true" width="250" height="480" loading="lazy" decoding="async" />
+              </div>
+            </section>
           </div>
-        </section>
-        <section class="quiz-viewer__activity quiz-viewer__activity--color" aria-label="心动色卡" aria-hidden="true" tabindex="-1" inert>
-          <div class="quiz-viewer__flow quiz-viewer__flow--color" tabindex="0" aria-label="心动色卡活动展示">
-            <div class="quiz-viewer__canvas quiz-viewer__canvas--color">
-              <div class="quiz-viewer__color-video">
-                <video muted loop playsinline preload="none" poster="./pic/测试结果/色卡poster.png" width="720" height="1280" data-src="./pic/测试结果/色卡视频1.mp4" aria-label="心动色卡活动视频"></video>
-                <img class="quiz-viewer__mobile-poster" src="./pic/测试结果/色卡poster.png" alt="心动色卡活动静态画面" width="720" height="1280" loading="lazy" decoding="async" />
-              </div>
-              <img class="quiz-viewer__artwork quiz-viewer__artwork--color" src="./pic/测试结果/色卡.png" alt="心动色卡活动介绍，手机视频与三步参与流程" width="1359" height="1002" loading="lazy" decoding="async" />
-            </div>
+          <div class="quiz-viewer__projects" aria-label="选择运营活动项目">
+            <section class="quiz-viewer__project is-active" data-project-index="0">
+              <h2 id="project-03-title"><button class="quiz-viewer__project-toggle" type="button" aria-expanded="true" aria-controls="quiz-peach-details"><img class="quiz-viewer__project-title" src="./pic/桃花签.svg" alt="正缘桃花签" width="291" height="64" /></button></h2>
+              <div class="quiz-viewer__project-details" id="quiz-peach-details"><p>新春桃花签趣味互动 H5 视觉设计，按答题结果生成专属桃花签。采用软萌手绘画风，让用户在轻松测试中完成自我表达与平台社交内容传播。</p></div>
+            </section>
+            <section class="quiz-viewer__project" data-project-index="1">
+              <h2 id="quiz-ai-title"><button class="quiz-viewer__project-toggle" type="button" aria-expanded="false" aria-controls="quiz-ai-details"><img class="quiz-viewer__project-title" src="./pic/ai恋人.svg" alt="一日 AI 恋人" width="291" height="64" /></button></h2>
+              <div class="quiz-viewer__project-details" id="quiz-ai-details" hidden><p>妇女节的趣味测试H5，整体选用暗底星云赛博浪漫风格，以轻问答测试生成专属AI恋人形象，通过分层氛围感界面、清晰信息层级，平衡精致氛围感与页面信息可读性。</p><img class="quiz-viewer__project-banner quiz-viewer__project-banner--ai" src="./pic/ai恋人ban.png" alt="永不失联的 AI 恋人活动视觉" width="538" height="184" loading="lazy" decoding="async" /></div>
+            </section>
+            <section class="quiz-viewer__project" data-project-index="2">
+              <h2 id="quiz-christmas-title"><button class="quiz-viewer__project-toggle" type="button" aria-expanded="false" aria-controls="quiz-christmas-details"><img class="quiz-viewer__project-title quiz-viewer__project-title--christmas" src="./pic/圣诞tt.svg" alt="圣诞奇遇夜" width="283" height="54" /></button></h2>
+              <div class="quiz-viewer__project-details" id="quiz-christmas-details" hidden><p>圣诞节点的百人心动互选活动，以圣诞红绿撞色营造节日氛围，结合真人资料卡、漫画爆炸字与手绘贴纸，打造轻松活泼的互动交友体验，突出参与感与转化引导。</p></div>
+            </section>
+            <section class="quiz-viewer__project" data-project-index="3">
+              <h2 id="quiz-color-title"><button class="quiz-viewer__project-toggle" type="button" aria-expanded="false" aria-controls="quiz-color-details"><img class="quiz-viewer__project-title quiz-viewer__project-title--color" src="./pic/心动色卡.svg" alt="心动色卡" width="238" height="54" /></button></h2>
+              <div class="quiz-viewer__project-details" id="quiz-color-details" hidden><p>中国婚恋网线上运营活动，解决用户自我介绍生硬、自拍观感不佳等问题，以定制色卡相框+人设标签（时尚捕手、人生体验官、十级追剧家等）为创意载体，生成可一键分享的个性卡片，轻量化呈现个人特质，弱化社交距离感。</p><img class="quiz-viewer__project-banner" src="./pic/色卡介绍.png" alt="心动色卡活动介绍视觉" width="1245" height="270" loading="lazy" decoding="async" /></div>
+            </section>
           </div>
-        </section>
+        </div>
       </div>
     </dialog>
     <dialog class="app-viewer" id="appViewer" aria-label="作文纸条 APP 作品查看" data-lenis-prevent>
@@ -805,7 +805,7 @@
         <button class="research-viewer__next" type="button" aria-label="下一张">→</button>
       </nav>
     </dialog>
-    <button class="hero__sound-toggle" type="button" aria-label="开启声音" aria-pressed="false" title="开启声音">
+    <button class="hero__sound-toggle" type="button" aria-label="关闭提示音" aria-pressed="true" title="关闭提示音">
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <path d="M4 9h4l5-4v14l-5-4H4z" />
         <path class="hero__sound-wave" d="M16 9a4 4 0 0 1 0 6m2.5-9a8 8 0 0 1 0 12" />
