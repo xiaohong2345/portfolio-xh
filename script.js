@@ -1013,6 +1013,13 @@ const aiVideoSection = document.querySelector(".ai-video");
 if (aiVideoSection) {
   const works = [
     {
+      title: "欧珑寻香之旅",
+      tag: "香水广告",
+      description: "以欧珑法式香水为引，开启一场穿越橙花、果香与森林的奇幻寻香之旅。",
+      src: "./pic/video/欧珑.mp4",
+      poster: "./pic/video/posters/欧珑.webp",
+    },
+    {
       title: "vivo精彩随行",
       tag: "产品广告 · 手机TVC",
       description: "用高频使用场景来展示产品卖点：远处拍得清 → 身边拍得好 → 动态抓得住，然后卖点收束，进入产品展示，“这一切来自这台手机”，记录值得珍藏的鲜活记忆。",
@@ -1025,14 +1032,6 @@ if (aiVideoSection) {
       description: "把蓝莓拟人化、从种植园到入口的过程旅程化，从摘下枝头开始“锁鲜”，到通关时完好无损，叙事节奏松紧交替，强化故事情绪起伏。",
       src: "./pic/video/web/anmuxi.mp4",
       poster: "./pic/video/posters/鲜奇一路整颗满足.webp",
-    },
-    {
-      title: "反邪教宣传短片",
-      tag: "公益广告",
-      description: "以邪教头目的视角，呈现邪教如何借“神迹”“救赎”与恐惧操控认知。揭露邪教洗脑机制，倡导理性判断与科学生活",
-      src: "./pic/video/web/fanxiejiao.mp4",
-      poster: "./pic/video/posters/反邪教.webp",
-      portrait: true,
     },
   ];
 

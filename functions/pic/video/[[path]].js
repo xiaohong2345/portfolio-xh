@@ -10,6 +10,7 @@ const videoSizes = {
   "vivo.mp4": 4942460,
   "fanxiejiao.mp4": 23314061,
   "anmuxi.mp4": 8636852,
+  "欧珑.mp4": 11926024,
 };
 
 export async function onRequestGet(context) {
