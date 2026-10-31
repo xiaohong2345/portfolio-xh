@@ -952,7 +952,7 @@ if (aiVideoSection) {
       title: "欧珑寻香之旅",
       tag: "香水广告",
       description: "以欧珑法式香水为引，开启一场穿越橙花、果香与森林的奇幻寻香之旅。",
-      src: "./pic/video/欧珑.mp4",
+      src: "./pic/video/10月31日欧珑.mp4",
       poster: "./pic/video/posters/欧珑.webp",
     },
     {

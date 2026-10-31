@@ -11,6 +11,7 @@ const videoSizes = {
   "fanxiejiao.mp4": 23314061,
   "anmuxi.mp4": 8636852,
   "欧珑.mp4": 11926024,
+  "10月31日欧珑.mp4": 9982094,
 };
 
 export async function onRequestGet(context) {
