@@ -589,6 +589,42 @@ if (creativeTrigger && creativeViewer) {
   });
 }
 
+const pageTrigger = document.querySelector(".work-card__open--page");
+const pageViewer = document.getElementById("pageViewer");
+
+if (pageTrigger && pageViewer) {
+  const backButton = pageViewer.querySelector(".page-viewer__back");
+  let openedScrollY = 0;
+
+  pageTrigger.addEventListener("click", () => {
+    openedScrollY = window.scrollY;
+    pageViewer.showModal();
+    pageViewer.scrollTop = 0;
+    document.documentElement.classList.add("page-viewer-open");
+    pageScroller?.stop();
+    backButton.focus({ preventScroll: true });
+  });
+
+  backButton.addEventListener("click", () => pageViewer.close());
+  pageViewer.addEventListener("wheel", (event) => {
+    if (event.ctrlKey) return;
+    event.preventDefault();
+    const amount = event.deltaMode === 1 ? event.deltaY * 16
+      : event.deltaMode === 2 ? event.deltaY * pageViewer.clientHeight
+      : event.deltaY;
+    pageViewer.scrollTop += amount;
+  }, { passive: false });
+  pageViewer.addEventListener("close", () => {
+    document.documentElement.classList.remove("page-viewer-open");
+    pageScroller?.start();
+    if (Math.abs(window.scrollY - openedScrollY) > 1) {
+      if (pageScroller) pageScroller.scrollTo(openedScrollY, { immediate: true, force: true });
+      else window.scrollTo(0, openedScrollY);
+    }
+    pageTrigger.focus({ preventScroll: true });
+  });
+}
+
 const researchTrigger = document.querySelector(".work-card__open--research");
 const researchViewer = document.getElementById("researchViewer");
 

@@ -382,6 +382,10 @@
       </div>
 
       <div class="work-collection__cards">
+      <article class="work-card work-collection__page-card">
+        <img class="work-collection__page-image" src="./pic/页面.png" alt="页面设计作品合集预览" width="2042" height="2643" loading="lazy" decoding="async" />
+        <button class="work-card__open work-card__open--page" type="button" aria-label="查看页面设计合集大图" aria-haspopup="dialog" aria-controls="pageViewer"></button>
+      </article>
       <div class="work-collection__grid">
         <article class="work-card">
           <div class="work-card__content">
@@ -797,6 +801,12 @@
         <button class="work-viewer__back creative-viewer__back" type="button" aria-label="返回作品列表"></button>
       </header>
       <img class="creative-viewer__image" src="./pic/文创.png" alt="反诈主题帆布包、手册与活动周边设计" width="1028" height="542" loading="lazy" decoding="async" />
+    </dialog>
+    <dialog class="page-viewer" id="pageViewer" aria-label="页面设计合集大图" data-lenis-prevent>
+      <header class="page-viewer__header">
+        <button class="work-viewer__back page-viewer__back" type="button" aria-label="返回作品列表"></button>
+      </header>
+      <img class="page-viewer__image" src="./pic/页面.png" alt="页面设计作品合集" width="2042" height="2643" decoding="async" />
     </dialog>
     <dialog class="research-viewer" id="researchViewer" aria-label="调研作品查看" data-lenis-prevent>
       <header class="research-viewer__header">

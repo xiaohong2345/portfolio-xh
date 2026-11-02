@@ -1473,6 +1473,24 @@ dd:lang(zh) {
   transition: transform 0.35s ease-out;
 }
 
+.work-card.work-collection__page-card {
+  height: 50svh;
+  min-height: 0;
+  margin-bottom: 24px;
+}
+
+.work-collection__page-image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  opacity: 0.72;
+  transition: opacity 0.4s ease;
+}
+
 .work-card__content {
   padding: 32px 32px 0;
 }
@@ -1659,6 +1677,8 @@ html.app-viewer-open,
 html.app-viewer-open body,
 html.creative-viewer-open,
 html.creative-viewer-open body,
+html.page-viewer-open,
+html.page-viewer-open body,
 html.research-viewer-open,
 html.research-viewer-open body,
 html.quiz-viewer-open,
@@ -1863,7 +1883,8 @@ html.quiz-viewer-open body {
 }
 
 .app-viewer,
-.creative-viewer {
+.creative-viewer,
+.page-viewer {
   position: fixed;
   inset: 0;
   width: 100%;
@@ -1890,12 +1911,14 @@ html.quiz-viewer-open body {
 }
 
 .app-viewer::backdrop,
-.creative-viewer::backdrop {
+.creative-viewer::backdrop,
+.page-viewer::backdrop {
   background: rgb(0 0 0 / 85%);
 }
 
 .app-viewer__header,
-.creative-viewer__header {
+.creative-viewer__header,
+.page-viewer__header {
   position: fixed;
   z-index: 5;
   top: 12px;
@@ -2023,6 +2046,22 @@ html.quiz-viewer-open body {
   width: min(100%, 900px);
   height: auto;
   margin: auto;
+}
+
+.page-viewer[open] {
+  display: block;
+  padding: 72px 24px 24px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+
+.page-viewer__image {
+  display: block;
+  width: min(100%, 1200px);
+  height: auto;
+  margin-inline: auto;
 }
 
 @media (max-width: 900px) {
@@ -2740,6 +2779,7 @@ html.quiz-viewer-open body {
   }
 
   .work-card:hover .work-card__visual,
+  .work-card:hover .work-collection__page-image,
   .work-collection__placeholder--wide:hover .work-collection__app-media,
   .work-collection__placeholder--square:hover .work-collection__creative-image {
     opacity: 1;
@@ -3047,6 +3087,10 @@ html.quiz-viewer-open body {
   .work-collection__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.6667vw;
+  }
+
+  .work-card.work-collection__page-card {
+    margin-bottom: 1.6667vw;
   }
 
   .work-collection__more {
@@ -4754,6 +4798,10 @@ html.quiz-viewer-open body {
 
   .creative-viewer__image {
     width: min(100%, 700px);
+  }
+
+  .page-viewer[open] {
+    padding: 80px 16px 32px;
   }
 
   .research-viewer__stage {
