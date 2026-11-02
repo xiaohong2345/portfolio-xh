@@ -387,6 +387,55 @@ if (ecommerceTrigger && ecommerceViewer) {
 
 const ipTrigger = document.querySelector(".work-card__open--ip");
 const ipViewer = document.getElementById("ipViewer");
+const ipCardVideo = document.querySelector(".work-card__ip-video");
+const quizCardVideo = document.querySelector(".work-card__quiz-video");
+
+if (quizCardVideo) {
+  let completedPlays = 0;
+  quizCardVideo.addEventListener("ended", () => {
+    completedPlays += 1;
+    if (completedPlays === 1) {
+      quizCardVideo.currentTime = 0;
+      quizCardVideo.play().catch(() => {});
+    }
+  });
+}
+
+if (ipCardVideo) {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let started = false;
+  let observer;
+
+  const playOnce = () => {
+    if (started || reducedMotion.matches) return;
+    started = true;
+    ipCardVideo.play().then(() => observer?.disconnect()).catch(() => {
+      started = false;
+    });
+  };
+
+  if ("IntersectionObserver" in window) {
+    observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) playOnce();
+    }, { threshold: 0.5 });
+    observer.observe(ipCardVideo);
+  } else {
+    const checkVisibility = () => {
+      const bounds = ipCardVideo.getBoundingClientRect();
+      if (bounds.right > 0 && bounds.left < window.innerWidth
+        && bounds.bottom > 0 && bounds.top < window.innerHeight) {
+        playOnce();
+      }
+      if (started) {
+        window.removeEventListener("scroll", checkVisibility);
+        window.removeEventListener("resize", checkVisibility);
+      }
+    };
+    window.addEventListener("scroll", checkVisibility, { passive: true });
+    window.addEventListener("resize", checkVisibility);
+    checkVisibility();
+  }
+}
 
 if (ipTrigger && ipViewer) {
   const backButton = ipViewer.querySelector(".ip-viewer__back");
