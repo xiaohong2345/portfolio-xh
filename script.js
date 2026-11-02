@@ -1473,8 +1473,8 @@ const coverflow = document.querySelector(".coverflow");
 
 if (coverflow) {
   const slides = [
-    { number: "01", src: "./pic/组件/01.png", alt: "户外木质机械蜻蜓与莲花装置" },
-    { number: "02", src: "./pic/组件/02.png", alt: "木质机械小提琴与红色帷幕" },
+    { number: "01", src: "./pic/组件/111.png", alt: "欧珑赤霞橘光香水与花朵的木质桌面场景" },
+    { number: "02", src: "./pic/组件/222.png", alt: "欧珑赤霞橘光香水与葡萄柚、花朵和黑莓" },
     { number: "03", src: "./pic/组件/03.png", alt: "缘·记忆手卡包装展示" },
     { number: "04", src: "./pic/组件/04.png", alt: "万用模板手卡包装展示" },
     { number: "05", src: "./pic/组件/333.png", alt: "红糖生姜牛奶礼盒与盒装饮品，搭配生姜、红糖和牛奶" },
@@ -1483,8 +1483,8 @@ if (coverflow) {
     { number: "08", src: "./pic/6-4.png", alt: "范文月刊蝴蝶花插画封面" },
     { number: "09", src: "./pic/6-2.png", alt: "作文纸条雨中人物插画封面" },
     { number: "10", src: "./pic/6-3.png", alt: "作文纸条篝火插画封面" },
-    { number: "11", src: "./pic/组件/111.png", alt: "橙色标签古龙水瓶与花朵的木质桌面场景" },
-    { number: "12", src: "./pic/组件/222.png", alt: "橙色标签古龙水瓶与葡萄柚、花朵和黑莓" },
+    { number: "11", src: "./pic/组件/01.png", alt: "欧珑无极乌龙香水与木材、茶叶和香柠檬" },
+    { number: "12", src: "./pic/组件/02.png", alt: "欧珑无极乌龙香水与柑橘、茶叶和木材" },
   ];
   const initialIndex = 8;
 
