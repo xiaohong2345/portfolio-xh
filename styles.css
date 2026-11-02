@@ -1479,6 +1479,12 @@ dd:lang(zh) {
   margin-bottom: 24px;
 }
 
+@media (max-width: 767px) {
+  .work-card.work-collection__page-card {
+    height: 33.333svh;
+  }
+}
+
 .work-collection__page-image {
   position: absolute;
   inset: 0;
