@@ -388,18 +388,6 @@ if (ecommerceTrigger && ecommerceViewer) {
 const ipTrigger = document.querySelector(".work-card__open--ip");
 const ipViewer = document.getElementById("ipViewer");
 const ipCardVideo = document.querySelector(".work-card__ip-video");
-const quizCardVideo = document.querySelector(".work-card__quiz-video");
-
-if (quizCardVideo) {
-  let completedPlays = 0;
-  quizCardVideo.addEventListener("ended", () => {
-    completedPlays += 1;
-    if (completedPlays === 1) {
-      quizCardVideo.currentTime = 0;
-      quizCardVideo.play().catch(() => {});
-    }
-  });
-}
 
 if (ipCardVideo) {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");

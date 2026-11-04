@@ -367,6 +367,13 @@ dd:lang(zh) {
   padding: clamp(18px, 1.875vw, 30px) var(--page-padding) 0;
 }
 
+#activity-design,
+#project-01,
+#project-02 {
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
 .activity-design-intro .card-stack__heading {
   margin-bottom: 0;
 }
@@ -1554,6 +1561,13 @@ dd:lang(zh) {
 }
 
 .work-card__visual--quiz {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  grid-template-rows: auto auto;
+  align-items: end;
+  align-content: end;
+  column-gap: 12px;
+  row-gap: 8px;
   width: 100%;
   max-width: 460px;
   height: 248px;
@@ -1561,14 +1575,37 @@ dd:lang(zh) {
   padding: 0 24px 24px;
 }
 
-.work-card__quiz-video {
+.work-card__visual--quiz img {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  min-width: 0;
+  object-fit: contain;
+}
+
+.work-card__visual--quiz img:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+}
+
+.work-card__visual--quiz img:nth-child(1),
+.work-card__visual--quiz img:nth-child(2) {
+  border: 1px solid rgb(255 255 255 / 20%);
   border-radius: 12px;
-  background: #101010;
-  object-fit: cover;
-  object-position: center bottom;
+}
+
+.work-card__visual--quiz img:nth-child(2) {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+}
+
+.work-card__visual--quiz img:nth-child(3) {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  max-height: 224px;
+  align-self: end;
 }
 
 .work-card__visual--research {
@@ -2771,8 +2808,9 @@ html.quiz-viewer-open body {
 
 @media (max-width: 767px) {
   .hero {
-    --hero-mobile-title-top: clamp(130px, 22svh, 210px);
-    height: calc(var(--hero-mobile-title-top) + 118px);
+    --hero-mobile-base-title-top: clamp(130px, 22svh, 210px);
+    --hero-mobile-title-top: calc(var(--hero-mobile-base-title-top) + var(--hero-mobile-base-title-top) - 72px);
+    height: calc(var(--hero-mobile-title-top) + 180px);
     min-height: 0;
   }
 
@@ -2816,6 +2854,42 @@ html.quiz-viewer-open body {
 
 /* Project layouts keep their desktop geometry scaled to the phone width. */
 @media (max-width: 767px) {
+  #activity-design .section-heading {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 26%);
+    gap: 4vw;
+    min-height: 12vw;
+  }
+
+  #activity-design .section-heading h2 {
+    font-size: 5.3vw;
+  }
+
+  #activity-design .section-heading__accent {
+    right: -2.7vw;
+    bottom: -0.8vw;
+    width: 9vw;
+    height: auto;
+  }
+
+  #activity-design .section-heading .card-stack__details {
+    display: flex;
+    gap: 1.4vw;
+    justify-self: end;
+    width: 100%;
+    transform: none;
+  }
+
+  #activity-design .section-heading .card-stack__details img {
+    width: auto;
+    max-width: 100%;
+    height: 1vw;
+  }
+
+  #activity-design .section-heading .card-stack__details img:first-child {
+    margin-right: 5.5vw;
+    transform: translateY(0.3vw);
+  }
+
   #project-01 {
     --grid-gap: 1.5vw;
     padding-inline: 4vw;
@@ -2907,6 +2981,10 @@ html.quiz-viewer-open body {
     margin-top: 3vw;
   }
 
+  #project-01 .project__concept-map {
+    height: 36vw;
+  }
+
   #project-01 .project__concept h3 {
     margin-bottom: 0.75vw;
     font-size: 3.75vw;
@@ -2925,6 +3003,24 @@ html.quiz-viewer-open body {
     gap: 1.1111vw;
     padding-bottom: 1.1111vw;
     font-size: 0.85vw;
+  }
+
+  #project-01 .project__gallery-tagline {
+    font-size: 0.7vw;
+  }
+
+  #project-01 .project__meta-logo {
+    height: 1.9vw;
+  }
+
+  #project-01 .project__process-line--to-adjustments {
+    left: 39.35%;
+    width: 17.3%;
+  }
+
+  #project-01 .project__process-line--to-logo {
+    top: 55.2%;
+    width: 3.7%;
   }
 
   #project-01 .project__gallery-images {
@@ -3082,12 +3178,19 @@ html.quiz-viewer-open body {
   }
 
   .work-card__visual--quiz {
+    column-gap: 0.8333vw;
+    row-gap: 0.5556vw;
     height: 17.2222vw;
     padding: 0 1.6667vw 1.6667vw;
   }
 
-  .work-card__quiz-video {
+  .work-card__visual--quiz img:nth-child(1),
+  .work-card__visual--quiz img:nth-child(2) {
     border-radius: 0.8333vw;
+  }
+
+  .work-card__visual--quiz img:nth-child(3) {
+    max-height: 15.5556vw;
   }
 
   .work-card__visual--research {
