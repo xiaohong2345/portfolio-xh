@@ -898,14 +898,14 @@ dd:lang(zh) {
 
   #project-01 .project__gallery {
     margin-top: clamp(10px, 1.5vw, 24px);
-    margin-bottom: clamp(-64px, -5vw, -38px);
+    margin-bottom: clamp(30px, 4vw, 60px);
   }
 }
 
 #project-01 .project__gallery-composition {
   position: relative;
   width: min(100%, 1100px);
-  aspect-ratio: 954 / 801;
+  aspect-ratio: 954 / 610;
   margin-inline: auto;
 }
 
@@ -953,14 +953,14 @@ dd:lang(zh) {
 
 #project-01 .project__gallery-corner--bottom-left,
 #project-01 .project__gallery-corner--bottom-right {
-  top: 64.4%;
-  height: 11.9%;
+  top: 86%;
+  height: 12%;
 }
 
 #project-01 .project__gallery-heading {
   position: absolute;
   z-index: 1;
-  top: 5.56%;
+  top: 7.3%;
   left: 50%;
   margin: 0;
   color: var(--project-muted);
@@ -974,7 +974,7 @@ dd:lang(zh) {
 #project-01 .project__gallery-hero {
   position: absolute;
   z-index: 1;
-  top: 10.5%;
+  top: 13%;
   left: 11.715%;
   display: block;
   width: 76.57%;
@@ -990,12 +990,12 @@ dd:lang(zh) {
 #project-01 .project__gallery-tagline {
   position: absolute;
   z-index: 1;
-  top: 62.7%;
+  top: 78%;
   left: 38.85%;
   display: grid;
   place-items: center;
   width: 22.3%;
-  height: 11.8%;
+  height: 15.5%;
   margin: 0;
   color: var(--project-muted);
   font-family: var(--font-sans);
@@ -1006,30 +1006,48 @@ dd:lang(zh) {
   text-align: center;
 }
 
-#project-01 .project__gallery-offline {
-  position: absolute;
-  z-index: 1;
-  top: 76.5%;
-  left: 9%;
+#project-01 .project__gallery-showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 0.39fr) minmax(0, 0.61fr);
+  align-items: start;
+  gap: clamp(20px, 5vw, 70px);
+  width: min(100%, 1100px);
+  margin: clamp(12px, 2vw, 28px) auto 0;
+  padding-inline: 2%;
+}
+
+#project-01 .project__gallery-showcase img {
   display: block;
-  width: 82%;
+  width: 100%;
   height: auto;
+  object-fit: contain;
+}
+
+#project-01 .project__gallery-showcase img:first-child {
+  width: 78%;
+  justify-self: center;
 }
 
 @media (min-width: 768px) {
   #project-01 .project__gallery-hero {
-    top: 10%;
+    top: 13%;
   }
 
   #project-01 .project__gallery-tagline {
-    top: 59.7%;
+    top: 78%;
+  }
+}
+
+@media (max-width: 600px) {
+  #project-01 .project__gallery-showcase {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-inline: 0;
   }
 
-  #project-01 .project__gallery-offline {
-    top: 68.8%;
-    left: 8.3%;
-    transform: scale(0.8);
-    transform-origin: center;
+  #project-01 .project__gallery-showcase img:first-child {
+    width: min(78%, 390px);
+    margin-inline: auto;
   }
 }
 
