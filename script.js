@@ -820,7 +820,7 @@ if (quizTrigger && quizViewer) {
   const aiResults = Array.from({ length: 8 }, (_, index) => `./pic/测试结果/恋人结果${index + 1}.png`);
   let activeProject = 0;
   let peachIndex = 0;
-  let aiIndex = 0;
+  let aiIndex = 1;
   let peachPlays = 0;
   let phoneVisible = false;
   let openedScrollY = 0;
@@ -852,7 +852,7 @@ if (quizTrigger && quizViewer) {
       peachVideo.muted = true;
       Promise.resolve(peachVideo.play()).catch(() => { peachVideo.controls = true; });
     }
-    if (activeProject === 1 && aiIndex === 0) {
+    if (activeProject === 1 && aiIndex === 1) {
       if (!aiVideo.src) aiVideo.src = aiVideo.dataset.src;
       aiVideo.muted = true;
       Promise.resolve(aiVideo.play()).catch(() => { aiVideo.controls = true; });
@@ -883,18 +883,19 @@ if (quizTrigger && quizViewer) {
   };
 
   const showAiPage = (index) => {
-    aiIndex = Math.max(0, Math.min(aiResults.length, index));
-    const isVideo = aiIndex === 0;
+    aiIndex = Math.max(0, Math.min(aiResults.length + 1, index));
+    const isVideo = aiIndex === 1;
     if (!isVideo) {
       aiVideo.pause();
-      aiImage.src = aiResults[aiIndex - 1];
-      aiImage.alt = `AI 恋人测试结果 ${aiIndex}，共 ${aiResults.length} 个结果`;
+      aiImage.src = aiIndex === 0 ? "./pic/测试结果/恋人结果0.png" : aiResults[aiIndex - 2];
+      aiImage.alt = aiIndex === 0 ? "AI 恋人答题页面" : `AI 恋人测试结果 ${aiIndex - 1}，共 ${aiResults.length} 个结果`;
+      aiImage.height = aiIndex === 0 ? 1624 : 1563;
     }
     aiVideo.hidden = !isVideo;
     aiImage.hidden = isVideo;
-    aiCount.textContent = `${aiIndex + 1} / ${aiResults.length + 1}`;
+    aiCount.textContent = `${aiIndex + 1} / ${aiResults.length + 2}`;
     aiPrevious.disabled = aiIndex === 0;
-    aiNext.disabled = aiIndex === aiResults.length;
+    aiNext.disabled = aiIndex === aiResults.length + 1;
     if (isVideo) playCurrentVideo();
   };
 
@@ -914,7 +915,7 @@ if (quizTrigger && quizViewer) {
       row.querySelector(".quiz-viewer__project-details").hidden = !active;
     });
     if (index === 0) showPeachPage(0);
-    else if (index === 1) showAiPage(0);
+    else if (index === 1) showAiPage(1);
     if (quizViewer.scrollTop > 0) quizViewer.scrollTo({ top: 0, behavior: reducedMotion.matches ? "auto" : "smooth" });
     playCurrentVideo();
   };
