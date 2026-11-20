@@ -75,7 +75,11 @@
     </div>
     <main>
     <section class="hero" aria-label="作品集首页">
-      <iframe class="hero__scene" data-src="./pic/hero/scene.html" title="流星窗景动画" loading="eager" tabindex="-1"></iframe>
+      <div class="hero__background" aria-hidden="true">
+        <video class="hero__scene" autoplay muted loop playsinline preload="auto" poster="./hero/hero1.jpg" tabindex="-1">
+          <source src="./hero/colorflow-animation%20(1).mp4" type="video/mp4" />
+        </video>
+      </div>
       <header class="hero__header">
         <nav class="hero__categories" aria-label="作品分类">
           <a href="#ai-lab">AI Lab</a>
@@ -83,15 +87,12 @@
           <a href="#ai-video">AI Video</a>
         </nav>
         <span class="hero__brand">xiaohong</span>
-        <h1 class="hero__title">PORTFOLIO</h1>
-        <p class="hero__mobile-tip">电脑端更精彩，打开看看！</p>
+        <h1 class="hero__title"><img src="./hero.svg" alt="Portfolio" width="1318" height="450" fetchpriority="high" /></h1>
       </header>
-      <p class="hero__interaction-hint" aria-label="点击窗景，送一颗星星进瓶子">
-        <svg viewBox="0 0 32 36" aria-hidden="true" focusable="false">
-          <path d="M4 3v27l7.2-6.1 4.7 9.2 5.3-2.7-4.7-9.2 10-.9L4 3Z" />
-        </svg>
-        <span>点击</span>
-      </p>
+      <div class="hero__footer">
+        <p class="hero__footer-categories">AI Lab&nbsp; / &nbsp;Visual Design&nbsp; / &nbsp;AI Video</p>
+        <p class="hero__footer-description">A collection of visual solutions<br />and creative concepts.</p>
+      </div>
     </section>
 
     <section class="coverflow" aria-label="作品轮播" aria-roledescription="carousel">
@@ -160,14 +161,14 @@
           <div class="card-stack__content">
             <div class="card-stack__copy">
               <dl class="card-stack__fields">
-                <div class="card-stack__field card-stack__field--name"><dt>[Tool Name]</dt><dd><h3>互动小游戏及作品网站</h3></dd></div>
-                <div class="card-stack__field"><dt>[Category]</dt><dd>互动游戏 / 作品网站</dd></div>
-                <div class="card-stack__field"><dt>[Keywords]</dt><dd>星光收集 × 作品展示 × 趣味探索</dd></div>
-                <div class="card-stack__field card-stack__field--description"><dt>[Description]</dt><dd>以个人作品展示为核心，构建集视觉呈现、内容编排与互动体验于一体的作品集网站。通过动态视觉与细节交互丰富浏览体验，结合清晰的内容布局，让作品展示更具吸引力与辨识度。</dd></div>
+                <div class="card-stack__field card-stack__field--name"><dt>[Tool Name]</dt><dd><h3>活动详情页工作流</h3></dd></div>
+                <div class="card-stack__field"><dt>[Category]</dt><dd>基于活动主题生成活动详情页</dd></div>
+                <div class="card-stack__field"><dt>[Keywords]</dt><dd>文案生成 × 智能排版 × PNG/PSD 分层文件</dd></div>
+                <div class="card-stack__field card-stack__field--description"><dt>[Description]</dt><dd>输入活动主题，自动生成活动文案并编排为完整的活动详情页，支持导出长图及下载 PSD 分层文件。</dd></div>
               </dl>
             </div>
             <div class="card-stack__visual">
-              <img src="./pic/互动.png" alt="作品网站中的星光收集互动视觉：流星、小兔与玻璃罐" width="1152" height="635" loading="lazy" decoding="async" />
+              <img src="./pic/互动.png" alt="活动详情页工作流预览" width="592" height="551" loading="lazy" decoding="async" />
             </div>
           </div>
         </div>
@@ -818,13 +819,6 @@
         <button class="research-viewer__next" type="button" aria-label="下一张">→</button>
       </nav>
     </dialog>
-    <button class="hero__sound-toggle" type="button" aria-label="关闭提示音" aria-pressed="true" title="关闭提示音">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M4 9h4l5-4v14l-5-4H4z" />
-        <path class="hero__sound-wave" d="M16 9a4 4 0 0 1 0 6m2.5-9a8 8 0 0 1 0 12" />
-        <path class="hero__sound-muted" d="m17 9 4 6m0-6-4 6" />
-      </svg>
-    </button>
     <button class="back-to-top" id="backToTop" type="button" aria-label="返回顶部"><span aria-hidden="true">↑</span></button>
   </body>
 </html>

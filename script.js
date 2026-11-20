@@ -1,16 +1,8 @@
 let startEntryWait;
-let entrySceneReady = false;
 let resolveEntryScene;
-let entryScenePromise = new Promise((resolve) => {
+const entryScenePromise = new Promise((resolve) => {
   resolveEntryScene = resolve;
 });
-
-const resetEntryScene = () => {
-  entrySceneReady = false;
-  entryScenePromise = new Promise((resolve) => {
-    resolveEntryScene = resolve;
-  });
-};
 
 if (window.entryLoading) {
   const waitForImage = (image) => {
@@ -25,40 +17,26 @@ if (window.entryLoading) {
     }).then(decode);
   };
 
-  const desktopScene = window.matchMedia("(min-width: 768px)");
   const root = document.documentElement;
   let revision = 0;
   let minimumTimer;
-  const isInViewport = (image) => {
-    const bounds = image.getBoundingClientRect();
-    return bounds.width > 0 && bounds.height > 0
-      && bounds.right > 0 && bounds.left < window.innerWidth
-      && bounds.bottom > 0 && bounds.top < window.innerHeight;
-  };
-
   const checkVisibleAssets = () => {
     if (!root.classList.contains("is-entry-loading")) {
-      desktopScene.removeEventListener("change", checkVisibleAssets);
       window.removeEventListener("resize", checkVisibleAssets);
       return;
     }
     const currentRevision = ++revision;
     clearTimeout(minimumTimer);
-    let assets;
-    if (desktopScene.matches) {
-      assets = [entrySceneReady ? Promise.resolve() : entryScenePromise];
-    } else {
-      const visibleCardImages = [...document.querySelectorAll(".coverflow__card-image")]
-        .filter(isInViewport);
-      assets = visibleCardImages.map(waitForImage);
-    }
+    const assets = [
+      waitForImage(document.querySelector(".hero__title img")),
+      Promise.race([entryScenePromise, new Promise((resolve) => setTimeout(resolve, 1800))]),
+    ];
 
     Promise.allSettled(assets).then(() => {
       if (currentRevision !== revision || !root.classList.contains("is-entry-loading")) return;
       const remaining = Math.max(0, 450 - (performance.now() - window.entryLoading.startedAt));
       minimumTimer = setTimeout(() => {
         if (currentRevision !== revision) return;
-        desktopScene.removeEventListener("change", checkVisibleAssets);
         window.removeEventListener("resize", checkVisibleAssets);
         window.entryLoading.finish();
       }, remaining);
@@ -66,7 +44,6 @@ if (window.entryLoading) {
   };
 
   startEntryWait = () => {
-    desktopScene.addEventListener("change", checkVisibleAssets);
     window.addEventListener("resize", checkVisibleAssets);
     checkVisibleAssets();
   };
@@ -87,155 +64,39 @@ const hero = document.querySelector(".hero");
 
 if (hero) {
   const scene = hero.querySelector(".hero__scene");
+  const finishSceneWait = () => resolveEntryScene();
   if (scene) {
-    const soundToggle = document.querySelector(".hero__sound-toggle");
-    const interactionHint = hero.querySelector(".hero__interaction-hint");
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    const sceneOrigin = window.location.protocol === "file:" ? "*" : window.location.origin;
-    const desktopScene = window.matchMedia("(min-width: 768px)");
+    const poster = new Image();
+    poster.onload = finishSceneWait;
+    poster.onerror = finishSceneWait;
+    poster.src = scene.poster;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let sceneVisible = true;
-    let soundContext;
-    let soundEnabled = true;
-    let lastChimeAt = -Infinity;
-    let sceneReady = false;
-    let pendingStar = null;
-
-    const updateSoundToggle = () => {
-      if (!soundToggle) return;
-      const label = soundEnabled ? "关闭提示音" : "开启提示音";
-      soundToggle.setAttribute("aria-label", label);
-      soundToggle.setAttribute("aria-pressed", String(soundEnabled));
-      soundToggle.title = label;
-    };
-
-    const unlockSound = () => {
-      if (!soundEnabled || !desktopScene.matches || document.hidden || !AudioContextClass) return;
-      try {
-        soundContext ||= new AudioContextClass();
-        if (soundContext.state !== "running") soundContext.resume().catch(() => {});
-      } catch {}
-    };
-
-    const playChime = () => {
-      const now = soundContext.currentTime;
-      if (now - lastChimeAt < 0.12) return;
-      lastChimeAt = now;
-
-      const envelope = soundContext.createGain();
-      envelope.gain.setValueAtTime(0.0001, now);
-      envelope.gain.exponentialRampToValueAtTime(0.055, now + 0.008);
-      envelope.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
-      envelope.connect(soundContext.destination);
-
-      let voicesLeft = 3;
-      for (const [frequency, volume] of [[1046.5, 1], [1568, 0.3], [2093, 0.12]]) {
-        const oscillator = soundContext.createOscillator();
-        const partial = soundContext.createGain();
-        oscillator.type = "sine";
-        oscillator.frequency.value = frequency;
-        partial.gain.value = volume;
-        oscillator.connect(partial);
-        partial.connect(envelope);
-        oscillator.onended = () => {
-          oscillator.disconnect();
-          partial.disconnect();
-          if (--voicesLeft === 0) envelope.disconnect();
-        };
-        oscillator.start(now);
-        oscillator.stop(now + 0.46);
-      }
-    };
-
-    if (soundToggle) {
-      updateSoundToggle();
-      soundToggle.addEventListener("click", () => {
-        soundEnabled = !soundEnabled;
-        if (soundEnabled) unlockSound();
-        updateSoundToggle();
-      });
-      const startAfterInteraction = (event) => {
-        if (event.target instanceof Node && soundToggle.contains(event.target)) return;
-        unlockSound();
-      };
-      window.addEventListener("pointerdown", startAfterInteraction, { capture: true });
-      window.addEventListener("keydown", startAfterInteraction, { capture: true });
-    }
-
-    window.addEventListener("message", (event) => {
-      if (event.source !== scene.contentWindow) return;
-      if (window.location.protocol !== "file:" && event.origin !== window.location.origin) return;
-      if (event.data?.type === "portfolio-scene:interactive-star") {
-        interactionHint?.classList.add("is-dismissed");
-        interactionHint?.setAttribute("aria-hidden", "true");
-        return;
-      }
-      if (event.data?.type !== "portfolio-scene:star-impact") return;
-      if (!soundEnabled || !desktopScene.matches || !sceneVisible || document.hidden) return;
-      if (soundContext?.state === "running") playChime();
-    });
-
-    const sendInteractiveStar = (point) => {
-      if (!sceneReady) {
-        pendingStar = point;
-        return;
-      }
-      scene.contentWindow?.postMessage({ type: "portfolio-scene:interactive-star", ...point }, sceneOrigin);
-    };
-
-    hero.addEventListener("click", (event) => {
-      if (!desktopScene.matches || document.hidden || !sceneVisible || !scene.hasAttribute("src")) return;
-      if (event.target instanceof Element && event.target.closest(".hero__categories, .hero__sound-toggle")) return;
-      const bounds = scene.getBoundingClientRect();
-      sendInteractiveStar({ x: event.clientX - bounds.left, y: event.clientY - bounds.top });
-    });
-
-    const syncScene = () => {
-      if (!desktopScene.matches || !scene.hasAttribute("src")) return;
-      scene.contentWindow?.postMessage(
-        { type: sceneVisible ? "portfolio-scene:resume" : "portfolio-scene:pause" },
-        sceneOrigin
-      );
-    };
-
-    const syncSceneWidth = () => {
-      if (desktopScene.matches) {
-        if (!scene.hasAttribute("src")) {
-          sceneReady = false;
-          resetEntryScene();
-          scene.src = scene.dataset.src;
-        }
-        else syncScene();
+    const syncScenePlayback = () => {
+      if (reduceMotion.matches || document.hidden || !sceneVisible || hero.classList.contains("is-video-unavailable")) {
+        scene.pause();
       } else {
-        if (scene.hasAttribute("src")) {
-          scene.contentWindow?.postMessage({ type: "portfolio-scene:pause" }, sceneOrigin);
-          scene.removeAttribute("src");
-          sceneReady = false;
-          resetEntryScene();
-          pendingStar = null;
-        }
+        scene.play().catch(() => {});
       }
-      updateSoundToggle();
     };
 
-    scene.addEventListener("load", () => {
-      if (!desktopScene.matches || !scene.hasAttribute("src")) return;
-      sceneReady = true;
-      entrySceneReady = true;
-      resolveEntryScene();
-      syncScene();
-      if (pendingStar) {
-        sendInteractiveStar(pendingStar);
-        pendingStar = null;
-      }
-    });
-    desktopScene.addEventListener("change", syncSceneWidth);
-    syncSceneWidth();
+    scene.addEventListener("loadeddata", finishSceneWait, { once: true });
+    scene.addEventListener("error", () => {
+      hero.classList.add("is-video-unavailable");
+      finishSceneWait();
+    }, { once: true });
+    reduceMotion.addEventListener("change", syncScenePlayback);
+    document.addEventListener("visibilitychange", syncScenePlayback);
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(([entry]) => {
         sceneVisible = entry.isIntersecting;
-        syncScene();
+        syncScenePlayback();
       }, { threshold: 0.01 }).observe(hero);
     }
+    syncScenePlayback();
+  } else {
+    finishSceneWait();
   }
 }
 
