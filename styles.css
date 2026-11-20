@@ -955,19 +955,6 @@ dd:lang(zh) {
   }
 }
 
-@media (max-width: 600px) {
-  #project-01 .project__gallery-showcase {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    padding-inline: 0;
-  }
-
-  #project-01 .project__gallery-showcase img:first-child {
-    width: min(78%, 390px);
-    margin-inline: auto;
-  }
-}
-
 #project-02 > .project__eyebrow {
   position: relative;
   z-index: 0;
@@ -1041,45 +1028,45 @@ dd:lang(zh) {
 
 @media (max-width: 767px) {
   #project-02 {
-    padding: 48px 20px 72px;
+    padding: 2vw 4vw 5vw;
   }
 
   #project-02 > .project__eyebrow {
-    margin-bottom: 20px;
-    font-size: clamp(38px, 10vw, 60px);
+    margin-bottom: -0.7vw;
+    font-size: 5vw;
   }
 
   .project-02__layout {
-    grid-template-columns: 1fr;
-    gap: 40px;
-    width: min(100%, 560px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4vw;
+    width: 100%;
   }
 
   #project-02 .project__heading img {
-    width: min(80%, 300px);
+    width: 52%;
   }
 
   #project-02 .project__feature-copy {
     width: 100%;
-    margin-top: 28px;
+    margin-top: 2.5vw;
   }
 
   #project-02 .project__feature-copy p {
-    font-size: 16px;
-    line-height: 1.75;
+    font-size: 1.05vw;
+    line-height: 1.8;
   }
 
   #project-02 .project__feature-copy p + p {
-    margin-top: 18px;
+    margin-top: 1.8vw;
   }
 
   .project-02__posters {
-    width: 100%;
-    margin-top: 28px;
+    width: 87%;
+    margin-top: 3vw;
   }
 
   #project-02 .project-02__media .project__visual {
-    width: min(100%, 440px);
+    width: 81%;
   }
 }
 
