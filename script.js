@@ -1469,10 +1469,11 @@ if (coverflow) {
     if (slide.src) {
       const image = document.createElement("img");
       image.className = "coverflow__card-image";
-      image.dataset.src = slide.src;
+      if (mobileImages.matches) image.dataset.src = slide.src;
+      else image.src = slide.src;
       image.alt = slide.alt || `作品 ${slide.number}`;
       image.draggable = false;
-      image.loading = "eager";
+      image.loading = !mobileImages.matches && Math.abs(index - initialIndex) <= 1 ? "eager" : "lazy";
       image.style.visibility = "hidden";
       card.append(image);
     } else {
@@ -1521,7 +1522,7 @@ if (coverflow) {
       if (offset > slides.length / 2) offset -= slides.length;
 
       const distance = Math.abs(offset);
-      if (distance <= (mobileImages.matches ? 1.6 : 2.6)) loadCardImage(card);
+      if (!mobileImages.matches || distance <= 1.6) loadCardImage(card);
       const ramp = Math.pow(distance, 0.56);
       const tilt = Math.min(44 * ramp, 82) * Math.sign(offset);
       const edge = Math.min(1, Math.max(0, slides.length / 2 - distance));
@@ -1568,6 +1569,7 @@ if (coverflow) {
   if ("ResizeObserver" in window) new ResizeObserver(measure).observe(stage);
   else window.addEventListener("resize", measure);
   mobileImages.addEventListener("change", () => {
+    if (!mobileImages.matches) cards.forEach(loadCardImage);
     measure();
   });
 
