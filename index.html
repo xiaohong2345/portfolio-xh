@@ -473,7 +473,10 @@
         </div>
       </header>
       <div class="ecommerce-design__preview">
-        <img class="ecommerce-design__image" src="./pic/电商/预览.png" alt="" width="1533" height="1329" loading="lazy" decoding="async" />
+        <picture>
+          <source media="(min-width: 768px)" srcset="./pic/电商/预览.png" />
+          <img class="ecommerce-design__image" src="./pic/电商/预览-mobile.jpg" alt="" width="1533" height="1329" loading="lazy" decoding="async" />
+        </picture>
         <button class="ecommerce-design__open" type="button" aria-label="打开电商设计作品查看" aria-haspopup="dialog" aria-controls="ecommerceViewer"></button>
       </div>
     </section>
