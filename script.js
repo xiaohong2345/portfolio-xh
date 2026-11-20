@@ -146,45 +146,6 @@ if (workCards) {
 }
 
 const compactWorkViewer = window.matchMedia("(max-width: 900px)");
-const coffeeTrigger = document.querySelector(".project-02__open");
-const coffeeViewer = document.getElementById("coffeeViewer");
-
-if (coffeeTrigger && coffeeViewer) {
-  const closeButton = coffeeViewer.querySelector(".coffee-viewer__close");
-  const coffeeDesktop = window.matchMedia("(min-width: 768px)");
-  let openedScrollY = 0;
-
-  coffeeTrigger.addEventListener("click", () => {
-    if (!coffeeDesktop.matches) return;
-    openedScrollY = window.scrollY;
-    coffeeViewer.showModal();
-    coffeeViewer.scrollTop = 0;
-    document.documentElement.classList.add("coffee-viewer-open");
-    pageScroller?.stop();
-    closeButton.focus({ preventScroll: true });
-  });
-
-  closeButton.addEventListener("click", () => coffeeViewer.close());
-  coffeeDesktop.addEventListener("change", () => {
-    if (!coffeeDesktop.matches && coffeeViewer.open) coffeeViewer.close();
-  });
-  coffeeViewer.addEventListener("click", (event) => {
-    if (event.target !== coffeeViewer) return;
-    const bounds = coffeeViewer.getBoundingClientRect();
-    if (event.clientX < bounds.left || event.clientX > bounds.right
-      || event.clientY < bounds.top || event.clientY > bounds.bottom) coffeeViewer.close();
-  });
-  coffeeViewer.addEventListener("close", () => {
-    document.documentElement.classList.remove("coffee-viewer-open");
-    pageScroller?.start();
-    if (Math.abs(window.scrollY - openedScrollY) > 1) {
-      if (pageScroller) pageScroller.scrollTo(openedScrollY, { immediate: true, force: true });
-      else window.scrollTo(0, openedScrollY);
-    }
-    if (coffeeDesktop.matches) coffeeTrigger.focus({ preventScroll: true });
-  });
-}
-
 const ecommerceTrigger = document.querySelector(".ecommerce-design__open");
 const ecommerceViewer = document.getElementById("ecommerceViewer");
 
