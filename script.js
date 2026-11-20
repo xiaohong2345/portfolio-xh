@@ -1,54 +1,3 @@
-let startEntryWait;
-let resolveEntryScene;
-const entryScenePromise = new Promise((resolve) => {
-  resolveEntryScene = resolve;
-});
-
-if (window.entryLoading) {
-  const waitForImage = (image) => {
-    image.loading = "eager";
-    const decode = () => image.naturalWidth && typeof image.decode === "function"
-      ? image.decode().catch(() => {})
-      : Promise.resolve();
-    if (image.complete) return decode();
-    return new Promise((resolve) => {
-      image.addEventListener("load", resolve, { once: true });
-      image.addEventListener("error", resolve, { once: true });
-    }).then(decode);
-  };
-
-  const root = document.documentElement;
-  let revision = 0;
-  let minimumTimer;
-  const checkVisibleAssets = () => {
-    if (!root.classList.contains("is-entry-loading")) {
-      window.removeEventListener("resize", checkVisibleAssets);
-      return;
-    }
-    const currentRevision = ++revision;
-    clearTimeout(minimumTimer);
-    const assets = [
-      waitForImage(document.querySelector(".hero__title img")),
-      Promise.race([entryScenePromise, new Promise((resolve) => setTimeout(resolve, 1800))]),
-    ];
-
-    Promise.allSettled(assets).then(() => {
-      if (currentRevision !== revision || !root.classList.contains("is-entry-loading")) return;
-      const remaining = Math.max(0, 450 - (performance.now() - window.entryLoading.startedAt));
-      minimumTimer = setTimeout(() => {
-        if (currentRevision !== revision) return;
-        window.removeEventListener("resize", checkVisibleAssets);
-        window.entryLoading.finish();
-      }, remaining);
-    });
-  };
-
-  startEntryWait = () => {
-    window.addEventListener("resize", checkVisibleAssets);
-    checkVisibleAssets();
-  };
-}
-
 const pageScroller = typeof Lenis !== "undefined"
   ? new Lenis({
       autoRaf: true,
@@ -64,13 +13,7 @@ const hero = document.querySelector(".hero");
 
 if (hero) {
   const scene = hero.querySelector(".hero__scene");
-  const finishSceneWait = () => resolveEntryScene();
   if (scene) {
-    const poster = new Image();
-    poster.onload = finishSceneWait;
-    poster.onerror = finishSceneWait;
-    poster.src = scene.poster;
-
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let sceneVisible = true;
     const syncScenePlayback = () => {
@@ -81,10 +24,8 @@ if (hero) {
       }
     };
 
-    scene.addEventListener("loadeddata", finishSceneWait, { once: true });
     scene.addEventListener("error", () => {
       hero.classList.add("is-video-unavailable");
-      finishSceneWait();
     }, { once: true });
     reduceMotion.addEventListener("change", syncScenePlayback);
     document.addEventListener("visibilitychange", syncScenePlayback);
@@ -95,8 +36,6 @@ if (hero) {
       }, { threshold: 0.01 }).observe(hero);
     }
     syncScenePlayback();
-  } else {
-    finishSceneWait();
   }
 }
 
@@ -1540,5 +1479,3 @@ if (coverflow) {
   });
   updateSelection(initialIndex);
 }
-
-startEntryWait?.();

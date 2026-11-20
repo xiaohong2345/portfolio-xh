@@ -11,68 +11,13 @@
     <meta property="og:title" content="XIAOHONG｜视觉设计、AI 视频与创意开发作品集（2026）" />
     <meta property="og:description" content="XIAOHONG 2026 作品集，展示活动视觉、IP 形象、文创设计、AI 工具与交互项目。" />
     <title>XIAOHONG｜视觉设计、AI 视频与创意开发作品集（2026）</title>
-    <style>
-      html.is-entry-loading,
-      html.is-entry-loading body { overflow: hidden; }
-      .entry-loader {
-        position: fixed;
-        inset: 0;
-        z-index: 10000;
-        display: none;
-        place-items: center;
-        background: #0f1110;
-        color: #f5f0e8;
-        font: 500 18px/1 Arial, Helvetica, sans-serif;
-        letter-spacing: .22em;
-        opacity: 1;
-        transition: opacity .5s ease;
-      }
-      .is-entry-loading .entry-loader,
-      .is-entry-ready .entry-loader { display: grid; }
-      .is-entry-ready .entry-loader { opacity: 0; pointer-events: none; }
-      @media (prefers-reduced-motion: reduce) {
-        .entry-loader { transition: none; }
-      }
-    </style>
-    <script>
-      (() => {
-        const root = document.documentElement;
-        root.classList.add("is-entry-loading");
-        const startedAt = performance.now();
-        let finished = false;
-        let fallbackTimer;
-        window.entryLoading = {
-          startedAt,
-          finish() {
-            if (finished) return;
-            finished = true;
-            clearTimeout(fallbackTimer);
-            root.classList.remove("is-entry-loading");
-            root.classList.add("is-entry-ready");
-            setTimeout(() => {
-              document.querySelector(".entry-loader")?.remove();
-              root.classList.remove("is-entry-ready");
-            }, 550);
-          },
-        };
-        fallbackTimer = setTimeout(() => window.entryLoading.finish(), 8000);
-      })();
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" href="./hero/hero1.jpg" as="image" fetchpriority="high" />
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./vendor/lenis/lenis.css" />
     <script src="./vendor/lenis/lenis.min.js" defer></script>
     <script src="./script.js" defer></script>
   </head>
   <body>
-    <div class="entry-loader" role="status" aria-live="polite" aria-label="正在加载作品集">
-      <span class="entry-loader__text">loading...</span>
-    </div>
     <main>
     <section class="hero" aria-label="作品集首页">
       <div class="hero__background" aria-hidden="true">
