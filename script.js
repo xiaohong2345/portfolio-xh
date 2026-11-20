@@ -62,6 +62,23 @@ const pageScroller = typeof Lenis !== "undefined"
 
 const hero = document.querySelector(".hero");
 
+// Retry portfolio images after a transient mobile network failure.
+document.addEventListener("error", (event) => {
+  const image = event.target;
+  if (!(image instanceof HTMLImageElement) || !image.closest("#project-01, #project-02")) return;
+  if (!window.matchMedia("(max-width: 767px)").matches) return;
+  const attempt = Number(image.dataset.retryCount || 0) + 1;
+  if (attempt > 2) return;
+  image.dataset.retryCount = String(attempt);
+  const url = new URL(image.src, document.baseURI);
+  url.searchParams.set("retry", String(attempt));
+  window.setTimeout(() => {
+    if (!image.isConnected) return;
+    image.loading = "eager";
+    image.src = url.href;
+  }, attempt === 1 ? 1200 : 3000);
+}, true);
+
 if (hero) {
   const scene = hero.querySelector(".hero__scene");
   const finishSceneWait = () => resolveEntryScene();

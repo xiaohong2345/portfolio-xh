@@ -1216,6 +1216,10 @@ dd:lang(zh) {
   padding: 0 clamp(32px, 8vw, 128px) clamp(96px, 9vw, 144px);
 }
 
+@media (max-width: 767px) {
+  .work-collection { display: none; }
+}
+
 .work-collection__heading {
   margin: 0 auto clamp(16px, 2vw, 28px);
   text-align: center;
