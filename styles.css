@@ -146,7 +146,7 @@ dd:lang(zh) {
 .hero__footer-description { text-align: right; }
 @media (max-width: 767px) {
   .hero { height: 100svh; min-height: 560px; }
-  .hero__scene { display: block; }
+  .hero__scene { display: none; }
   .hero__categories, .hero__brand { top: 22px; font-size: 14px; }
   .hero__categories { left: 20px; }
   .hero__brand { right: 20px; }

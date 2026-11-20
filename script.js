@@ -72,9 +72,10 @@ if (hero) {
     poster.src = scene.poster;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mobileHero = window.matchMedia("(max-width: 767px)");
     let sceneVisible = true;
     const syncScenePlayback = () => {
-      if (reduceMotion.matches || document.hidden || !sceneVisible || hero.classList.contains("is-video-unavailable")) {
+      if (mobileHero.matches || reduceMotion.matches || document.hidden || !sceneVisible || hero.classList.contains("is-video-unavailable")) {
         scene.pause();
       } else {
         scene.play().catch(() => {});
@@ -87,6 +88,7 @@ if (hero) {
       finishSceneWait();
     }, { once: true });
     reduceMotion.addEventListener("change", syncScenePlayback);
+    mobileHero.addEventListener("change", syncScenePlayback);
     document.addEventListener("visibilitychange", syncScenePlayback);
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(([entry]) => {
