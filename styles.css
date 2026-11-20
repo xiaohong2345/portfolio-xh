@@ -133,7 +133,7 @@ dd:lang(zh) {
   gap: 32px;
   pointer-events: none;
 }
-.hero__footer p { margin: 0; font-size: clamp(14px, .95vw, 17px); font-weight: 300; line-height: 1.45; opacity: .7; }
+.hero__footer p { margin: 0; font-size: clamp(14px, .95vw, 17px); font-weight: 300; line-height: 1.45; opacity: .4; }
 .hero__footer-description { text-align: right; }
 @media (max-width: 767px) {
   .hero { height: 100svh; min-height: 560px; }
