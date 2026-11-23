@@ -1,9 +1,4 @@
 let startEntryWait;
-let resolveEntryScene;
-const entryScenePromise = new Promise((resolve) => {
-  resolveEntryScene = resolve;
-});
-
 if (window.entryLoading) {
   const waitForImage = (image) => {
     image.loading = "eager";
@@ -29,7 +24,6 @@ if (window.entryLoading) {
     clearTimeout(minimumTimer);
     const assets = [
       waitForImage(document.querySelector(".hero__title img")),
-      Promise.race([entryScenePromise, new Promise((resolve) => setTimeout(resolve, 1800))]),
     ];
 
     Promise.allSettled(assets).then(() => {
@@ -59,8 +53,6 @@ const pageScroller = typeof Lenis !== "undefined"
       respectReducedMotion: true,
     })
   : null;
-
-const hero = document.querySelector(".hero");
 
 // Keep mobile retries close to the viewport and limit simultaneous requests.
 const mobileImages = window.matchMedia("(max-width: 767px)");
@@ -129,46 +121,6 @@ document.addEventListener("load", (event) => {
 document.querySelectorAll("img").forEach((image) => {
   if (image.complete && image.naturalWidth === 0) handleImageError(image);
 });
-
-if (hero) {
-  const scene = hero.querySelector(".hero__scene");
-  const finishSceneWait = () => resolveEntryScene();
-  if (scene) {
-    const poster = new Image();
-    poster.onload = finishSceneWait;
-    poster.onerror = finishSceneWait;
-    poster.src = scene.poster;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const mobileHero = window.matchMedia("(max-width: 767px)");
-    let sceneVisible = true;
-    const syncScenePlayback = () => {
-      if (mobileHero.matches || reduceMotion.matches || document.hidden || !sceneVisible || hero.classList.contains("is-video-unavailable")) {
-        scene.pause();
-      } else {
-        scene.play().catch(() => {});
-      }
-    };
-
-    scene.addEventListener("loadeddata", finishSceneWait, { once: true });
-    scene.addEventListener("error", () => {
-      hero.classList.add("is-video-unavailable");
-      finishSceneWait();
-    }, { once: true });
-    reduceMotion.addEventListener("change", syncScenePlayback);
-    mobileHero.addEventListener("change", syncScenePlayback);
-    document.addEventListener("visibilitychange", syncScenePlayback);
-    if ("IntersectionObserver" in window) {
-      new IntersectionObserver(([entry]) => {
-        sceneVisible = entry.isIntersecting;
-        syncScenePlayback();
-      }, { threshold: 0.01 }).observe(hero);
-    }
-    syncScenePlayback();
-  } else {
-    finishSceneWait();
-  }
-}
 
 if ("IntersectionObserver" in window) {
   const targets = document.querySelectorAll("[data-reveal]");
