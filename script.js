@@ -1,4 +1,17 @@
 let startEntryWait;
+let entrySceneReady = false;
+let resolveEntryScene;
+let entryScenePromise = new Promise((resolve) => {
+  resolveEntryScene = resolve;
+});
+
+const resetEntryScene = () => {
+  entrySceneReady = false;
+  entryScenePromise = new Promise((resolve) => {
+    resolveEntryScene = resolve;
+  });
+};
+
 if (window.entryLoading) {
   const waitForImage = (image) => {
     image.loading = "eager";
@@ -12,25 +25,40 @@ if (window.entryLoading) {
     }).then(decode);
   };
 
+  const desktopScene = window.matchMedia("(min-width: 768px)");
   const root = document.documentElement;
   let revision = 0;
   let minimumTimer;
+  const isInViewport = (image) => {
+    const bounds = image.getBoundingClientRect();
+    return bounds.width > 0 && bounds.height > 0
+      && bounds.right > 0 && bounds.left < window.innerWidth
+      && bounds.bottom > 0 && bounds.top < window.innerHeight;
+  };
+
   const checkVisibleAssets = () => {
     if (!root.classList.contains("is-entry-loading")) {
+      desktopScene.removeEventListener("change", checkVisibleAssets);
       window.removeEventListener("resize", checkVisibleAssets);
       return;
     }
     const currentRevision = ++revision;
     clearTimeout(minimumTimer);
-    const assets = [
-      waitForImage(document.querySelector(".hero__title img")),
-    ];
+    let assets;
+    if (desktopScene.matches) {
+      assets = [entrySceneReady ? Promise.resolve() : entryScenePromise];
+    } else {
+      const visibleCardImages = [...document.querySelectorAll(".coverflow__card-image")]
+        .filter(isInViewport);
+      assets = visibleCardImages.map(waitForImage);
+    }
 
     Promise.allSettled(assets).then(() => {
       if (currentRevision !== revision || !root.classList.contains("is-entry-loading")) return;
       const remaining = Math.max(0, 450 - (performance.now() - window.entryLoading.startedAt));
       minimumTimer = setTimeout(() => {
         if (currentRevision !== revision) return;
+        desktopScene.removeEventListener("change", checkVisibleAssets);
         window.removeEventListener("resize", checkVisibleAssets);
         window.entryLoading.finish();
       }, remaining);
@@ -38,6 +66,7 @@ if (window.entryLoading) {
   };
 
   startEntryWait = () => {
+    desktopScene.addEventListener("change", checkVisibleAssets);
     window.addEventListener("resize", checkVisibleAssets);
     checkVisibleAssets();
   };
@@ -53,6 +82,162 @@ const pageScroller = typeof Lenis !== "undefined"
       respectReducedMotion: true,
     })
   : null;
+
+const hero = document.querySelector(".hero");
+
+if (hero) {
+  const scene = hero.querySelector(".hero__scene");
+  if (scene) {
+    const soundToggle = document.querySelector(".hero__sound-toggle");
+    const interactionHint = hero.querySelector(".hero__interaction-hint");
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    const sceneOrigin = window.location.protocol === "file:" ? "*" : window.location.origin;
+    const desktopScene = window.matchMedia("(min-width: 768px)");
+    let sceneVisible = true;
+    let soundContext;
+    let soundEnabled = true;
+    let lastChimeAt = -Infinity;
+    let sceneReady = false;
+    let pendingStar = null;
+
+    const updateSoundToggle = () => {
+      if (!soundToggle) return;
+      const label = soundEnabled ? "关闭提示音" : "开启提示音";
+      soundToggle.setAttribute("aria-label", label);
+      soundToggle.setAttribute("aria-pressed", String(soundEnabled));
+      soundToggle.title = label;
+    };
+
+    const unlockSound = () => {
+      if (!soundEnabled || !desktopScene.matches || document.hidden || !AudioContextClass) return;
+      try {
+        soundContext ||= new AudioContextClass();
+        if (soundContext.state !== "running") soundContext.resume().catch(() => {});
+      } catch {}
+    };
+
+    const playChime = () => {
+      const now = soundContext.currentTime;
+      if (now - lastChimeAt < 0.12) return;
+      lastChimeAt = now;
+
+      const envelope = soundContext.createGain();
+      envelope.gain.setValueAtTime(0.0001, now);
+      envelope.gain.exponentialRampToValueAtTime(0.055, now + 0.008);
+      envelope.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+      envelope.connect(soundContext.destination);
+
+      let voicesLeft = 3;
+      for (const [frequency, volume] of [[1046.5, 1], [1568, 0.3], [2093, 0.12]]) {
+        const oscillator = soundContext.createOscillator();
+        const partial = soundContext.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.value = frequency;
+        partial.gain.value = volume;
+        oscillator.connect(partial);
+        partial.connect(envelope);
+        oscillator.onended = () => {
+          oscillator.disconnect();
+          partial.disconnect();
+          if (--voicesLeft === 0) envelope.disconnect();
+        };
+        oscillator.start(now);
+        oscillator.stop(now + 0.46);
+      }
+    };
+
+    if (soundToggle) {
+      updateSoundToggle();
+      soundToggle.addEventListener("click", () => {
+        soundEnabled = !soundEnabled;
+        if (soundEnabled) unlockSound();
+        updateSoundToggle();
+      });
+      const startAfterInteraction = (event) => {
+        if (event.target instanceof Node && soundToggle.contains(event.target)) return;
+        unlockSound();
+      };
+      window.addEventListener("pointerdown", startAfterInteraction, { capture: true });
+      window.addEventListener("keydown", startAfterInteraction, { capture: true });
+    }
+
+    window.addEventListener("message", (event) => {
+      if (event.source !== scene.contentWindow) return;
+      if (window.location.protocol !== "file:" && event.origin !== window.location.origin) return;
+      if (event.data?.type === "portfolio-scene:interactive-star") {
+        interactionHint?.classList.add("is-dismissed");
+        interactionHint?.setAttribute("aria-hidden", "true");
+        return;
+      }
+      if (event.data?.type !== "portfolio-scene:star-impact") return;
+      if (!soundEnabled || !desktopScene.matches || !sceneVisible || document.hidden) return;
+      if (soundContext?.state === "running") playChime();
+    });
+
+    const sendInteractiveStar = (point) => {
+      if (!sceneReady) {
+        pendingStar = point;
+        return;
+      }
+      scene.contentWindow?.postMessage({ type: "portfolio-scene:interactive-star", ...point }, sceneOrigin);
+    };
+
+    hero.addEventListener("click", (event) => {
+      if (!desktopScene.matches || document.hidden || !sceneVisible || !scene.hasAttribute("src")) return;
+      if (event.target instanceof Element && event.target.closest(".hero__categories, .hero__sound-toggle")) return;
+      const bounds = scene.getBoundingClientRect();
+      sendInteractiveStar({ x: event.clientX - bounds.left, y: event.clientY - bounds.top });
+    });
+
+    const syncScene = () => {
+      if (!desktopScene.matches || !scene.hasAttribute("src")) return;
+      scene.contentWindow?.postMessage(
+        { type: sceneVisible ? "portfolio-scene:resume" : "portfolio-scene:pause" },
+        sceneOrigin
+      );
+    };
+
+    const syncSceneWidth = () => {
+      if (desktopScene.matches) {
+        if (!scene.hasAttribute("src")) {
+          sceneReady = false;
+          resetEntryScene();
+          scene.src = scene.dataset.src;
+        }
+        else syncScene();
+      } else {
+        if (scene.hasAttribute("src")) {
+          scene.contentWindow?.postMessage({ type: "portfolio-scene:pause" }, sceneOrigin);
+          scene.removeAttribute("src");
+          sceneReady = false;
+          resetEntryScene();
+          pendingStar = null;
+        }
+      }
+      updateSoundToggle();
+    };
+
+    scene.addEventListener("load", () => {
+      if (!desktopScene.matches || !scene.hasAttribute("src")) return;
+      sceneReady = true;
+      entrySceneReady = true;
+      resolveEntryScene();
+      syncScene();
+      if (pendingStar) {
+        sendInteractiveStar(pendingStar);
+        pendingStar = null;
+      }
+    });
+    desktopScene.addEventListener("change", syncSceneWidth);
+    syncSceneWidth();
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([entry]) => {
+        sceneVisible = entry.isIntersecting;
+        syncScene();
+      }, { threshold: 0.01 }).observe(hero);
+    }
+  }
+}
 
 if ("IntersectionObserver" in window) {
   const targets = document.querySelectorAll("[data-reveal]");
@@ -100,6 +285,45 @@ if (workCards) {
 }
 
 const compactWorkViewer = window.matchMedia("(max-width: 900px)");
+const coffeeTrigger = document.querySelector(".project-02__open");
+const coffeeViewer = document.getElementById("coffeeViewer");
+
+if (coffeeTrigger && coffeeViewer) {
+  const closeButton = coffeeViewer.querySelector(".coffee-viewer__close");
+  const coffeeDesktop = window.matchMedia("(min-width: 768px)");
+  let openedScrollY = 0;
+
+  coffeeTrigger.addEventListener("click", () => {
+    if (!coffeeDesktop.matches) return;
+    openedScrollY = window.scrollY;
+    coffeeViewer.showModal();
+    coffeeViewer.scrollTop = 0;
+    document.documentElement.classList.add("coffee-viewer-open");
+    pageScroller?.stop();
+    closeButton.focus({ preventScroll: true });
+  });
+
+  closeButton.addEventListener("click", () => coffeeViewer.close());
+  coffeeDesktop.addEventListener("change", () => {
+    if (!coffeeDesktop.matches && coffeeViewer.open) coffeeViewer.close();
+  });
+  coffeeViewer.addEventListener("click", (event) => {
+    if (event.target !== coffeeViewer) return;
+    const bounds = coffeeViewer.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right
+      || event.clientY < bounds.top || event.clientY > bounds.bottom) coffeeViewer.close();
+  });
+  coffeeViewer.addEventListener("close", () => {
+    document.documentElement.classList.remove("coffee-viewer-open");
+    pageScroller?.start();
+    if (Math.abs(window.scrollY - openedScrollY) > 1) {
+      if (pageScroller) pageScroller.scrollTo(openedScrollY, { immediate: true, force: true });
+      else window.scrollTo(0, openedScrollY);
+    }
+    if (coffeeDesktop.matches) coffeeTrigger.focus({ preventScroll: true });
+  });
+}
+
 const ecommerceTrigger = document.querySelector(".ecommerce-design__open");
 const ecommerceViewer = document.getElementById("ecommerceViewer");
 
@@ -1379,6 +1603,7 @@ if (coverflow) {
   let drag = null;
 
   const selectedIndex = (value) => ((Math.round(value) % slides.length) + slides.length) % slides.length;
+
   const updateSelection = (value) => {
     const selected = selectedIndex(value);
     cards.forEach((card, index) => {
