@@ -54,74 +54,6 @@ const pageScroller = typeof Lenis !== "undefined"
     })
   : null;
 
-// Keep mobile retries close to the viewport and limit simultaneous requests.
-const mobileImages = window.matchMedia("(max-width: 767px)");
-const imageRetryQueue = [];
-let activeImageRetries = 0;
-
-const runImageRetries = () => {
-  while (activeImageRetries < 2 && imageRetryQueue.length) {
-    const image = imageRetryQueue.shift();
-    image.dataset.retryPending = "";
-    if (!image.isConnected || !mobileImages.matches) continue;
-    const url = new URL(image.src, document.baseURI);
-    if (url.origin !== location.origin) continue;
-
-    activeImageRetries += 1;
-    let finished = false;
-    const finish = () => {
-      if (finished) return;
-      finished = true;
-      activeImageRetries -= 1;
-      runImageRetries();
-    };
-    image.addEventListener("load", finish, { once: true });
-    image.addEventListener("error", finish, { once: true });
-    window.setTimeout(finish, 15000);
-    image.style.visibility = "hidden";
-    image.loading = "eager";
-    url.searchParams.set("retry", image.dataset.retryCount);
-    image.src = url.href;
-  }
-};
-
-const queueImageRetry = (image) => {
-  if (image.dataset.retryPending || !mobileImages.matches) return;
-  const attempt = Number(image.dataset.retryCount || 0) + 1;
-  if (attempt > 3) return;
-  image.dataset.retryCount = String(attempt);
-  image.dataset.retryPending = "true";
-  window.setTimeout(() => {
-    imageRetryQueue.push(image);
-    runImageRetries();
-  }, [1200, 4000, 9000][attempt - 1]);
-};
-
-const imageRetryObserver = "IntersectionObserver" in window
-  ? new IntersectionObserver((entries, observer) => {
-      entries.forEach(({ target, isIntersecting }) => {
-        if (!isIntersecting) return;
-        observer.unobserve(target);
-        queueImageRetry(target);
-      });
-    }, { rootMargin: "300px" })
-  : null;
-
-const handleImageError = (image) => {
-  if (!(image instanceof HTMLImageElement) || !mobileImages.matches) return;
-  image.style.visibility = "hidden";
-  if (imageRetryObserver) imageRetryObserver.observe(image);
-  else queueImageRetry(image);
-};
-
-document.addEventListener("error", (event) => handleImageError(event.target), true);
-document.addEventListener("load", (event) => {
-  if (event.target instanceof HTMLImageElement) event.target.style.visibility = "";
-}, true);
-document.querySelectorAll("img").forEach((image) => {
-  if (image.complete && image.naturalWidth === 0) handleImageError(image);
-});
-
 if ("IntersectionObserver" in window) {
   const targets = document.querySelectorAll("[data-reveal]");
   const observer = new IntersectionObserver(
@@ -1421,12 +1353,10 @@ if (coverflow) {
     if (slide.src) {
       const image = document.createElement("img");
       image.className = "coverflow__card-image";
-      if (mobileImages.matches) image.dataset.src = slide.src;
-      else image.src = slide.src;
+      image.src = slide.src;
       image.alt = slide.alt || `作品 ${slide.number}`;
       image.draggable = false;
-      image.loading = !mobileImages.matches && Math.abs(index - initialIndex) <= 1 ? "eager" : "lazy";
-      image.style.visibility = "hidden";
+      image.loading = Math.abs(index - initialIndex) <= 1 ? "eager" : "lazy";
       card.append(image);
     } else {
       card.classList.add("is-placeholder");
@@ -1449,13 +1379,6 @@ if (coverflow) {
   let drag = null;
 
   const selectedIndex = (value) => ((Math.round(value) % slides.length) + slides.length) % slides.length;
-  const loadCardImage = (card) => {
-    const image = card.querySelector("img[data-src]");
-    if (!image) return;
-    image.src = image.dataset.src;
-    delete image.dataset.src;
-  };
-
   const updateSelection = (value) => {
     const selected = selectedIndex(value);
     cards.forEach((card, index) => {
@@ -1474,7 +1397,6 @@ if (coverflow) {
       if (offset > slides.length / 2) offset -= slides.length;
 
       const distance = Math.abs(offset);
-      if (!mobileImages.matches || distance <= 1.6) loadCardImage(card);
       const ramp = Math.pow(distance, 0.56);
       const tilt = Math.min(44 * ramp, 82) * Math.sign(offset);
       const edge = Math.min(1, Math.max(0, slides.length / 2 - distance));
@@ -1520,10 +1442,6 @@ if (coverflow) {
   measure();
   if ("ResizeObserver" in window) new ResizeObserver(measure).observe(stage);
   else window.addEventListener("resize", measure);
-  mobileImages.addEventListener("change", () => {
-    if (!mobileImages.matches) cards.forEach(loadCardImage);
-    measure();
-  });
 
   stage.addEventListener("keydown", (event) => {
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
