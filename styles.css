@@ -1038,19 +1038,6 @@ dd:lang(zh) {
   }
 }
 
-@media (max-width: 600px) {
-  #project-01 .project__gallery-showcase {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    padding-inline: 0;
-  }
-
-  #project-01 .project__gallery-showcase img:first-child {
-    width: min(78%, 390px);
-    margin-inline: auto;
-  }
-}
-
 #project-02 > .project__eyebrow {
   position: relative;
   z-index: 0;
@@ -2813,13 +2800,13 @@ html.quiz-viewer-open body {
   }
 
   .project-02__layout {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8vw;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+    gap: 4vw;
   }
 
   .project-02__copy {
-    padding-top: 0;
-    left: auto;
+    padding-top: 1.5625vw;
+    left: 2.35vw;
   }
 
   #project-02 .project__heading img {
@@ -2828,25 +2815,25 @@ html.quiz-viewer-open body {
 
   #project-02 .project__feature-copy {
     width: 86%;
-    margin-top: 7vw;
+    margin-top: 1.5vw;
   }
 
   #project-02 .project__feature-copy p {
-    font-size: clamp(14px, 3.8vw, 17px);
-    line-height: 1.8;
+    font-size: 1vw;
+    line-height: 1.9;
   }
 
   #project-02 .project__feature-copy p + p {
-    margin-top: 6vw;
+    margin-top: 1.6667vw;
   }
 
   .project-02__posters {
-    width: 86%;
-    margin: 9vw auto 0;
+    width: 83%;
+    margin: 3.2vw auto 0;
   }
 
   .project-02__details {
-    width: min(100%, 700px);
+    width: min(100%, 32.7vw, 628px);
     margin-inline: auto;
   }
 }
