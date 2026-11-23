@@ -54,6 +54,21 @@ const pageScroller = typeof Lenis !== "undefined"
     })
   : null;
 
+const hero = document.querySelector(".hero");
+const heroScene = hero?.querySelector(".hero__scene");
+if (hero && heroScene && window.matchMedia("(min-width: 768px)").matches) {
+  heroScene.src = heroScene.dataset.src;
+  hero.addEventListener("click", (event) => {
+    if (event.target instanceof Element && event.target.closest(".hero__categories")) return;
+    const bounds = heroScene.getBoundingClientRect();
+    heroScene.contentWindow?.postMessage({
+      type: "portfolio-scene:interactive-star",
+      x: event.clientX - bounds.left,
+      y: event.clientY - bounds.top,
+    }, location.origin);
+  });
+}
+
 // Keep mobile retries close to the viewport and limit simultaneous requests.
 const mobileImages = window.matchMedia("(max-width: 767px)");
 const imageRetryQueue = [];
